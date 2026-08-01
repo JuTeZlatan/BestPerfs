@@ -37,8 +37,8 @@ body {
 
 .view-toggle-btn {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -40px;
+  left: 0;
   padding: 8px 14px;
   border-radius: 4px;
   border: 1px solid var(--card-border);
