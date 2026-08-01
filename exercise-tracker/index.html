@@ -71,6 +71,12 @@
       <div id="exercise-list" class="exercise-list"></div>
 
       <p id="empty-state" class="empty-state" data-i18n="exercise.empty">Aucun exercice pour l'instant. Ajoute-en un ci-dessous !</p>
+
+      <div class="backup-bar">
+        <button id="export-btn" class="sort-btn" data-i18n="backup.export">💾 Exporter</button>
+        <button id="import-btn" class="sort-btn" data-i18n="backup.import">📥 Importer</button>
+        <input type="file" id="import-file-input" accept="application/json,.json" hidden>
+      </div>
     </section>
 
     <section id="timer-view" hidden>

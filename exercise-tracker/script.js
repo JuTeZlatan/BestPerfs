@@ -105,8 +105,9 @@ function render() {
   });
 }
 
-function openConfirmModal(message, onConfirm) {
+function openConfirmModal(message, onConfirm, confirmLabel) {
   modalMessageEl.textContent = message;
+  modalConfirmBtn.textContent = confirmLabel || t("modal.confirm");
   pendingConfirmAction = onConfirm;
   confirmModal.hidden = false;
 }
