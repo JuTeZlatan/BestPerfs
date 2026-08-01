@@ -322,61 +322,6 @@ document.addEventListener("languagechange", () => {
   renderPresets();
 });
 
-// ---- Backup: export/import all data as a JSON file ----
-const exportBtn = document.getElementById("export-btn");
-const importBtn = document.getElementById("import-btn");
-const importFileInput = document.getElementById("import-file-input");
-
-function exportData() {
-  const data = {
-    version: 1,
-    exportedAt: new Date().toISOString(),
-    exercises: JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"),
-    presets: JSON.parse(localStorage.getItem(PRESETS_STORAGE_KEY) || "[]"),
-    lang: localStorage.getItem(LANG_STORAGE_KEY) || "fr",
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `best-perfs-sauvegarde-${new Date().toISOString().slice(0, 10)}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function applyImportedData(data) {
-  if (Array.isArray(data.exercises)) localStorage.setItem(STORAGE_KEY, JSON.stringify(data.exercises));
-  if (Array.isArray(data.presets)) localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(data.presets));
-  if (typeof data.lang === "string") localStorage.setItem(LANG_STORAGE_KEY, data.lang);
-  window.location.reload();
-}
-
-function importDataFromFile(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    let data;
-    try {
-      data = JSON.parse(reader.result);
-      if (!data || typeof data !== "object") throw new Error("invalid");
-    } catch {
-      alert(t("backup.importError"));
-      return;
-    }
-    window.openConfirmModal(t("backup.confirmImport"), () => applyImportedData(data), t("backup.confirmImportBtn"));
-  };
-  reader.readAsText(file);
-}
-
-exportBtn.addEventListener("click", exportData);
-importBtn.addEventListener("click", () => importFileInput.click());
-importFileInput.addEventListener("change", () => {
-  const file = importFileInput.files[0];
-  if (file) importDataFromFile(file);
-  importFileInput.value = "";
-});
-
 if (navigator.storage && navigator.storage.persist) {
   navigator.storage.persist();
 }

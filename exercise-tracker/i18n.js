@@ -52,11 +52,6 @@ const TRANSLATIONS = {
     "presets.playTitle": "Démarrer ce chrono",
     "notif.title": "⏱️ Chrono terminé !",
     "notif.body": "Le temps est écoulé.",
-    "backup.export": "💾 Exporter",
-    "backup.import": "📥 Importer",
-    "backup.confirmImport": "Ceci remplacera tes données actuelles par celles du fichier. Continuer ?",
-    "backup.confirmImportBtn": "Importer",
-    "backup.importError": "Fichier invalide.",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -102,11 +97,6 @@ const TRANSLATIONS = {
     "presets.playTitle": "Start this timer",
     "notif.title": "⏱️ Timer done!",
     "notif.body": "Time's up.",
-    "backup.export": "💾 Export",
-    "backup.import": "📥 Import",
-    "backup.confirmImport": "This will replace your current data with the file's content. Continue?",
-    "backup.confirmImportBtn": "Import",
-    "backup.importError": "Invalid file.",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -152,11 +142,6 @@ const TRANSLATIONS = {
     "presets.playTitle": "Iniciar este cronómetro",
     "notif.title": "⏱️ ¡Cronómetro terminado!",
     "notif.body": "Se acabó el tiempo.",
-    "backup.export": "💾 Exportar",
-    "backup.import": "📥 Importar",
-    "backup.confirmImport": "Esto reemplazará tus datos actuales por los del archivo. ¿Continuar?",
-    "backup.confirmImportBtn": "Importar",
-    "backup.importError": "Archivo no válido.",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -202,11 +187,6 @@ const TRANSLATIONS = {
     "presets.playTitle": "Iniciar este cronómetro",
     "notif.title": "⏱️ Cronómetro terminado!",
     "notif.body": "O tempo acabou.",
-    "backup.export": "💾 Exportar",
-    "backup.import": "📥 Importar",
-    "backup.confirmImport": "Isto vai substituir os teus dados atuais pelos do ficheiro. Continuar?",
-    "backup.confirmImportBtn": "Importar",
-    "backup.importError": "Ficheiro inválido.",
   },
 };
 

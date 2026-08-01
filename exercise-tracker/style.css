@@ -600,10 +600,3 @@ input[type="number"]::-webkit-inner-spin-button {
   border-radius: 12px;
   box-shadow: 0 0 60px rgba(236, 43, 30, 0.35);
 }
-
-.backup-bar {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 32px;
-}
