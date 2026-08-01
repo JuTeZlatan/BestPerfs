@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi d'exercices</title>
+<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#ec2b1e">
+</head>
+<body>
+  <div id="splash-screen" class="splash-screen">
+    <img src="splash-logo.jpg" alt="Best Perfs" class="splash-logo">
+  </div>
+  <script>
+    setTimeout(function () {
+      var splash = document.getElementById("splash-screen");
+      splash.classList.add("hide");
+      setTimeout(function () { splash.style.display = "none"; }, 400);
+    }, 3000);
+  </script>
+
+  <div class="app">
+    <div class="lang-switcher">
+      <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
+      <div id="lang-menu" class="lang-menu" hidden>
+        <button class="lang-option" data-lang="fr">
+          <span class="flag-icon-slot"></span>
+          <span>Français</span>
+        </button>
+        <button class="lang-option" data-lang="en">
+          <span class="flag-icon-slot"></span>
+          <span>English</span>
+        </button>
+        <button class="lang-option" data-lang="es">
+          <span class="flag-icon-slot"></span>
+          <span>Español</span>
+        </button>
+        <button class="lang-option" data-lang="pt">
+          <span class="flag-icon-slot"></span>
+          <span>Português</span>
+        </button>
+      </div>
+    </div>
+
+    <button id="view-toggle-btn" class="view-toggle-btn" data-i18n-title="nav.toggleTitle">⏱️ Chrono</button>
+
+    <section id="exercises-view">
+      <header>
+        <h1 data-i18n="app.title.exercises">💪 Suivi d'exercices</h1>
+        <p class="subtitle" data-i18n="app.subtitle.exercises">Ajoute tes appareils/exercices et note tes records.</p>
+      </header>
+
+      <form id="add-form" class="add-form">
+        <input type="text" id="exercise-input" data-i18n-placeholder="exercise.inputPlaceholder" placeholder="Nom de l'appareil ou exercice (ex: Développé couché)" maxlength="40" required>
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <div class="sort-bar">
+        <span class="sort-label" data-i18n="sort.label">Trier :</span>
+        <button id="sort-asc-btn" class="sort-btn" data-i18n="sort.asc" data-i18n-title="sort.ascTitle" title="Ordre alphabétique croissant">A → Z</button>
+        <button id="sort-desc-btn" class="sort-btn" data-i18n="sort.desc" data-i18n-title="sort.descTitle" title="Ordre alphabétique décroissant">Z → A</button>
+      </div>
+
+      <div id="exercise-list" class="exercise-list"></div>
+
+      <p id="empty-state" class="empty-state" data-i18n="exercise.empty">Aucun exercice pour l'instant. Ajoute-en un ci-dessous !</p>
+    </section>
+
+    <section id="timer-view" hidden>
+      <header>
+        <h1 data-i18n="app.title.chrono">⏱️ Chrono</h1>
+        <p class="subtitle" data-i18n="app.subtitle.chrono">Démarre le chrono et marque des intervalles au fil de l'effort.</p>
+      </header>
+
+      <div class="timer-panel">
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-controls">
+          <button id="timer-start-btn" class="timer-btn primary">Démarrer</button>
+          <button id="lap-btn" class="timer-btn" data-i18n="timer.lap">Intervalle</button>
+          <button id="timer-reset-btn" class="timer-btn" data-i18n="timer.reset">Réinitialiser</button>
+        </div>
+
+        <div id="lap-list" class="lap-list"></div>
+      </div>
+
+      <h2 class="section-title" data-i18n="presets.sectionTitle">Chronos prédéfinis</h2>
+
+      <form id="add-preset-form" class="add-form">
+        <input type="text" id="preset-name-input" data-i18n-placeholder="presets.namePlaceholder" placeholder="Nom (ex: Repos)" maxlength="30" required>
+        <input type="number" id="preset-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="preset-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <div id="preset-list" class="exercise-list"></div>
+
+      <p id="preset-empty-state" class="empty-state" data-i18n="presets.empty">Aucun chrono enregistré. Ajoute-en un ci-dessous !</p>
+    </section>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" id="modal-message">Supprimer cet exercice ?</p>
+      <div class="modal-actions">
+        <button id="modal-cancel-btn" class="modal-btn" data-i18n="modal.cancel">Annuler</button>
+        <button id="modal-confirm-btn" class="modal-btn danger" data-i18n="modal.confirm">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <template id="exercise-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <button class="edit-btn" title="Modifier le nom">✏️</button>
+        <input type="text" class="exercise-name" maxlength="40" placeholder="Nom de l'exercice" readonly>
+        <div class="reps-kg-stack">
+          <label class="inline-field">
+            <span class="inline-field-label">Reps</span>
+            <input type="number" class="reps-input" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">kg</span>
+            <input type="number" class="weight-input" min="0" step="0.5" placeholder="0">
+          </label>
+        </div>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <template id="lap-row-template">
+    <div class="lap-row">
+      <span class="lap-row-label"></span>
+      <span class="lap-row-time"></span>
+      <button class="lap-delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <template id="preset-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <button class="edit-btn" title="Modifier le nom">✏️</button>
+        <input type="text" class="preset-name" maxlength="30" placeholder="Nom du chrono" readonly>
+        <label class="inline-field">
+          <span class="inline-field-label">Min</span>
+          <input type="number" class="preset-minutes" min="0" step="1">
+        </label>
+        <label class="inline-field">
+          <span class="inline-field-label">Sec</span>
+          <input type="number" class="preset-seconds" min="0" max="59" step="1">
+        </label>
+        <button class="play-btn" title="Démarrer ce chrono">▶</button>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+  <script src="timer.js"></script>
+</body>
+</html>
