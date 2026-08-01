@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi d'habitudes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>🔥 Suivi d'habitudes</h1>
+      <p class="subtitle">Coche chaque jour, garde ta série vivante.</p>
+    </header>
+
+    <form id="add-form" class="add-form">
+      <input type="text" id="habit-input" placeholder="Nouvelle habitude (ex: Lire 10 min)" maxlength="40" required>
+      <button type="submit">Ajouter</button>
+    </form>
+
+    <div id="habit-list" class="habit-list"></div>
+
+    <p id="empty-state" class="empty-state">Aucune habitude pour l'instant. Ajoute-en une ci-dessus !</p>
+  </div>
+
+  <template id="habit-template">
+    <div class="habit-card">
+      <div class="habit-header">
+        <span class="habit-name"></span>
+        <div class="habit-header-right">
+          <span class="streak-badge"></span>
+          <button class="delete-btn" title="Supprimer">✕</button>
+        </div>
+      </div>
+      <div class="day-grid"></div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
