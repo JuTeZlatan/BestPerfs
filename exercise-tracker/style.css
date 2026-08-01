@@ -173,12 +173,14 @@ h1 {
 
 .add-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
 }
 
 .add-form input {
   flex: 1;
+  min-width: 140px;
   padding: 12px 14px;
   border-radius: 4px;
   border: 1px solid var(--card-border);
@@ -271,13 +273,14 @@ h1 {
   border-radius: 4px;
   padding: 8px 12px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 8px 12px;
 }
 
 .exercise-name {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 100px;
+  min-width: 100px;
 }
 
 .exercise-name,
@@ -432,6 +435,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .timer-controls {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
   margin-bottom: 8px;
