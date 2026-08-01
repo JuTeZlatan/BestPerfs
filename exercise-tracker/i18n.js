@@ -50,6 +50,8 @@ const TRANSLATIONS = {
     "presets.secPlaceholder": "Sec",
     "presets.empty": "Aucun chrono enregistré. Ajoute-en un ci-dessous !",
     "presets.playTitle": "Démarrer ce chrono",
+    "notif.title": "⏱️ Chrono terminé !",
+    "notif.body": "Le temps est écoulé.",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -93,6 +95,8 @@ const TRANSLATIONS = {
     "presets.secPlaceholder": "Sec",
     "presets.empty": "No preset timers yet. Add one below!",
     "presets.playTitle": "Start this timer",
+    "notif.title": "⏱️ Timer done!",
+    "notif.body": "Time's up.",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -136,6 +140,8 @@ const TRANSLATIONS = {
     "presets.secPlaceholder": "Seg",
     "presets.empty": "Aún no hay cronómetros. ¡Añade uno abajo!",
     "presets.playTitle": "Iniciar este cronómetro",
+    "notif.title": "⏱️ ¡Cronómetro terminado!",
+    "notif.body": "Se acabó el tiempo.",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -179,6 +185,8 @@ const TRANSLATIONS = {
     "presets.secPlaceholder": "Seg",
     "presets.empty": "Ainda não há cronómetros. Adiciona um abaixo!",
     "presets.playTitle": "Iniciar este cronómetro",
+    "notif.title": "⏱️ Cronómetro terminado!",
+    "notif.body": "O tempo acabou.",
   },
 };
 

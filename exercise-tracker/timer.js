@@ -40,6 +40,42 @@ function beep(freq = 880, durationMs = 150) {
   osc.stop(audioCtx.currentTime + durationMs / 1000);
 }
 
+// ---- Completion notification (works while the app is backgrounded, not after it's fully closed) ----
+function requestNotificationPermission() {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function showCompletionNotification(name) {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  const title = t("notif.title");
+  const body = name ? `${name} — ${t("notif.body")}` : t("notif.body");
+  const options = { body, icon: "icon-192.png", badge: "icon-192.png", tag: "chrono-done" };
+  if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+    navigator.serviceWorker.ready.then((reg) => reg.showNotification(title, options)).catch(() => {
+      new Notification(title, options);
+    });
+  } else {
+    new Notification(title, options);
+  }
+}
+
+let notifyTimeoutId = null;
+
+function clearScheduledNotification() {
+  if (notifyTimeoutId) {
+    clearTimeout(notifyTimeoutId);
+    notifyTimeoutId = null;
+  }
+}
+
+function scheduleNotification(remainingSeconds, name) {
+  clearScheduledNotification();
+  notifyTimeoutId = setTimeout(() => showCompletionNotification(name), Math.max(0, remainingSeconds * 1000));
+}
+
 // ---- Chrono ----
 const timerDisplay = document.getElementById("timer-display");
 const timerStartBtn = document.getElementById("timer-start-btn");
@@ -54,6 +90,7 @@ let elapsedSeconds = 0;
 let animationHandle = null;
 let laps = [];
 let countdownTarget = null; // null = stopwatch mode, number = countdown seconds
+let countdownName = null;
 let timerBtnState = "start"; // "start" | "pause" | "resume"
 
 function setTimerBtnState(state) {
@@ -72,9 +109,11 @@ function updateDisplay() {
     const remaining = countdownTarget - elapsed;
     if (remaining <= 0) {
       beep(660, 400);
+      clearScheduledNotification();
       running = false;
       cancelAnimationFrame(animationHandle);
       countdownTarget = null;
+      countdownName = null;
       elapsedSeconds = 0;
       setTimerBtnState("start");
       timerDisplay.textContent = formatTime(0);
@@ -95,10 +134,14 @@ timerStartBtn.addEventListener("click", () => {
     elapsedSeconds += (Date.now() - startTimestamp) / 1000;
     running = false;
     cancelAnimationFrame(animationHandle);
+    clearScheduledNotification();
     setTimerBtnState("resume");
   } else {
     startTimestamp = Date.now();
     running = true;
+    if (countdownTarget !== null) {
+      scheduleNotification(countdownTarget - elapsedSeconds, countdownName);
+    }
     updateDisplay();
     setTimerBtnState("pause");
   }
@@ -107,23 +150,27 @@ timerStartBtn.addEventListener("click", () => {
 timerResetBtn.addEventListener("click", () => {
   running = false;
   cancelAnimationFrame(animationHandle);
+  clearScheduledNotification();
   elapsedSeconds = 0;
   countdownTarget = null;
+  countdownName = null;
   setTimerBtnState("start");
   laps = [];
   renderLaps();
   updateDisplay();
 });
 
-function startCountdown(seconds) {
+function startCountdown(seconds, name) {
   running = false;
   cancelAnimationFrame(animationHandle);
   elapsedSeconds = 0;
   laps = [];
   renderLaps();
   countdownTarget = seconds;
+  countdownName = name || null;
   startTimestamp = Date.now();
   running = true;
+  scheduleNotification(seconds, countdownName);
   updateDisplay();
   setTimerBtnState("pause");
 }
@@ -234,7 +281,8 @@ function renderPresets() {
     const playBtn = node.querySelector(".play-btn");
     playBtn.title = t("presets.playTitle");
     playBtn.addEventListener("click", () => {
-      startCountdown(preset.seconds);
+      requestNotificationPermission();
+      startCountdown(preset.seconds, preset.name);
     });
 
     const deleteBtn = node.querySelector(".delete-btn");

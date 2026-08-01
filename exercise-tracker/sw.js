@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v2";
+const CACHE_NAME = "exercise-tracker-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -41,5 +41,18 @@ self.addEventListener("fetch", (event) => {
         return response;
       })
       .catch(() => caches.match(event.request))
+  );
+});
+
+// Focus (or open) the app when the user taps a completion notification.
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ("focus" in client) return client.focus();
+      }
+      if (self.clients.openWindow) return self.clients.openWindow("./");
+    })
   );
 });
