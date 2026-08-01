@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v1";
+const CACHE_NAME = "exercise-tracker-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -27,20 +27,19 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+// Network-first: always try to fetch the latest version when online,
+// only fall back to the cached copy when the network is unavailable.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const network = fetch(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    fetch(event.request, { cache: "no-store" })
+      .then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
