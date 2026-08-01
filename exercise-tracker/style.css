@@ -261,13 +261,13 @@ h1 {
 .exercise-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .exercise-row {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 6px;
 }
 
 .exercise-card {
@@ -275,31 +275,31 @@ h1 {
   min-width: 0;
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-left: 4px solid var(--accent);
+  border-left: 3px solid var(--accent);
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 5px 8px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
+  gap: 4px 8px;
 }
 
 .exercise-name {
-  flex: 1 1 100px;
-  min-width: 100px;
+  flex: 1 1 80px;
+  min-width: 80px;
 }
 
 .exercise-name,
 .preset-name {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-family: inherit;
   color: var(--text);
   background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 4px 6px;
-  margin: -4px -6px;
+  padding: 3px 5px;
+  margin: -3px -5px;
   outline: none;
   cursor: default;
 }
@@ -316,9 +316,9 @@ h1 {
   border: none;
   color: var(--text-dim);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.85rem;
   line-height: 1;
-  padding: 4px;
+  padding: 3px;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -328,13 +328,13 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
+  width: 34px;
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 4px;
   color: var(--text-dim);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 .play-btn {
@@ -370,33 +370,33 @@ h1 {
 .reps-kg-stack {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex-shrink: 0;
 }
 
 .inline-field {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
 .inline-field-label {
-  min-width: 30px;
-  font-size: 0.7rem;
+  min-width: 24px;
+  font-size: 0.62rem;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .inline-field input {
-  width: 56px;
-  padding: 6px 8px;
+  width: 46px;
+  padding: 3px 5px;
   border-radius: 4px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   outline: none;
 }
 
@@ -405,7 +405,7 @@ h1 {
 }
 
 .weight-input {
-  width: 76px;
+  width: 62px;
 }
 
 input[type="number"] {
