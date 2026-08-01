@@ -15,6 +15,17 @@
 <meta name="apple-mobile-web-app-title" content="Exercices">
 </head>
 <body>
+  <div id="splash-screen" class="splash-screen">
+    <img src="splash-logo.jpg" alt="Best Perfs" class="splash-logo">
+  </div>
+  <script>
+    setTimeout(function () {
+      var splash = document.getElementById("splash-screen");
+      splash.classList.add("hide");
+      setTimeout(function () { splash.style.display = "none"; }, 400);
+    }, 3000);
+  </script>
+
   <div class="app">
     <div class="lang-switcher">
       <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
