@@ -513,22 +513,63 @@ h1 {
 
 .reps-kg-stack {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
   flex-shrink: 0;
 }
 
 .perf-distance-display,
 .perf-time-display {
+  display: inline-flex;
+  align-items: baseline;
   flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
-  font-size: 0.85rem;
-  color: var(--text-dim);
+  padding: 3px 9px 3px 7px;
+  border-radius: 12px;
+  background: rgba(226, 36, 26, 0.14);
+  border: 1px solid var(--card-border);
 }
 
-.perf-time-display {
+.perf-distance-display[hidden] {
+  display: none;
+}
+
+.perf-distance-display .chip-icon,
+.perf-time-display .chip-icon {
+  font-size: 0.68rem;
+  margin-right: 3px;
+}
+
+.perf-distance-display .chip-num,
+.perf-time-display .chip-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.perf-distance-display .chip-num {
   color: var(--text);
-  font-weight: 600;
+}
+
+.perf-time-display .chip-num {
+  color: var(--accent-2);
+}
+
+.chip-num-sub {
+  font-size: 0.68rem;
+  opacity: 0.85;
+}
+
+.chip-unit {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: lowercase;
+  margin: 0 3px 0 1px;
+}
+
+.chip-unit:last-child {
+  margin-right: 0;
 }
 
 .inline-field {

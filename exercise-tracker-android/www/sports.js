@@ -31,18 +31,19 @@ const runningMinutesInput = document.getElementById("running-minutes-input");
 const runningSecondsInput = document.getElementById("running-seconds-input");
 
 const DISTANCE_UNITS = { natation: "m", velo: "km" };
+const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃" };
 
-function formatSportTime(perf, sport) {
+function timeChipHTML(perf, sport) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
   if (sport === "natation") {
-    return `${pad(perf.minutes)}Mn${pad(perf.seconds)}S${pad(perf.hundredths)}`;
+    return `<span class="chip-icon">⏱️</span><span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span><span class="chip-num chip-num-sub">${pad(perf.hundredths)}</span>`;
   }
-  return `${pad(perf.hours)}H${pad(perf.minutes)}Mn${pad(perf.seconds)}S`;
+  return `<span class="chip-icon">⏱️</span><span class="chip-num">${pad(perf.hours)}</span><span class="chip-unit">h</span><span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span>`;
 }
 
-function formatSportDistance(perf, sport) {
+function distanceChipHTML(perf, sport) {
   if (perf.distance == null || perf.distance === "") return "";
-  return `${perf.distance} ${DISTANCE_UNITS[sport]}`;
+  return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${perf.distance}</span><span class="chip-unit">${DISTANCE_UNITS[sport]}</span>`;
 }
 
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
@@ -167,10 +168,14 @@ function renderSportList() {
     }
 
     const distanceDisplay = node.querySelector(".perf-distance-display");
-    if (distanceDisplay) distanceDisplay.textContent = formatSportDistance(perf, currentSport);
+    if (distanceDisplay) {
+      const html = distanceChipHTML(perf, currentSport);
+      distanceDisplay.innerHTML = html;
+      distanceDisplay.hidden = !html;
+    }
 
     const timeDisplay = node.querySelector(".perf-time-display");
-    timeDisplay.textContent = formatSportTime(perf, currentSport);
+    timeDisplay.innerHTML = timeChipHTML(perf, currentSport);
 
     const deleteBtn = node.querySelector(".delete-btn");
     deleteBtn.title = t("delete.title");
