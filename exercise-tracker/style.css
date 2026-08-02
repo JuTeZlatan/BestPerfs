@@ -247,6 +247,46 @@ h1 {
 }
 .add-form button:active { transform: translateY(0); }
 
+@media (max-width: 480px) {
+  .add-form {
+    flex-wrap: nowrap;
+    gap: 3px;
+  }
+
+  .add-form input {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 8px 6px;
+    font-size: 0.8rem;
+  }
+
+  .add-form input.preset-time-field {
+    flex: 0 0 30px;
+    width: 30px;
+    padding: 8px 2px;
+    text-align: center;
+  }
+
+  .add-form input.distance-field {
+    flex: 0 0 50px;
+    width: 50px;
+    padding: 8px 4px;
+  }
+
+  .add-form button[type="submit"] {
+    flex: 0 0 34px;
+    width: 34px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .add-form button[type="submit"]::after {
+    content: "+";
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+}
+
 .sort-bar {
   display: flex;
   align-items: center;

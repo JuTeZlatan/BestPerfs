@@ -137,6 +137,7 @@
 
       <form id="add-cycling-form" class="add-form" hidden>
         <input type="number" id="cycling-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1" required>
+        <input type="number" id="cycling-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="cycling-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="cycling-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
@@ -144,6 +145,7 @@
 
       <form id="add-running-form" class="add-form" hidden>
         <input type="text" id="running-desc-input" data-i18n-placeholder="sport.running.descPlaceholder" placeholder="Décris la course (ex: 10 km route)" maxlength="40" required>
+        <input type="number" id="running-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="running-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="running-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
@@ -249,6 +251,10 @@
             <input type="number" class="perf-distance distance-input" min="0" step="0.1" placeholder="0">
           </label>
           <label class="inline-field">
+            <span class="inline-field-label">H</span>
+            <input type="number" class="perf-hours" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
             <span class="inline-field-label">Min</span>
             <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
           </label>
@@ -268,6 +274,10 @@
         <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
         <div class="reps-kg-stack">
+          <label class="inline-field">
+            <span class="inline-field-label">H</span>
+            <input type="number" class="perf-hours" min="0" step="1" placeholder="0">
+          </label>
           <label class="inline-field">
             <span class="inline-field-label">Min</span>
             <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
