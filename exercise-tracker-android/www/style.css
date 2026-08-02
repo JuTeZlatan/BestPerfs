@@ -247,7 +247,7 @@ h1 {
 }
 .add-form button:active { transform: translateY(0); }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .add-form {
     flex-wrap: nowrap;
     gap: 3px;
@@ -551,11 +551,6 @@ h1 {
 .weight-input,
 .distance-input {
   width: 62px;
-}
-
-.add-form input.distance-field {
-  flex: 0 0 130px;
-  min-width: 0;
 }
 
 input[type="number"] {
