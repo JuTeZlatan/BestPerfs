@@ -17,7 +17,7 @@ const TRANSLATIONS = {
     "app.title.chrono": "⏱️ Chrono",
     "app.subtitle.chrono": "Démarre le chrono et marque des intervalles.",
     "nav.toChrono": "⏱️ Chrono",
-    "nav.toExercises": "💪 Exercices",
+    "nav.toExercises": "💪 Muscu",
     "nav.toggleTitle": "Changer de vue",
     "lang.title": "Langue",
     "exercise.inputPlaceholder": "Nom de l'appareil ou exercice (ex: Développé couché)",

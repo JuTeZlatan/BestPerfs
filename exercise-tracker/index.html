@@ -124,10 +124,16 @@
         <p class="subtitle" data-i18n="app.subtitle.sports">Choisis un sport et enregistre tes performances.</p>
       </header>
 
-      <div id="sport-selector" class="sport-selector">
-        <button class="sport-tab active" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
-        <button class="sport-tab" data-sport="velo" data-i18n="sport.cycling">🚴 Vélo</button>
-        <button class="sport-tab" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
+      <div class="sport-dropdown">
+        <button id="sport-select-btn" class="sport-select-btn" type="button">
+          <span id="sport-select-label"></span>
+          <span class="dropdown-arrow">▾</span>
+        </button>
+        <div id="sport-menu" class="sport-menu" hidden>
+          <button class="sport-option active" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
+          <button class="sport-option" data-sport="velo" data-i18n="sport.cycling">🚴 Vélo</button>
+          <button class="sport-option" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
+        </div>
       </div>
 
       <form id="add-swim-form" class="add-form">

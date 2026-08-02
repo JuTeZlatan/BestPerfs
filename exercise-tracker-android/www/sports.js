@@ -1,6 +1,8 @@
 const SPORTS_STORAGE_KEY = "exercise-tracker-sports";
 
-const sportSelectorEl = document.getElementById("sport-selector");
+const sportSelectBtn = document.getElementById("sport-select-btn");
+const sportSelectLabel = document.getElementById("sport-select-label");
+const sportMenuEl = document.getElementById("sport-menu");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
 
@@ -26,6 +28,7 @@ const runningSecondsInput = document.getElementById("running-seconds-input");
 
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
 const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate };
+const SPORT_LABEL_KEYS = { natation: "sport.swimming", velo: "sport.cycling", course: "sport.running" };
 
 let currentSport = "natation";
 let sportPerfs = loadSportPerfs();
@@ -48,19 +51,42 @@ function saveSportPerfs() {
   localStorage.setItem(SPORTS_STORAGE_KEY, JSON.stringify(sportPerfs));
 }
 
+function updateSportSelectLabel() {
+  sportSelectLabel.textContent = t(SPORT_LABEL_KEYS[currentSport]);
+}
+
 function selectSport(sport) {
   currentSport = sport;
-  sportSelectorEl.querySelectorAll(".sport-tab").forEach((btn) => {
+  sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.sport === sport);
   });
   Object.keys(SPORT_FORMS).forEach((key) => {
     SPORT_FORMS[key].hidden = key !== sport;
   });
+  updateSportSelectLabel();
   renderSportList();
 }
 
-sportSelectorEl.querySelectorAll(".sport-tab").forEach((btn) => {
-  btn.addEventListener("click", () => selectSport(btn.dataset.sport));
+sportSelectBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  sportMenuEl.hidden = !sportMenuEl.hidden;
+});
+
+sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    selectSport(btn.dataset.sport);
+    sportMenuEl.hidden = true;
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!sportMenuEl.hidden && !sportMenuEl.contains(e.target) && e.target !== sportSelectBtn) {
+    sportMenuEl.hidden = true;
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !sportMenuEl.hidden) sportMenuEl.hidden = true;
 });
 
 function renderSportList() {
@@ -200,6 +226,9 @@ addRunningForm.addEventListener("submit", (e) => {
   runningDescInput.focus();
 });
 
-document.addEventListener("languagechange", renderSportList);
+document.addEventListener("languagechange", () => {
+  updateSportSelectLabel();
+  renderSportList();
+});
 
 selectSport("natation");
