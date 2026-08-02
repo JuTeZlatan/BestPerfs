@@ -247,45 +247,6 @@ h1 {
 }
 .add-form button:active { transform: translateY(0); }
 
-@media (max-width: 600px) {
-  .add-form {
-    flex-wrap: nowrap;
-    gap: 3px;
-  }
-
-  .add-form input {
-    min-width: 0;
-    flex: 1 1 0;
-    padding: 8px 6px;
-    font-size: 0.8rem;
-  }
-
-  .add-form input.preset-time-field {
-    flex: 0 0 30px;
-    width: 30px;
-    padding: 8px 2px;
-    text-align: center;
-  }
-
-  .add-form input.distance-field {
-    flex: 0 0 50px;
-    width: 50px;
-    padding: 8px 4px;
-  }
-
-  .add-form button[type="submit"] {
-    flex: 0 0 34px;
-    width: 34px;
-    padding: 0;
-    font-size: 0;
-  }
-
-  .add-form button[type="submit"]::after {
-    content: "+";
-    font-size: 1.3rem;
-    line-height: 1;
-  }
-}
 
 .sort-bar {
   display: flex;
@@ -798,4 +759,98 @@ input[type="number"]::-webkit-inner-spin-button {
   height: auto;
   border-radius: 12px;
   box-shadow: 0 0 60px rgba(236, 43, 30, 0.35);
+}
+
+/* Mobile-width overrides. Kept last in the file so equal-specificity
+   rules above (any width, not just this block) always lose to these. */
+@media (max-width: 600px) {
+  .add-form {
+    flex-wrap: nowrap;
+    gap: 3px;
+  }
+
+  .add-form input {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 8px 6px;
+    font-size: 0.8rem;
+  }
+
+  .add-form input.preset-time-field {
+    flex: 0 0 30px;
+    width: 30px;
+    padding: 8px 2px;
+    text-align: center;
+  }
+
+  .add-form input.distance-field {
+    flex: 0 0 50px;
+    width: 50px;
+    padding: 8px 4px;
+  }
+
+  .add-form button[type="submit"] {
+    flex: 0 0 34px;
+    width: 34px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .add-form button[type="submit"]::after {
+    content: "+";
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+
+  .exercise-card {
+    flex-wrap: nowrap;
+  }
+
+  .exercise-name,
+  .preset-name,
+  .perf-text {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .perf-distance-display,
+  .perf-time-display {
+    padding: 2px 6px 2px 5px;
+  }
+
+  .perf-distance-display .chip-icon,
+  .perf-time-display .chip-icon {
+    font-size: 0.6rem;
+    margin-right: 2px;
+  }
+
+  .perf-distance-display .chip-num,
+  .perf-time-display .chip-num {
+    font-size: 0.76rem;
+  }
+
+  .chip-num-sub {
+    font-size: 0.6rem;
+  }
+
+  .chip-unit {
+    font-size: 0.52rem;
+    margin: 0 2px 0 1px;
+  }
+
+  .reps-kg-stack {
+    gap: 3px;
+  }
+
+  .inline-field-label {
+    min-width: 0;
+  }
+
+  .inline-field input {
+    width: 34px;
+  }
+
+  .weight-input {
+    width: 40px;
+  }
 }
