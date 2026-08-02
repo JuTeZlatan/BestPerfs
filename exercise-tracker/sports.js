@@ -35,9 +35,9 @@ const DISTANCE_UNITS = { natation: "m", velo: "km" };
 function formatSportTime(perf, sport) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
   if (sport === "natation") {
-    return `${pad(perf.minutes)}:${pad(perf.seconds)}.${pad(perf.hundredths)}`;
+    return `${pad(perf.minutes)}Mn${pad(perf.seconds)}S${pad(perf.hundredths)}`;
   }
-  return `${pad(perf.hours)}:${pad(perf.minutes)}:${pad(perf.seconds)}`;
+  return `${pad(perf.hours)}H${pad(perf.minutes)}Mn${pad(perf.seconds)}S`;
 }
 
 function formatSportDistance(perf, sport) {
