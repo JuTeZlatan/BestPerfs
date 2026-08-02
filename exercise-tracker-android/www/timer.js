@@ -1,20 +1,20 @@
-// ---- View toggle (exercises <-> chrono) ----
-const viewToggleBtn = document.getElementById("view-toggle-btn");
+// ---- View navigation (exercises / chrono / sports) ----
+const navTabs = document.querySelectorAll(".nav-tab");
 const exercisesView = document.getElementById("exercises-view");
 const timerView = document.getElementById("timer-view");
+const sportsView = document.getElementById("sports-view");
+const NAV_VIEWS = { exercises: exercisesView, timer: timerView, sports: sportsView };
 
-function updateViewToggleLabel() {
-  viewToggleBtn.textContent = timerView.hidden ? t("nav.toChrono") : t("nav.toExercises");
+function showView(name) {
+  Object.keys(NAV_VIEWS).forEach((key) => {
+    NAV_VIEWS[key].hidden = key !== name;
+  });
+  navTabs.forEach((btn) => btn.classList.toggle("active", btn.dataset.view === name));
 }
 
-viewToggleBtn.addEventListener("click", () => {
-  const showingTimer = !timerView.hidden;
-  timerView.hidden = showingTimer;
-  exercisesView.hidden = !showingTimer;
-  updateViewToggleLabel();
+navTabs.forEach((btn) => {
+  btn.addEventListener("click", () => showView(btn.dataset.view));
 });
-
-updateViewToggleLabel();
 
 function formatTime(totalSeconds) {
   const clamped = Math.max(0, totalSeconds);
@@ -316,7 +316,6 @@ addPresetForm.addEventListener("submit", (e) => {
 });
 
 document.addEventListener("languagechange", () => {
-  updateViewToggleLabel();
   setTimerBtnState(timerBtnState);
   renderLaps();
   renderPresets();

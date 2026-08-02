@@ -35,34 +35,52 @@ body {
   position: relative;
 }
 
-.view-toggle-btn {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  padding: 8px 14px;
+.top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nav-tab {
+  padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid var(--card-border);
   background: var(--card);
-  color: var(--text);
+  color: var(--text-dim);
   font-family: "Oswald", sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
   cursor: pointer;
   transition: transform 0.1s ease, border-color 0.15s ease;
 }
 
-.view-toggle-btn:hover {
+.nav-tab:hover {
   transform: translateY(-1px);
   border-color: var(--accent);
 }
 
+.nav-tab.active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: transparent;
+}
+
 .lang-switcher {
-  position: absolute;
-  top: -40px;
-  right: 0;
+  position: relative;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .lang-btn {
@@ -184,6 +202,10 @@ h1 {
   margin-bottom: 24px;
 }
 
+.add-form[hidden] {
+  display: none;
+}
+
 .add-form input {
   flex: 1;
   min-width: 140px;
@@ -258,6 +280,42 @@ h1 {
   border-color: transparent;
 }
 
+.sport-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sport-tab {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text-dim);
+  font-family: "Oswald", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+
+.sport-tab:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.sport-tab.active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: transparent;
+}
+
 .exercise-list {
   display: flex;
   flex-direction: column;
@@ -290,7 +348,8 @@ h1 {
 }
 
 .exercise-name,
-.preset-name {
+.preset-name,
+.perf-text {
   font-weight: 600;
   font-size: 0.85rem;
   font-family: inherit;
@@ -305,10 +364,16 @@ h1 {
 }
 
 .exercise-name:not([readonly]),
-.preset-name:not([readonly]) {
+.preset-name:not([readonly]),
+.perf-text:not([readonly]) {
   border-color: var(--accent);
   background: var(--field);
   cursor: text;
+}
+
+.perf-text {
+  flex: 1 1 80px;
+  min-width: 80px;
 }
 
 .edit-btn {
@@ -404,8 +469,14 @@ h1 {
   border-color: var(--accent);
 }
 
-.weight-input {
+.weight-input,
+.distance-input {
   width: 62px;
+}
+
+.add-form input.distance-field {
+  flex: 0 0 130px;
+  min-width: 0;
 }
 
 input[type="number"] {

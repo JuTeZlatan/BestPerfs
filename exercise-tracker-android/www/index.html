@@ -20,37 +20,43 @@
   </script>
 
   <div class="app">
-    <div class="lang-switcher">
-      <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
-      <div id="lang-menu" class="lang-menu" hidden>
-        <button class="lang-option" data-lang="fr">
-          <span class="flag-icon-slot"></span>
-          <span>Français</span>
-        </button>
-        <button class="lang-option" data-lang="en">
-          <span class="flag-icon-slot"></span>
-          <span>English</span>
-        </button>
-        <button class="lang-option" data-lang="es">
-          <span class="flag-icon-slot"></span>
-          <span>Español</span>
-        </button>
-        <button class="lang-option" data-lang="pt">
-          <span class="flag-icon-slot"></span>
-          <span>Português</span>
-        </button>
-        <button class="lang-option" data-lang="zh">
-          <span class="flag-icon-slot"></span>
-          <span>中文</span>
-        </button>
-        <button class="lang-option" data-lang="ar">
-          <span class="flag-icon-slot"></span>
-          <span>العربية</span>
-        </button>
+    <div class="top-bar">
+      <nav id="main-nav" class="main-nav">
+        <button class="nav-tab active" data-view="exercises" data-i18n="nav.toExercises">💪 Exercices</button>
+        <button class="nav-tab" data-view="timer" data-i18n="nav.toChrono">⏱️ Chrono</button>
+        <button class="nav-tab" data-view="sports" data-i18n="nav.toSports">🏅 Sports</button>
+      </nav>
+
+      <div class="lang-switcher">
+        <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
+        <div id="lang-menu" class="lang-menu" hidden>
+          <button class="lang-option" data-lang="fr">
+            <span class="flag-icon-slot"></span>
+            <span>Français</span>
+          </button>
+          <button class="lang-option" data-lang="en">
+            <span class="flag-icon-slot"></span>
+            <span>English</span>
+          </button>
+          <button class="lang-option" data-lang="es">
+            <span class="flag-icon-slot"></span>
+            <span>Español</span>
+          </button>
+          <button class="lang-option" data-lang="pt">
+            <span class="flag-icon-slot"></span>
+            <span>Português</span>
+          </button>
+          <button class="lang-option" data-lang="zh">
+            <span class="flag-icon-slot"></span>
+            <span>中文</span>
+          </button>
+          <button class="lang-option" data-lang="ar">
+            <span class="flag-icon-slot"></span>
+            <span>العربية</span>
+          </button>
+        </div>
       </div>
     </div>
-
-    <button id="view-toggle-btn" class="view-toggle-btn" data-i18n-title="nav.toggleTitle">⏱️ Chrono</button>
 
     <section id="exercises-view">
       <header>
@@ -103,6 +109,45 @@
       <div id="preset-list" class="exercise-list"></div>
 
       <p id="preset-empty-state" class="empty-state" data-i18n="presets.empty">Aucun chrono enregistré. Ajoute-en un ci-dessous !</p>
+    </section>
+
+    <section id="sports-view" hidden>
+      <header>
+        <h1 data-i18n="app.title.sports">🏅 Autres sports</h1>
+        <p class="subtitle" data-i18n="app.subtitle.sports">Choisis un sport et enregistre tes performances.</p>
+      </header>
+
+      <div id="sport-selector" class="sport-selector">
+        <button class="sport-tab active" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
+        <button class="sport-tab" data-sport="velo" data-i18n="sport.cycling">🚴 Vélo</button>
+        <button class="sport-tab" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
+      </div>
+
+      <form id="add-swim-form" class="add-form">
+        <input type="text" id="swim-style-input" data-i18n-placeholder="sport.swim.stylePlaceholder" placeholder="Style de nage (ex: Brasse)" maxlength="30" required>
+        <input type="number" id="swim-distance-input" class="distance-field" data-i18n-placeholder="field.distanceM" placeholder="Distance (m)" min="0" step="1">
+        <input type="number" id="swim-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="swim-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <form id="add-cycling-form" class="add-form" hidden>
+        <input type="number" id="cycling-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1" required>
+        <input type="number" id="cycling-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="cycling-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <form id="add-running-form" class="add-form" hidden>
+        <input type="text" id="running-desc-input" data-i18n-placeholder="sport.running.descPlaceholder" placeholder="Décris la course (ex: 10 km route)" maxlength="40" required>
+        <input type="number" id="running-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="running-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <div id="sport-list" class="exercise-list"></div>
+
+      <p id="sport-empty-state" class="empty-state" data-i18n="sport.empty">Aucune performance pour l'instant. Ajoute-en une ci-dessous !</p>
     </section>
   </div>
 
@@ -163,8 +208,75 @@
     </div>
   </template>
 
+  <template id="swim-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <button class="edit-btn" title="Modifier">✏️</button>
+        <input type="text" class="perf-text" maxlength="30" placeholder="Style de nage" readonly>
+        <div class="reps-kg-stack">
+          <label class="inline-field">
+            <span class="inline-field-label">m</span>
+            <input type="number" class="perf-distance distance-input" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">Min</span>
+            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">Sec</span>
+            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
+          </label>
+        </div>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <template id="cycling-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <div class="reps-kg-stack cycling-stack">
+          <label class="inline-field">
+            <span class="inline-field-label">km</span>
+            <input type="number" class="perf-distance distance-input" min="0" step="0.1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">Min</span>
+            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">Sec</span>
+            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
+          </label>
+        </div>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <template id="running-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <button class="edit-btn" title="Modifier">✏️</button>
+        <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
+        <div class="reps-kg-stack">
+          <label class="inline-field">
+            <span class="inline-field-label">Min</span>
+            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">Sec</span>
+            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
+          </label>
+        </div>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
   <script src="i18n.js"></script>
   <script src="script.js"></script>
   <script src="timer.js"></script>
+  <script src="sports.js"></script>
 </body>
 </html>
