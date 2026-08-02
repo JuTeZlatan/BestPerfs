@@ -5,6 +5,7 @@ const sportSelectLabel = document.getElementById("sport-select-label");
 const sportMenuEl = document.getElementById("sport-menu");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
+const fitnessPanelEl = document.getElementById("fitness-panel");
 
 const swimTemplate = document.getElementById("swim-perf-template");
 const cyclingTemplate = document.getElementById("cycling-perf-template");
@@ -15,6 +16,7 @@ const swimStyleInput = document.getElementById("swim-style-input");
 const swimDistanceInput = document.getElementById("swim-distance-input");
 const swimMinutesInput = document.getElementById("swim-minutes-input");
 const swimSecondsInput = document.getElementById("swim-seconds-input");
+const swimHundredthsInput = document.getElementById("swim-hundredths-input");
 
 const addCyclingForm = document.getElementById("add-cycling-form");
 const cyclingDistanceInput = document.getElementById("cycling-distance-input");
@@ -28,9 +30,9 @@ const runningSecondsInput = document.getElementById("running-seconds-input");
 
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
 const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate };
-const SPORT_LABEL_KEYS = { natation: "sport.swimming", velo: "sport.cycling", course: "sport.running" };
+const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running" };
 
-let currentSport = "natation";
+let currentSport = "fitness";
 let sportPerfs = loadSportPerfs();
 
 function loadSportPerfs() {
@@ -60,6 +62,7 @@ function selectSport(sport) {
   sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.sport === sport);
   });
+  fitnessPanelEl.hidden = sport !== "fitness";
   Object.keys(SPORT_FORMS).forEach((key) => {
     SPORT_FORMS[key].hidden = key !== sport;
   });
@@ -90,6 +93,12 @@ document.addEventListener("keydown", (e) => {
 });
 
 function renderSportList() {
+  if (currentSport === "fitness") {
+    sportListEl.innerHTML = "";
+    sportEmptyStateEl.classList.remove("visible");
+    return;
+  }
+
   sportListEl.innerHTML = "";
   const entries = sportPerfs[currentSport];
   sportEmptyStateEl.classList.toggle("visible", entries.length === 0);
@@ -134,6 +143,7 @@ function renderSportList() {
     const distanceInput = node.querySelector(".perf-distance");
     const minutesInput = node.querySelector(".perf-minutes");
     const secondsInput = node.querySelector(".perf-seconds");
+    const hundredthsInput = node.querySelector(".perf-hundredths");
 
     if (distanceInput) {
       distanceInput.value = perf.distance ?? "";
@@ -155,6 +165,14 @@ function renderSportList() {
       perf.seconds = secondsInput.value === "" ? null : Number(secondsInput.value);
       saveSportPerfs();
     });
+
+    if (hundredthsInput) {
+      hundredthsInput.value = perf.hundredths ?? "";
+      hundredthsInput.addEventListener("input", () => {
+        perf.hundredths = hundredthsInput.value === "" ? null : Number(hundredthsInput.value);
+        saveSportPerfs();
+      });
+    }
 
     if (currentSport === "course") {
       fieldLabels[0].textContent = t("field.min");
@@ -188,6 +206,7 @@ addSwimForm.addEventListener("submit", (e) => {
     distance: swimDistanceInput.value === "" ? null : Number(swimDistanceInput.value),
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
+    hundredths: swimHundredthsInput.value === "" ? null : Number(swimHundredthsInput.value),
   });
   saveSportPerfs();
   renderSportList();
@@ -231,4 +250,4 @@ document.addEventListener("languagechange", () => {
   renderSportList();
 });
 
-selectSport("natation");
+selectSport("fitness");

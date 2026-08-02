@@ -22,9 +22,8 @@
   <div class="app">
     <div class="top-bar">
       <nav id="main-nav" class="main-nav">
-        <button class="nav-tab active" data-view="exercises" data-i18n="nav.toExercises">💪 Exercices</button>
         <button class="nav-tab" data-view="timer" data-i18n="nav.toChrono">⏱️ Chrono</button>
-        <button class="nav-tab" data-view="sports" data-i18n="nav.toSports">🏅 Sports</button>
+        <button class="nav-tab active" data-view="sports" data-i18n="nav.toSports">🏅 Sports</button>
       </nav>
 
       <div class="lang-switcher">
@@ -58,28 +57,6 @@
       </div>
     </div>
 
-    <section id="exercises-view">
-      <header>
-        <h1 data-i18n="app.title.exercises">💪 Suivi d'exercices</h1>
-        <p class="subtitle" data-i18n="app.subtitle.exercises">Ajoute tes appareils/exercices et note tes records.</p>
-      </header>
-
-      <form id="add-form" class="add-form">
-        <input type="text" id="exercise-input" data-i18n-placeholder="exercise.inputPlaceholder" placeholder="Nom de l'appareil ou exercice (ex: Développé couché)" maxlength="40" required>
-        <button type="submit" data-i18n="common.add">Ajouter</button>
-      </form>
-
-      <div class="sort-bar">
-        <span class="sort-label" data-i18n="sort.label">Trier :</span>
-        <button id="sort-asc-btn" class="sort-btn" data-i18n="sort.asc" data-i18n-title="sort.ascTitle" title="Ordre alphabétique croissant">A → Z</button>
-        <button id="sort-desc-btn" class="sort-btn" data-i18n="sort.desc" data-i18n-title="sort.descTitle" title="Ordre alphabétique décroissant">Z → A</button>
-      </div>
-
-      <div id="exercise-list" class="exercise-list"></div>
-
-      <p id="empty-state" class="empty-state" data-i18n="exercise.empty">Aucun exercice pour l'instant. Ajoute-en un ci-dessous !</p>
-    </section>
-
     <section id="timer-view" hidden>
       <header>
         <h1 data-i18n="app.title.chrono">⏱️ Chrono</h1>
@@ -111,10 +88,10 @@
       <p id="preset-empty-state" class="empty-state" data-i18n="presets.empty">Aucun chrono enregistré. Ajoute-en un ci-dessous !</p>
     </section>
 
-    <section id="sports-view" hidden>
+    <section id="sports-view">
       <header>
-        <h1 data-i18n="app.title.sports">🏅 Autres sports</h1>
-        <p class="subtitle" data-i18n="app.subtitle.sports">Choisis un sport et enregistre tes performances.</p>
+        <h1 data-i18n="app.title.sports">🏅 Sports</h1>
+        <p class="subtitle" data-i18n="app.subtitle.sports">Choisis une activité et enregistre tes performances.</p>
       </header>
 
       <div class="sport-dropdown">
@@ -123,17 +100,36 @@
           <span class="dropdown-arrow">▾</span>
         </button>
         <div id="sport-menu" class="sport-menu" hidden>
-          <button class="sport-option active" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
+          <button class="sport-option active" data-sport="fitness" data-i18n="sport.fitness">💪 Fitness</button>
+          <button class="sport-option" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
           <button class="sport-option" data-sport="velo" data-i18n="sport.cycling">🚴 Vélo</button>
           <button class="sport-option" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
         </div>
       </div>
 
-      <form id="add-swim-form" class="add-form">
+      <div id="fitness-panel" class="sport-panel" hidden>
+        <form id="add-form" class="add-form">
+          <input type="text" id="exercise-input" data-i18n-placeholder="exercise.inputPlaceholder" placeholder="Nom de l'appareil ou exercice (ex: Développé couché)" maxlength="40" required>
+          <button type="submit" data-i18n="common.add">Ajouter</button>
+        </form>
+
+        <div class="sort-bar">
+          <span class="sort-label" data-i18n="sort.label">Trier :</span>
+          <button id="sort-asc-btn" class="sort-btn" data-i18n="sort.asc" data-i18n-title="sort.ascTitle" title="Ordre alphabétique croissant">A → Z</button>
+          <button id="sort-desc-btn" class="sort-btn" data-i18n="sort.desc" data-i18n-title="sort.descTitle" title="Ordre alphabétique décroissant">Z → A</button>
+        </div>
+
+        <div id="exercise-list" class="exercise-list"></div>
+
+        <p id="empty-state" class="empty-state" data-i18n="exercise.empty">Aucun exercice pour l'instant. Ajoute-en un ci-dessous !</p>
+      </div>
+
+      <form id="add-swim-form" class="add-form" hidden>
         <input type="text" id="swim-style-input" data-i18n-placeholder="sport.swim.stylePlaceholder" placeholder="Style de nage (ex: Brasse)" maxlength="30" required>
         <input type="number" id="swim-distance-input" class="distance-field" data-i18n-placeholder="field.distanceM" placeholder="Distance (m)" min="0" step="1">
         <input type="number" id="swim-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="swim-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <input type="number" id="swim-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
       </form>
 
@@ -231,6 +227,10 @@
           <label class="inline-field">
             <span class="inline-field-label">Sec</span>
             <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
+          </label>
+          <label class="inline-field">
+            <span class="inline-field-label">00</span>
+            <input type="number" class="perf-hundredths" min="0" max="99" step="1" placeholder="0">
           </label>
         </div>
       </div>
