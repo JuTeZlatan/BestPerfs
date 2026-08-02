@@ -61,6 +61,16 @@ function updateSportSelectLabel() {
   sportSelectLabel.textContent = t(SPORT_LABEL_KEYS[currentSport]);
 }
 
+function sortSportMenu() {
+  const buttons = Array.from(sportMenuEl.querySelectorAll(".sport-option"));
+  buttons.sort((a, b) => {
+    const textA = t(SPORT_LABEL_KEYS[a.dataset.sport]).replace(/^\S+\s*/, "");
+    const textB = t(SPORT_LABEL_KEYS[b.dataset.sport]).replace(/^\S+\s*/, "");
+    return textA.localeCompare(textB, getLang());
+  });
+  buttons.forEach((btn) => sportMenuEl.appendChild(btn));
+}
+
 function selectSport(sport) {
   currentSport = sport;
   sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
@@ -257,8 +267,10 @@ addRunningForm.addEventListener("submit", (e) => {
 });
 
 document.addEventListener("languagechange", () => {
+  sortSportMenu();
   updateSportSelectLabel();
   renderSportList();
 });
 
+sortSportMenu();
 selectSport("fitness");
