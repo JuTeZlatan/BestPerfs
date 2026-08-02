@@ -19,6 +19,7 @@ const swimSecondsInput = document.getElementById("swim-seconds-input");
 const swimHundredthsInput = document.getElementById("swim-hundredths-input");
 
 const addCyclingForm = document.getElementById("add-cycling-form");
+const cyclingLocationInput = document.getElementById("cycling-location-input");
 const cyclingDistanceInput = document.getElementById("cycling-distance-input");
 const cyclingHoursInput = document.getElementById("cycling-hours-input");
 const cyclingMinutesInput = document.getElementById("cycling-minutes-input");
@@ -30,8 +31,44 @@ const runningHoursInput = document.getElementById("running-hours-input");
 const runningMinutesInput = document.getElementById("running-minutes-input");
 const runningSecondsInput = document.getElementById("running-seconds-input");
 
+const triathlonTemplate = document.getElementById("triathlon-perf-template");
+const triathlonPanelEl = document.getElementById("triathlon-panel");
+const triLocationInput = document.getElementById("triathlon-location-input");
+const triSizeInput = document.getElementById("triathlon-size-input");
+const triSteps = {
+  swim: document.getElementById("triathlon-step-swim"),
+  bike: document.getElementById("triathlon-step-bike"),
+  run: document.getElementById("triathlon-step-run"),
+};
+const triFields = {
+  swim: {
+    hours: document.getElementById("tri-swim-hours"),
+    minutes: document.getElementById("tri-swim-minutes"),
+    seconds: document.getElementById("tri-swim-seconds"),
+    validate: document.getElementById("tri-swim-validate"),
+  },
+  bike: {
+    hours: document.getElementById("tri-bike-hours"),
+    minutes: document.getElementById("tri-bike-minutes"),
+    seconds: document.getElementById("tri-bike-seconds"),
+    validate: document.getElementById("tri-bike-validate"),
+  },
+  run: {
+    hours: document.getElementById("tri-run-hours"),
+    minutes: document.getElementById("tri-run-minutes"),
+    seconds: document.getElementById("tri-run-seconds"),
+    validate: document.getElementById("tri-run-validate"),
+  },
+};
+
 const DISTANCE_UNITS = { natation: "m", velo: "km" };
-const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃" };
+const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃", triathlon: "🔱" };
+const TEXT_PLACEHOLDER_KEYS = {
+  natation: "sport.swim.stylePlaceholder",
+  velo: "sport.locationPlaceholder",
+  course: "sport.running.descPlaceholder",
+  triathlon: "sport.locationPlaceholder",
+};
 
 function timeChipHTML(perf, sport) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
@@ -46,9 +83,34 @@ function distanceChipHTML(perf, sport) {
   return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${perf.distance}</span><span class="chip-unit">${DISTANCE_UNITS[sport]}</span>`;
 }
 
+function sizeChipHTML(perf) {
+  return `<span class="chip-icon">🔱</span><span class="chip-num">${perf.size}</span>`;
+}
+
+function legToSeconds(leg) {
+  return (leg?.hours ?? 0) * 3600 + (leg?.minutes ?? 0) * 60 + (leg?.seconds ?? 0);
+}
+
+function secondsToHMS(totalSeconds) {
+  return {
+    hours: Math.floor(totalSeconds / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: Math.floor(totalSeconds % 60),
+  };
+}
+
+function triathlonTotal(perf) {
+  return legToSeconds(perf.swim) + legToSeconds(perf.bike) + legToSeconds(perf.run);
+}
+
+function triLegRowHTML(icon, leg) {
+  const pad = (n) => String(n ?? 0).padStart(2, "0");
+  return `<div class="tri-popup-row"><span class="tri-popup-icon">${icon}</span><span class="tri-popup-time">${pad(leg?.hours)}H${pad(leg?.minutes)}Mn${pad(leg?.seconds)}S</span></div>`;
+}
+
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
-const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate };
-const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running" };
+const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate };
+const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon" };
 
 let currentSport = "fitness";
 let sportPerfs = loadSportPerfs();
@@ -61,9 +123,10 @@ function loadSportPerfs() {
       natation: parsed.natation || [],
       velo: parsed.velo || [],
       course: parsed.course || [],
+      triathlon: parsed.triathlon || [],
     };
   } catch {
-    return { natation: [], velo: [], course: [] };
+    return { natation: [], velo: [], course: [], triathlon: [] };
   }
 }
 
@@ -91,6 +154,8 @@ function selectSport(sport) {
     btn.classList.toggle("active", btn.dataset.sport === sport);
   });
   fitnessPanelEl.hidden = sport !== "fitness";
+  triathlonPanelEl.hidden = sport !== "triathlon";
+  if (sport === "triathlon") resetTriathlonWizard();
   Object.keys(SPORT_FORMS).forEach((key) => {
     SPORT_FORMS[key].hidden = key !== sport;
   });
@@ -139,7 +204,7 @@ function renderSportList() {
     const textInput = node.querySelector(".perf-text");
     if (textInput) {
       textInput.value = perf.text;
-      textInput.placeholder = currentSport === "natation" ? t("sport.swim.stylePlaceholder") : t("sport.running.descPlaceholder");
+      textInput.placeholder = t(TEXT_PLACEHOLDER_KEYS[currentSport]);
 
       textInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") textInput.blur();
@@ -174,8 +239,19 @@ function renderSportList() {
       distanceDisplay.hidden = !html;
     }
 
+    const sizeDisplay = node.querySelector(".perf-size-display");
+    if (sizeDisplay) sizeDisplay.innerHTML = sizeChipHTML(perf);
+
     const timeDisplay = node.querySelector(".perf-time-display");
-    timeDisplay.innerHTML = timeChipHTML(perf, currentSport);
+    if (currentSport === "triathlon") {
+      timeDisplay.innerHTML = timeChipHTML(secondsToHMS(triathlonTotal(perf)), "velo");
+      timeDisplay.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleTriPopup(timeDisplay, perf);
+      });
+    } else {
+      timeDisplay.innerHTML = timeChipHTML(perf, currentSport);
+    }
 
     const deleteBtn = node.querySelector(".delete-btn");
     deleteBtn.title = t("delete.title");
@@ -211,9 +287,11 @@ addSwimForm.addEventListener("submit", (e) => {
 
 addCyclingForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  if (cyclingDistanceInput.value === "") return;
+  const text = cyclingLocationInput.value.trim();
+  if (!text || cyclingDistanceInput.value === "") return;
   sportPerfs.velo.push({
     id: crypto.randomUUID(),
+    text,
     distance: Number(cyclingDistanceInput.value),
     hours: cyclingHoursInput.value === "" ? null : Number(cyclingHoursInput.value),
     minutes: cyclingMinutesInput.value === "" ? null : Number(cyclingMinutesInput.value),
@@ -222,7 +300,7 @@ addCyclingForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addCyclingForm.reset();
-  cyclingDistanceInput.focus();
+  cyclingLocationInput.focus();
 });
 
 addRunningForm.addEventListener("submit", (e) => {
@@ -240,6 +318,101 @@ addRunningForm.addEventListener("submit", (e) => {
   renderSportList();
   addRunningForm.reset();
   runningDescInput.focus();
+});
+
+// ---- Triathlon step wizard ----
+let triathlonDraft = { swim: null, bike: null, run: null };
+
+function resetTriathlonWizard() {
+  triLocationInput.value = "";
+  triSizeInput.value = "M";
+  Object.values(triFields).forEach(({ hours, minutes, seconds }) => {
+    hours.value = "";
+    minutes.value = "";
+    seconds.value = "";
+  });
+  triSteps.swim.hidden = false;
+  triSteps.bike.hidden = true;
+  triSteps.run.hidden = true;
+  triathlonDraft = { swim: null, bike: null, run: null };
+}
+
+function readTriLeg(leg) {
+  const { hours, minutes, seconds } = triFields[leg];
+  return {
+    hours: hours.value === "" ? 0 : Number(hours.value),
+    minutes: minutes.value === "" ? 0 : Number(minutes.value),
+    seconds: seconds.value === "" ? 0 : Number(seconds.value),
+  };
+}
+
+triFields.swim.validate.addEventListener("click", () => {
+  triathlonDraft.swim = readTriLeg("swim");
+  triSteps.swim.hidden = true;
+  triSteps.bike.hidden = false;
+});
+
+triFields.bike.validate.addEventListener("click", () => {
+  triathlonDraft.bike = readTriLeg("bike");
+  triSteps.bike.hidden = true;
+  triSteps.run.hidden = false;
+});
+
+triFields.run.validate.addEventListener("click", () => {
+  const text = triLocationInput.value.trim();
+  if (!text) {
+    triLocationInput.focus();
+    return;
+  }
+  triathlonDraft.run = readTriLeg("run");
+  sportPerfs.triathlon.push({
+    id: crypto.randomUUID(),
+    text,
+    size: triSizeInput.value,
+    swim: triathlonDraft.swim,
+    bike: triathlonDraft.bike,
+    run: triathlonDraft.run,
+  });
+  saveSportPerfs();
+  renderSportList();
+  resetTriathlonWizard();
+});
+
+// ---- Triathlon breakdown popup ----
+let openTriPopup = null;
+
+function closeTriPopup() {
+  if (openTriPopup) {
+    openTriPopup.remove();
+    openTriPopup = null;
+  }
+}
+
+function toggleTriPopup(anchorEl, perf) {
+  if (openTriPopup) {
+    closeTriPopup();
+    return;
+  }
+  const popup = document.createElement("div");
+  popup.className = "tri-popup";
+  popup.innerHTML =
+    triLegRowHTML("🏊", perf.swim) + triLegRowHTML("🚴", perf.bike) + triLegRowHTML("🏃", perf.run);
+  document.body.appendChild(popup);
+
+  const rect = anchorEl.getBoundingClientRect();
+  const popupWidth = popup.offsetWidth;
+  popup.style.position = "fixed";
+  popup.style.top = `${rect.bottom + 6}px`;
+  popup.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - popupWidth - 8))}px`;
+  openTriPopup = popup;
+}
+
+document.addEventListener("click", (e) => {
+  if (openTriPopup && !openTriPopup.contains(e.target)) closeTriPopup();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && openTriPopup) closeTriPopup();
 });
 
 document.addEventListener("languagechange", () => {

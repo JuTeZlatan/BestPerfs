@@ -105,6 +105,7 @@
           <button class="sport-option" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
           <button class="sport-option active" data-sport="fitness" data-i18n="sport.fitness">💪 Fitness</button>
           <button class="sport-option" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
+          <button class="sport-option" data-sport="triathlon" data-i18n="sport.triathlon">🔱 Triathlon</button>
           <button class="sport-option" data-sport="velo" data-i18n="sport.cycling">🚴 Vélo</button>
         </div>
       </div>
@@ -136,6 +137,7 @@
       </form>
 
       <form id="add-cycling-form" class="add-form" hidden>
+        <input type="text" id="cycling-location-input" data-i18n-placeholder="sport.locationPlaceholder" placeholder="Lieu (ex: Nice)" maxlength="40" required>
         <input type="number" id="cycling-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1" required>
         <input type="number" id="cycling-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="cycling-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
@@ -150,6 +152,49 @@
         <input type="number" id="running-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
       </form>
+
+      <div id="triathlon-panel" class="triathlon-panel" hidden>
+        <div class="triathlon-setup-row">
+          <input type="text" id="triathlon-location-input" data-i18n-placeholder="sport.locationPlaceholder" placeholder="Lieu (ex: Nice)" maxlength="40">
+          <select id="triathlon-size-input" class="triathlon-size-select">
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M" selected>M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+        </div>
+
+        <div class="triathlon-step" id="triathlon-step-swim">
+          <span class="triathlon-step-label" data-i18n="sport.swimming">🏊 Natation</span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="tri-swim-hours" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="tri-swim-minutes" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="tri-swim-seconds" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <button type="button" id="tri-swim-validate" class="triathlon-validate-btn" data-i18n="common.validate">Valider</button>
+          </div>
+        </div>
+
+        <div class="triathlon-step" id="triathlon-step-bike" hidden>
+          <span class="triathlon-step-label" data-i18n="sport.cycling">🚴 Vélo</span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="tri-bike-hours" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="tri-bike-minutes" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="tri-bike-seconds" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <button type="button" id="tri-bike-validate" class="triathlon-validate-btn" data-i18n="common.validate">Valider</button>
+          </div>
+        </div>
+
+        <div class="triathlon-step" id="triathlon-step-run" hidden>
+          <span class="triathlon-step-label" data-i18n="sport.running">🏃 Course à pied</span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="tri-run-hours" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="tri-run-minutes" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="tri-run-seconds" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <button type="button" id="tri-run-validate" class="triathlon-validate-btn" data-i18n="common.validate">Valider</button>
+          </div>
+        </div>
+      </div>
 
       <div id="sport-list" class="exercise-list"></div>
 
@@ -229,6 +274,8 @@
   <template id="cycling-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
+        <button class="edit-btn" title="Modifier">✏️</button>
+        <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -242,6 +289,18 @@
         <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
         <span class="perf-time-display"></span>
+      </div>
+      <button class="delete-btn" title="Supprimer">✕</button>
+    </div>
+  </template>
+
+  <template id="triathlon-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card">
+        <button class="edit-btn" title="Modifier">✏️</button>
+        <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
+        <span class="perf-size-display"></span>
+        <span class="perf-time-display perf-time-tappable"></span>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>
     </div>

@@ -67,6 +67,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "Distance (km)",
     "sport.empty": "Aucune performance pour l'instant. Ajoute-en une ci-dessous !",
     "modal.deletePerf": "Supprimer cette performance ?",
+    "sport.triathlon": "🔱 Triathlon",
+    "sport.locationPlaceholder": "Lieu (ex: Nice)",
+    "common.validate": "Valider",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -125,6 +128,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "Distance (km)",
     "sport.empty": "No performances yet. Add one below!",
     "modal.deletePerf": "Delete this performance?",
+    "sport.triathlon": "🔱 Triathlon",
+    "sport.locationPlaceholder": "Location (e.g. Nice)",
+    "common.validate": "Confirm",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -183,6 +189,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "Distancia (km)",
     "sport.empty": "Aún no hay marcas. ¡Añade una a continuación!",
     "modal.deletePerf": "¿Eliminar esta marca?",
+    "sport.triathlon": "🔱 Triatlón",
+    "sport.locationPlaceholder": "Lugar (ej: Niza)",
+    "common.validate": "Confirmar",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -241,6 +250,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "Distância (km)",
     "sport.empty": "Ainda não há resultados. Adiciona um abaixo!",
     "modal.deletePerf": "Eliminar este resultado?",
+    "sport.triathlon": "🔱 Triatlo",
+    "sport.locationPlaceholder": "Local (ex: Nice)",
+    "common.validate": "Confirmar",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -299,6 +311,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "距离（公里）",
     "sport.empty": "还没有成绩。在下面添加一个！",
     "modal.deletePerf": "删除这条成绩？",
+    "sport.triathlon": "🔱 铁人三项",
+    "sport.locationPlaceholder": "地点（例如：尼斯）",
+    "common.validate": "确认",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -357,6 +372,9 @@ const TRANSLATIONS = {
     "field.distanceKm": "المسافة (كم)",
     "sport.empty": "لا توجد نتائج بعد. أضف واحدة أدناه!",
     "modal.deletePerf": "حذف هذه النتيجة؟",
+    "sport.triathlon": "🔱 ترياثلون",
+    "sport.locationPlaceholder": "المكان (مثال: نيس)",
+    "common.validate": "تأكيد",
   },
 };
 

@@ -356,6 +356,149 @@ h1 {
   font-weight: 700;
 }
 
+.triathlon-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.triathlon-panel[hidden] {
+  display: none;
+}
+
+.triathlon-setup-row {
+  display: flex;
+  gap: 8px;
+}
+
+.triathlon-setup-row input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.triathlon-setup-row input[type="text"]:focus {
+  border-color: var(--accent);
+}
+
+.triathlon-size-select {
+  flex: 0 0 68px;
+  padding: 10px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+  text-align: center;
+}
+
+.triathlon-step {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.triathlon-step-label {
+  display: block;
+  font-family: "Oswald", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.triathlon-step-fields {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.triathlon-step-fields input.preset-time-field {
+  flex: 0 0 50px;
+  min-width: 0;
+  padding: 8px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--field);
+  color: var(--text);
+  font-size: 0.85rem;
+  outline: none;
+  text-align: center;
+}
+
+.triathlon-step-fields input.preset-time-field:focus {
+  border-color: var(--accent);
+}
+
+.triathlon-validate-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: none;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.triathlon-validate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(226, 36, 26, 0.45);
+}
+
+.perf-time-tappable {
+  cursor: pointer;
+}
+
+.tri-popup {
+  z-index: 200;
+  background: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tri-popup-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.tri-popup-icon {
+  font-size: 0.85rem;
+}
+
+.tri-popup-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent-2);
+}
+
 .exercise-list {
   display: flex;
   flex-direction: column;
@@ -481,6 +624,7 @@ h1 {
 }
 
 .perf-distance-display,
+.perf-size-display,
 .perf-time-display {
   display: inline-flex;
   align-items: baseline;
@@ -496,12 +640,14 @@ h1 {
 }
 
 .perf-distance-display .chip-icon,
+.perf-size-display .chip-icon,
 .perf-time-display .chip-icon {
   font-size: 0.68rem;
   margin-right: 3px;
 }
 
 .perf-distance-display .chip-num,
+.perf-size-display .chip-num,
 .perf-time-display .chip-num {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
@@ -509,7 +655,8 @@ h1 {
   letter-spacing: 0.01em;
 }
 
-.perf-distance-display .chip-num {
+.perf-distance-display .chip-num,
+.perf-size-display .chip-num {
   color: var(--text);
 }
 
@@ -814,17 +961,20 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 
   .perf-distance-display,
+  .perf-size-display,
   .perf-time-display {
     padding: 2px 6px 2px 5px;
   }
 
   .perf-distance-display .chip-icon,
+  .perf-size-display .chip-icon,
   .perf-time-display .chip-icon {
     font-size: 0.6rem;
     margin-right: 2px;
   }
 
   .perf-distance-display .chip-num,
+  .perf-size-display .chip-num,
   .perf-time-display .chip-num {
     font-size: 0.76rem;
   }
@@ -852,5 +1002,26 @@ input[type="number"]::-webkit-inner-spin-button {
 
   .weight-input {
     width: 40px;
+  }
+
+  .triathlon-setup-row {
+    flex-wrap: nowrap;
+  }
+
+  .triathlon-step-fields {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .triathlon-step-fields .preset-time-field {
+    flex: 0 0 30px;
+    width: 30px;
+    padding: 8px 2px;
+    text-align: center;
+  }
+
+  .triathlon-validate-btn {
+    padding: 8px 10px;
+    font-size: 0.7rem;
   }
 }
