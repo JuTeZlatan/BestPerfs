@@ -212,24 +212,8 @@
       <div class="exercise-card">
         <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="30" placeholder="Style de nage" readonly>
-        <div class="reps-kg-stack">
-          <label class="inline-field">
-            <span class="inline-field-label">m</span>
-            <input type="number" class="perf-distance distance-input" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Min</span>
-            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Sec</span>
-            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">00</span>
-            <input type="number" class="perf-hundredths" min="0" max="99" step="1" placeholder="0">
-          </label>
-        </div>
+        <span class="perf-distance-display"></span>
+        <span class="perf-time-display"></span>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>
     </div>
@@ -238,24 +222,8 @@
   <template id="cycling-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <div class="reps-kg-stack cycling-stack">
-          <label class="inline-field">
-            <span class="inline-field-label">km</span>
-            <input type="number" class="perf-distance distance-input" min="0" step="0.1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">H</span>
-            <input type="number" class="perf-hours" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Min</span>
-            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Sec</span>
-            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
-          </label>
-        </div>
+        <span class="perf-distance-display"></span>
+        <span class="perf-time-display"></span>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>
     </div>
@@ -266,20 +234,7 @@
       <div class="exercise-card">
         <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
-        <div class="reps-kg-stack">
-          <label class="inline-field">
-            <span class="inline-field-label">H</span>
-            <input type="number" class="perf-hours" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Min</span>
-            <input type="number" class="perf-minutes" min="0" step="1" placeholder="0">
-          </label>
-          <label class="inline-field">
-            <span class="inline-field-label">Sec</span>
-            <input type="number" class="perf-seconds" min="0" max="59" step="1" placeholder="0">
-          </label>
-        </div>
+        <span class="perf-time-display"></span>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>
     </div>

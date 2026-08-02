@@ -518,6 +518,19 @@ h1 {
   flex-shrink: 0;
 }
 
+.perf-distance-display,
+.perf-time-display {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.perf-time-display {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .inline-field {
   display: flex;
   align-items: center;
