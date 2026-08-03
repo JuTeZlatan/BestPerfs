@@ -9,29 +9,68 @@
 </head>
 <body>
   <div id="splash-screen" class="splash-screen">
+    <div class="splash-grid"></div>
+
     <div class="splash-shake">
-      <div class="splash-mark">
-        <div class="splash-line">
-          <span class="splash-drop" style="animation-delay: .1s">B</span>
-          <span class="splash-impact" style="animation-delay: .47s"></span>
-          <span class="splash-ring" style="animation-delay: .47s"></span>
-          <span class="splash-rest" style="animation-delay: .48s">EST</span>
+      <div class="splash-hud">
+        <span class="hud-corner hud-tl"></span>
+        <span class="hud-corner hud-tr"></span>
+        <span class="hud-corner hud-bl"></span>
+        <span class="hud-corner hud-br"></span>
+
+        <div class="splash-core">
+          <div class="core-ring core-ring-1"></div>
+          <div class="core-ring core-ring-2"></div>
+          <div class="core-dot"></div>
         </div>
-        <div class="splash-line">
-          <span class="splash-drop" style="animation-delay: 1s">P</span>
-          <span class="splash-impact" style="animation-delay: 1.37s"></span>
-          <span class="splash-ring" style="animation-delay: 1.37s"></span>
-          <span class="splash-rest" style="animation-delay: 1.38s">ERFS</span>
+
+        <div class="splash-burst" aria-hidden="true">
+          <span class="burst-ray" style="--i: 0"></span>
+          <span class="burst-ray" style="--i: 1"></span>
+          <span class="burst-ray" style="--i: 2"></span>
+          <span class="burst-ray" style="--i: 3"></span>
+          <span class="burst-ray" style="--i: 4"></span>
+          <span class="burst-ray" style="--i: 5"></span>
+          <span class="burst-ray" style="--i: 6"></span>
+          <span class="burst-ray" style="--i: 7"></span>
         </div>
+
+        <div class="splash-wordmark">
+          <span class="word-glitch word-r" aria-hidden="true">BEST PERFS</span>
+          <span class="word-glitch word-c" aria-hidden="true">BEST PERFS</span>
+          <span class="word-main">BEST PERFS</span>
+        </div>
+
+        <div class="splash-readout"><span id="splashPct">0</span>%</div>
       </div>
     </div>
+
+    <div class="splash-flash"></div>
   </div>
   <script>
-    setTimeout(function () {
-      var splash = document.getElementById("splash-screen");
-      splash.classList.add("hide");
-      setTimeout(function () { splash.style.display = "none"; }, 500);
-    }, 3000);
+    (function () {
+      var pctEl = document.getElementById("splashPct");
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (pctEl) {
+        if (reduced) {
+          pctEl.textContent = "100";
+        } else {
+          var duration = 700;
+          var chargeStart = Date.now();
+          var tick = function () {
+            var pct = Math.min(100, Math.round(((Date.now() - chargeStart) / duration) * 100));
+            pctEl.textContent = pct;
+            if (pct < 100) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }
+      setTimeout(function () {
+        var splash = document.getElementById("splash-screen");
+        splash.classList.add("hide");
+        setTimeout(function () { splash.style.display = "none"; }, 400);
+      }, 3000);
+    })();
   </script>
 
   <div class="app">
