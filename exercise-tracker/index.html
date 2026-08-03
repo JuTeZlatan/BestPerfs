@@ -134,6 +134,7 @@
 
       <form id="add-preset-form" class="add-form">
         <input type="text" id="preset-name-input" data-i18n-placeholder="presets.namePlaceholder" placeholder="Nom (ex: Repos)" maxlength="30" required>
+        <input type="number" id="preset-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="preset-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="preset-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
@@ -202,6 +203,7 @@
 
       <form id="add-running-form" class="add-form" hidden>
         <input type="text" id="running-desc-input" data-i18n-placeholder="sport.running.descPlaceholder" placeholder="Décris la course (ex: 10 km route)" maxlength="40" required>
+        <input type="number" id="running-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1">
         <input type="number" id="running-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="running-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="running-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
@@ -255,6 +257,17 @@
         </div>
       </div>
 
+      <div id="sport-sort-bar" class="sort-bar" hidden>
+        <span class="sort-label" data-i18n="sort.label">Trier :</span>
+        <select id="sport-sort-select" class="sport-sort-select">
+          <option value="">–</option>
+          <option value="alpha-asc" data-i18n="sort.asc">A → Z</option>
+          <option value="alpha-desc" data-i18n="sort.desc">Z → A</option>
+          <option value="dist-asc" class="sort-opt-dist" data-i18n="sort.distAsc">Distance ↑</option>
+          <option value="dist-desc" class="sort-opt-dist" data-i18n="sort.distDesc">Distance ↓</option>
+        </select>
+      </div>
+
       <div id="sport-list" class="exercise-list"></div>
 
       <p id="sport-empty-state" class="empty-state" data-i18n="sport.empty">Aucune performance pour l'instant. Ajoute-en une ci-dessous !</p>
@@ -305,6 +318,10 @@
         <button class="edit-btn" title="Modifier le nom">✏️</button>
         <input type="text" class="preset-name" maxlength="30" placeholder="Nom du chrono" readonly>
         <label class="inline-field">
+          <span class="inline-field-label">H</span>
+          <input type="number" class="preset-hours" min="0" step="1">
+        </label>
+        <label class="inline-field">
           <span class="inline-field-label">Min</span>
           <input type="number" class="preset-minutes" min="0" step="1">
         </label>
@@ -347,6 +364,7 @@
       <div class="exercise-card">
         <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
+        <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>

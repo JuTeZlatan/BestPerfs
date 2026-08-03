@@ -70,6 +70,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 Triathlon",
     "sport.locationPlaceholder": "Lieu (ex: Nice)",
     "common.validate": "Valider",
+    "sort.distAsc": "Distance ↑",
+    "sort.distDesc": "Distance ↓",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -131,6 +133,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 Triathlon",
     "sport.locationPlaceholder": "Location (e.g. Nice)",
     "common.validate": "Confirm",
+    "sort.distAsc": "Distance ↑",
+    "sort.distDesc": "Distance ↓",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -192,6 +196,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 Triatlón",
     "sport.locationPlaceholder": "Lugar (ej: Niza)",
     "common.validate": "Confirmar",
+    "sort.distAsc": "Distancia ↑",
+    "sort.distDesc": "Distancia ↓",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -253,6 +259,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 Triatlo",
     "sport.locationPlaceholder": "Local (ex: Nice)",
     "common.validate": "Confirmar",
+    "sort.distAsc": "Distância ↑",
+    "sort.distDesc": "Distância ↓",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -314,6 +322,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 铁人三项",
     "sport.locationPlaceholder": "地点（例如：尼斯）",
     "common.validate": "确认",
+    "sort.distAsc": "距离 ↑",
+    "sort.distDesc": "距离 ↓",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -375,6 +385,8 @@ const TRANSLATIONS = {
     "sport.triathlon": "🔱 ترياثلون",
     "sport.locationPlaceholder": "المكان (مثال: نيس)",
     "common.validate": "تأكيد",
+    "sort.distAsc": "المسافة ↑",
+    "sort.distDesc": "المسافة ↓",
   },
 };
 

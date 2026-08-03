@@ -203,6 +203,7 @@ const presetEmptyStateEl = document.getElementById("preset-empty-state");
 const presetTemplate = document.getElementById("preset-template");
 const addPresetForm = document.getElementById("add-preset-form");
 const presetNameInput = document.getElementById("preset-name-input");
+const presetHoursInput = document.getElementById("preset-hours-input");
 const presetMinutesInput = document.getElementById("preset-minutes-input");
 const presetSecondsInput = document.getElementById("preset-seconds-input");
 
@@ -257,23 +258,29 @@ function renderPresets() {
     });
 
     const fieldLabels = node.querySelectorAll(".inline-field-label");
-    fieldLabels[0].textContent = t("field.min");
-    fieldLabels[1].textContent = t("field.sec");
+    fieldLabels[0].textContent = "H";
+    fieldLabels[1].textContent = t("field.min");
+    fieldLabels[2].textContent = t("field.sec");
 
+    const hoursInput = node.querySelector(".preset-hours");
     const minutesInput = node.querySelector(".preset-minutes");
     const secondsInput = node.querySelector(".preset-seconds");
-    minutesInput.value = Math.floor(preset.seconds / 60);
+    hoursInput.value = Math.floor(preset.seconds / 3600);
+    minutesInput.value = Math.floor((preset.seconds % 3600) / 60);
     secondsInput.value = preset.seconds % 60;
 
     const updatePresetDuration = () => {
+      const hrs = Math.max(0, Math.round(Number(hoursInput.value) || 0));
       const min = Math.max(0, Math.round(Number(minutesInput.value) || 0));
       const sec = Math.max(0, Math.min(59, Math.round(Number(secondsInput.value) || 0)));
+      hoursInput.value = hrs;
       minutesInput.value = min;
       secondsInput.value = sec;
-      preset.seconds = Math.max(1, min * 60 + sec);
+      preset.seconds = Math.max(1, hrs * 3600 + min * 60 + sec);
       savePresets();
     };
 
+    hoursInput.addEventListener("change", updatePresetDuration);
     minutesInput.addEventListener("change", updatePresetDuration);
     secondsInput.addEventListener("change", updatePresetDuration);
 
@@ -301,14 +308,16 @@ function renderPresets() {
 addPresetForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const name = presetNameInput.value.trim();
+  const hours = Math.max(0, Math.round(Number(presetHoursInput.value) || 0));
   const minutes = Math.max(0, Math.round(Number(presetMinutesInput.value) || 0));
   const secondsPart = Math.max(0, Math.round(Number(presetSecondsInput.value) || 0));
-  const seconds = minutes * 60 + secondsPart;
+  const seconds = hours * 3600 + minutes * 60 + secondsPart;
   if (!name || seconds <= 0) return;
   presets.push({ id: crypto.randomUUID(), name, seconds });
   savePresets();
   renderPresets();
   presetNameInput.value = "";
+  presetHoursInput.value = "";
   presetMinutesInput.value = "";
   presetSecondsInput.value = "";
   presetNameInput.focus();

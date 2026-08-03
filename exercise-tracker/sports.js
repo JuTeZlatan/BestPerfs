@@ -6,6 +6,8 @@ const sportMenuEl = document.getElementById("sport-menu");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
 const fitnessPanelEl = document.getElementById("fitness-panel");
+const sportSortBarEl = document.getElementById("sport-sort-bar");
+const sportSortSelect = document.getElementById("sport-sort-select");
 
 const swimTemplate = document.getElementById("swim-perf-template");
 const cyclingTemplate = document.getElementById("cycling-perf-template");
@@ -28,6 +30,7 @@ const cyclingHundredthsInput = document.getElementById("cycling-hundredths-input
 
 const addRunningForm = document.getElementById("add-running-form");
 const runningDescInput = document.getElementById("running-desc-input");
+const runningDistanceInput = document.getElementById("running-distance-input");
 const runningHoursInput = document.getElementById("running-hours-input");
 const runningMinutesInput = document.getElementById("running-minutes-input");
 const runningSecondsInput = document.getElementById("running-seconds-input");
@@ -66,7 +69,8 @@ const triFields = {
   },
 };
 
-const DISTANCE_UNITS = { natation: "m", velo: "km" };
+const DISTANCE_UNITS = { natation: "m", velo: "km", course: "km" };
+const DISTANCE_SORT_SPORTS = ["natation", "velo", "course"];
 const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃", triathlon: "🔱" };
 const TEXT_PLACEHOLDER_KEYS = {
   natation: "sport.swim.stylePlaceholder",
@@ -112,6 +116,32 @@ function triathlonTotal(perf) {
 function triLegRowHTML(icon, leg) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
   return `<div class="tri-popup-row"><span class="tri-popup-icon">${icon}</span><span class="tri-popup-time">${pad(leg?.hours)}H${pad(leg?.minutes)}Mn${pad(leg?.seconds)}S${pad(leg?.hundredths)}</span></div>`;
+}
+
+function perfTimeCentiseconds(perf) {
+  return ((perf.hours ?? 0) * 3600 + (perf.minutes ?? 0) * 60 + (perf.seconds ?? 0)) * 100 + (perf.hundredths ?? 0);
+}
+
+let sportSortMode = "";
+
+function getSortedSportEntries(entries, sport) {
+  if (!sportSortMode) return entries;
+  const sorted = [...entries];
+  if (sportSortMode === "alpha-asc" || sportSortMode === "alpha-desc") {
+    sorted.sort((a, b) => a.text.localeCompare(b.text, getLang()));
+    if (sportSortMode === "alpha-desc") sorted.reverse();
+    return sorted;
+  }
+  if (sportSortMode === "dist-asc" || sportSortMode === "dist-desc") {
+    sorted.sort((a, b) => {
+      const distDiff = (a.distance ?? 0) - (b.distance ?? 0);
+      if (distDiff !== 0) return sportSortMode === "dist-asc" ? distDiff : -distDiff;
+      // Equal distance: always rank the best performance (fastest time) first.
+      return perfTimeCentiseconds(a) - perfTimeCentiseconds(b);
+    });
+    return sorted;
+  }
+  return entries;
 }
 
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
@@ -165,6 +195,13 @@ function selectSport(sport) {
   Object.keys(SPORT_FORMS).forEach((key) => {
     SPORT_FORMS[key].hidden = key !== sport;
   });
+  sportSortBarEl.hidden = sport === "fitness";
+  const canSortByDistance = DISTANCE_SORT_SPORTS.includes(sport);
+  sportSortSelect.querySelectorAll(".sort-opt-dist").forEach((opt) => {
+    opt.hidden = !canSortByDistance;
+  });
+  sportSortMode = "";
+  sportSortSelect.value = "";
   updateSportSelectLabel();
   renderSportList();
 }
@@ -191,6 +228,11 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !sportMenuEl.hidden) sportMenuEl.hidden = true;
 });
 
+sportSortSelect.addEventListener("change", () => {
+  sportSortMode = sportSortSelect.value;
+  renderSportList();
+});
+
 function renderSportList() {
   if (currentSport === "fitness") {
     sportListEl.innerHTML = "";
@@ -199,7 +241,7 @@ function renderSportList() {
   }
 
   sportListEl.innerHTML = "";
-  const entries = sportPerfs[currentSport];
+  const entries = getSortedSportEntries(sportPerfs[currentSport], currentSport);
   sportEmptyStateEl.classList.toggle("visible", entries.length === 0);
 
   const template = SPORT_TEMPLATES[currentSport];
@@ -317,6 +359,7 @@ addRunningForm.addEventListener("submit", (e) => {
   sportPerfs.course.push({
     id: crypto.randomUUID(),
     text,
+    distance: runningDistanceInput.value === "" ? null : Number(runningDistanceInput.value),
     hours: runningHoursInput.value === "" ? null : Number(runningHoursInput.value),
     minutes: runningMinutesInput.value === "" ? null : Number(runningMinutesInput.value),
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
