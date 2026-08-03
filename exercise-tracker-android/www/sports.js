@@ -24,12 +24,14 @@ const cyclingDistanceInput = document.getElementById("cycling-distance-input");
 const cyclingHoursInput = document.getElementById("cycling-hours-input");
 const cyclingMinutesInput = document.getElementById("cycling-minutes-input");
 const cyclingSecondsInput = document.getElementById("cycling-seconds-input");
+const cyclingHundredthsInput = document.getElementById("cycling-hundredths-input");
 
 const addRunningForm = document.getElementById("add-running-form");
 const runningDescInput = document.getElementById("running-desc-input");
 const runningHoursInput = document.getElementById("running-hours-input");
 const runningMinutesInput = document.getElementById("running-minutes-input");
 const runningSecondsInput = document.getElementById("running-seconds-input");
+const runningHundredthsInput = document.getElementById("running-hundredths-input");
 
 const triathlonTemplate = document.getElementById("triathlon-perf-template");
 const triathlonPanelEl = document.getElementById("triathlon-panel");
@@ -45,18 +47,21 @@ const triFields = {
     hours: document.getElementById("tri-swim-hours"),
     minutes: document.getElementById("tri-swim-minutes"),
     seconds: document.getElementById("tri-swim-seconds"),
+    hundredths: document.getElementById("tri-swim-hundredths"),
     validate: document.getElementById("tri-swim-validate"),
   },
   bike: {
     hours: document.getElementById("tri-bike-hours"),
     minutes: document.getElementById("tri-bike-minutes"),
     seconds: document.getElementById("tri-bike-seconds"),
+    hundredths: document.getElementById("tri-bike-hundredths"),
     validate: document.getElementById("tri-bike-validate"),
   },
   run: {
     hours: document.getElementById("tri-run-hours"),
     minutes: document.getElementById("tri-run-minutes"),
     seconds: document.getElementById("tri-run-seconds"),
+    hundredths: document.getElementById("tri-run-hundredths"),
     validate: document.getElementById("tri-run-validate"),
   },
 };
@@ -72,10 +77,9 @@ const TEXT_PLACEHOLDER_KEYS = {
 
 function timeChipHTML(perf, sport) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
-  if (sport === "natation") {
-    return `<span class="chip-icon">⏱️</span><span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span><span class="chip-num chip-num-sub">${pad(perf.hundredths)}</span>`;
-  }
-  return `<span class="chip-icon">⏱️</span><span class="chip-num">${pad(perf.hours)}</span><span class="chip-unit">h</span><span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span>`;
+  const hoursPart =
+    sport === "natation" ? "" : `<span class="chip-num">${pad(perf.hours)}</span><span class="chip-unit">h</span>`;
+  return `<span class="chip-icon">⏱️</span>${hoursPart}<span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span><span class="chip-num chip-num-sub">${pad(perf.hundredths)}</span>`;
 }
 
 function distanceChipHTML(perf, sport) {
@@ -87,25 +91,27 @@ function sizeChipHTML(perf) {
   return `<span class="chip-icon">🔱</span><span class="chip-num">${perf.size}</span>`;
 }
 
-function legToSeconds(leg) {
-  return (leg?.hours ?? 0) * 3600 + (leg?.minutes ?? 0) * 60 + (leg?.seconds ?? 0);
+function legToCentiseconds(leg) {
+  return ((leg?.hours ?? 0) * 3600 + (leg?.minutes ?? 0) * 60 + (leg?.seconds ?? 0)) * 100 + (leg?.hundredths ?? 0);
 }
 
-function secondsToHMS(totalSeconds) {
+function centisecondsToHMSC(totalCenti) {
+  const totalSeconds = Math.floor(totalCenti / 100);
   return {
     hours: Math.floor(totalSeconds / 3600),
     minutes: Math.floor((totalSeconds % 3600) / 60),
-    seconds: Math.floor(totalSeconds % 60),
+    seconds: totalSeconds % 60,
+    hundredths: totalCenti % 100,
   };
 }
 
 function triathlonTotal(perf) {
-  return legToSeconds(perf.swim) + legToSeconds(perf.bike) + legToSeconds(perf.run);
+  return legToCentiseconds(perf.swim) + legToCentiseconds(perf.bike) + legToCentiseconds(perf.run);
 }
 
 function triLegRowHTML(icon, leg) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
-  return `<div class="tri-popup-row"><span class="tri-popup-icon">${icon}</span><span class="tri-popup-time">${pad(leg?.hours)}H${pad(leg?.minutes)}Mn${pad(leg?.seconds)}S</span></div>`;
+  return `<div class="tri-popup-row"><span class="tri-popup-icon">${icon}</span><span class="tri-popup-time">${pad(leg?.hours)}H${pad(leg?.minutes)}Mn${pad(leg?.seconds)}S${pad(leg?.hundredths)}</span></div>`;
 }
 
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
@@ -244,7 +250,7 @@ function renderSportList() {
 
     const timeDisplay = node.querySelector(".perf-time-display");
     if (currentSport === "triathlon") {
-      timeDisplay.innerHTML = timeChipHTML(secondsToHMS(triathlonTotal(perf)), "velo");
+      timeDisplay.innerHTML = timeChipHTML(centisecondsToHMSC(triathlonTotal(perf)), "velo");
       timeDisplay.addEventListener("click", (e) => {
         e.stopPropagation();
         toggleTriPopup(timeDisplay, perf);
@@ -296,6 +302,7 @@ addCyclingForm.addEventListener("submit", (e) => {
     hours: cyclingHoursInput.value === "" ? null : Number(cyclingHoursInput.value),
     minutes: cyclingMinutesInput.value === "" ? null : Number(cyclingMinutesInput.value),
     seconds: cyclingSecondsInput.value === "" ? null : Number(cyclingSecondsInput.value),
+    hundredths: cyclingHundredthsInput.value === "" ? null : Number(cyclingHundredthsInput.value),
   });
   saveSportPerfs();
   renderSportList();
@@ -313,6 +320,7 @@ addRunningForm.addEventListener("submit", (e) => {
     hours: runningHoursInput.value === "" ? null : Number(runningHoursInput.value),
     minutes: runningMinutesInput.value === "" ? null : Number(runningMinutesInput.value),
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
+    hundredths: runningHundredthsInput.value === "" ? null : Number(runningHundredthsInput.value),
   });
   saveSportPerfs();
   renderSportList();
@@ -326,10 +334,11 @@ let triathlonDraft = { swim: null, bike: null, run: null };
 function resetTriathlonWizard() {
   triLocationInput.value = "";
   triSizeInput.value = "M";
-  Object.values(triFields).forEach(({ hours, minutes, seconds }) => {
+  Object.values(triFields).forEach(({ hours, minutes, seconds, hundredths }) => {
     hours.value = "";
     minutes.value = "";
     seconds.value = "";
+    hundredths.value = "";
   });
   triSteps.swim.hidden = false;
   triSteps.bike.hidden = true;
@@ -338,11 +347,12 @@ function resetTriathlonWizard() {
 }
 
 function readTriLeg(leg) {
-  const { hours, minutes, seconds } = triFields[leg];
+  const { hours, minutes, seconds, hundredths } = triFields[leg];
   return {
     hours: hours.value === "" ? 0 : Number(hours.value),
     minutes: minutes.value === "" ? 0 : Number(minutes.value),
     seconds: seconds.value === "" ? 0 : Number(seconds.value),
+    hundredths: hundredths.value === "" ? 0 : Number(hundredths.value),
   };
 }
 
