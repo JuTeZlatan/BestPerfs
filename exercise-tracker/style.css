@@ -889,23 +889,92 @@ input[type="number"]::-webkit-inner-spin-button {
   inset: 0;
   z-index: 1000;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 28px;
   background: #0a0505;
   opacity: 1;
-  transition: opacity 0.4s ease;
+  overflow: hidden;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .splash-screen.hide {
   opacity: 0;
+  transform: scale(1.04);
   pointer-events: none;
 }
 
+.splash-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(80vw, 420px);
+  height: min(80vw, 420px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236, 43, 30, 0.45), transparent 70%);
+  filter: blur(10px);
+  animation: splash-pulse 2.2s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes splash-pulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.94); }
+  50% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05); }
+}
+
 .splash-logo {
+  position: relative;
+  z-index: 1;
   width: min(70vw, 340px);
   height: auto;
   border-radius: 12px;
   box-shadow: 0 0 60px rgba(236, 43, 30, 0.35);
+  opacity: 0;
+  transform: scale(0.82);
+  animation: splash-logo-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+@keyframes splash-logo-in {
+  to { opacity: 1; transform: scale(1); }
+}
+
+.splash-progress {
+  position: relative;
+  z-index: 1;
+  width: min(50vw, 200px);
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(246, 239, 236, 0.12);
+  overflow: hidden;
+  opacity: 0;
+  animation: splash-progress-in 0.4s ease 0.4s forwards;
+}
+
+@keyframes splash-progress-in {
+  to { opacity: 1; }
+}
+
+.splash-progress span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 3px;
+  animation: splash-progress-fill 2.6s linear 0.4s forwards;
+}
+
+@keyframes splash-progress-fill {
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-glow { animation: none; opacity: 0.6; }
+  .splash-logo { animation: none; opacity: 1; transform: none; }
+  .splash-progress { animation: none; opacity: 1; }
+  .splash-progress span { animation: none; width: 100%; }
+  .splash-screen.hide { transform: none; }
 }
 
 /* Mobile-width overrides. Kept last in the file so equal-specificity

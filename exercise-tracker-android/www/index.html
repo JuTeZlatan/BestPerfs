@@ -9,13 +9,15 @@
 </head>
 <body>
   <div id="splash-screen" class="splash-screen">
+    <div class="splash-glow"></div>
     <img src="splash-logo.jpg" alt="Best Perfs" class="splash-logo">
+    <div class="splash-progress"><span></span></div>
   </div>
   <script>
     setTimeout(function () {
       var splash = document.getElementById("splash-screen");
       splash.classList.add("hide");
-      setTimeout(function () { splash.style.display = "none"; }, 400);
+      setTimeout(function () { splash.style.display = "none"; }, 500);
     }, 3000);
   </script>
 
