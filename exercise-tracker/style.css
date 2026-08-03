@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;800&family=Orbitron:wght@700;800;900&display=swap");
 
 :root {
   --bg: #1c0f0d;
@@ -895,6 +895,8 @@ input[type="number"]::-webkit-inner-spin-button {
   opacity: 1;
   overflow: hidden;
   transition: opacity 0.35s ease, transform 0.35s ease;
+  --splash-red: #ff1a1a;
+  --splash-red-hot: #ff4040;
 }
 
 .splash-screen.hide {
@@ -907,8 +909,8 @@ input[type="number"]::-webkit-inner-spin-button {
   position: absolute;
   inset: -10%;
   background-image:
-    linear-gradient(rgba(236, 43, 30, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(236, 43, 30, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(255, 26, 26, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 26, 26, 0.1) 1px, transparent 1px);
   background-size: 42px 42px;
   opacity: 0.5;
   animation: grid-drift 12s linear infinite;
@@ -920,16 +922,16 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .splash-shake {
-  animation: splash-shake 3s linear forwards;
+  animation: splash-shake 4s linear forwards;
 }
 
 @keyframes splash-shake {
-  0%, 23% { transform: translate(0, 0); }
-  23.3% { transform: translate(-8px, 4px); }
-  24.5% { transform: translate(7px, -5px); }
-  25.7% { transform: translate(-5px, 3px); }
-  26.9% { transform: translate(3px, -2px); }
-  28%, 100% { transform: translate(0, 0); }
+  0%, 28% { transform: translate(0, 0); }
+  28.75% { transform: translate(-8px, 4px); }
+  30% { transform: translate(7px, -5px); }
+  31.25% { transform: translate(-5px, 3px); }
+  32.5% { transform: translate(3px, -2px); }
+  33.75%, 100% { transform: translate(0, 0); }
 }
 
 .splash-hud {
@@ -945,9 +947,9 @@ input[type="number"]::-webkit-inner-spin-button {
   position: absolute;
   width: 26px;
   height: 26px;
-  border: 2px solid var(--accent-2);
+  border: 2px solid var(--splash-red-hot);
   opacity: 0;
-  filter: drop-shadow(0 0 6px rgba(236, 43, 30, 0.8));
+  filter: drop-shadow(0 0 7px rgba(255, 26, 26, 0.9));
   animation: hud-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
 }
 .hud-tl { top: 0; left: 0; border-width: 2px 0 0 2px; transform: translate(-14px, -14px); }
@@ -972,11 +974,11 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--accent-2);
-  box-shadow: 0 0 8px 2px rgba(255, 106, 61, 0.9);
+  background: var(--splash-red-hot);
+  box-shadow: 0 0 10px 3px rgba(255, 64, 64, 1);
   opacity: 0.4;
   transform: scale(0.3);
-  animation: core-charge 0.6s ease-in 0.15s forwards;
+  animation: core-charge 1s ease-in 0.15s forwards;
 }
 
 @keyframes core-charge {
@@ -987,13 +989,13 @@ input[type="number"]::-webkit-inner-spin-button {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px solid rgba(236, 43, 30, 0.5);
+  border: 1px solid rgba(255, 26, 26, 0.6);
   opacity: 0;
-  animation: core-ring-charge 0.6s ease-in 0.15s forwards;
+  animation: core-ring-charge 1s ease-in 0.15s forwards;
 }
 .core-ring-2 {
-  animation-delay: 0.22s;
-  border-color: rgba(255, 106, 61, 0.4);
+  animation-delay: 0.37s;
+  border-color: rgba(255, 64, 64, 0.5);
 }
 
 @keyframes core-ring-charge {
@@ -1017,7 +1019,7 @@ input[type="number"]::-webkit-inner-spin-button {
   transform-origin: top center;
   transform: translate(-50%, 0) rotate(calc(var(--i) * 45deg));
   opacity: 0;
-  animation: ray-burst 0.4s ease-out 0.72s forwards;
+  animation: ray-burst 0.4s ease-out 1.15s forwards;
 }
 
 @keyframes ray-burst {
@@ -1029,11 +1031,11 @@ input[type="number"]::-webkit-inner-spin-button {
 .splash-wordmark {
   display: grid;
   position: relative;
-  font-family: "Oswald", sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.9rem, 11vw, 3.6rem);
+  font-family: "Orbitron", "Oswald", sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.7rem, 10vw, 3.3rem);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
@@ -1046,12 +1048,12 @@ input[type="number"]::-webkit-inner-spin-button {
   color: var(--text);
   opacity: 0;
   text-shadow:
-    0 0 8px rgba(236, 43, 30, 0.9),
-    0 0 26px rgba(236, 43, 30, 0.6),
-    0 0 56px rgba(236, 43, 30, 0.35);
+    0 0 10px rgba(255, 26, 26, 0.95),
+    0 0 30px rgba(255, 26, 26, 0.7),
+    0 0 64px rgba(255, 26, 26, 0.4);
   animation:
-    word-reveal 0.16s steps(2, end) 0.74s forwards,
-    word-glow 2.6s ease-in-out 0.95s infinite;
+    word-reveal 0.16s steps(2, end) 1.17s forwards,
+    word-glow 2.6s ease-in-out 1.35s infinite;
 }
 
 @keyframes word-reveal {
@@ -1061,10 +1063,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 @keyframes word-glow {
   0%, 100% {
-    text-shadow: 0 0 8px rgba(236, 43, 30, 0.9), 0 0 26px rgba(236, 43, 30, 0.6), 0 0 56px rgba(236, 43, 30, 0.35);
+    text-shadow: 0 0 10px rgba(255, 26, 26, 0.95), 0 0 30px rgba(255, 26, 26, 0.7), 0 0 64px rgba(255, 26, 26, 0.4);
   }
   50% {
-    text-shadow: 0 0 12px rgba(236, 43, 30, 1), 0 0 36px rgba(236, 43, 30, 0.75), 0 0 72px rgba(236, 43, 30, 0.45);
+    text-shadow: 0 0 14px rgba(255, 64, 64, 1), 0 0 42px rgba(255, 26, 26, 0.85), 0 0 82px rgba(255, 26, 26, 0.5);
   }
 }
 
@@ -1073,14 +1075,14 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .word-r {
-  color: #ff2d55;
+  color: #ff0044;
   mix-blend-mode: screen;
-  animation: glitch-r 0.22s steps(2, end) 0.72s 2;
+  animation: glitch-r 0.22s steps(2, end) 1.15s 2;
 }
 .word-c {
   color: #35e0ff;
   mix-blend-mode: screen;
-  animation: glitch-c 0.22s steps(2, end) 0.72s 2;
+  animation: glitch-c 0.22s steps(2, end) 1.15s 2;
 }
 
 @keyframes glitch-r {
@@ -1113,7 +1115,7 @@ input[type="number"]::-webkit-inner-spin-button {
   background: #fff;
   opacity: 0;
   pointer-events: none;
-  animation: screen-flash 0.5s ease-out 0.7s forwards;
+  animation: screen-flash 0.5s ease-out 1.13s forwards;
 }
 
 @keyframes screen-flash {

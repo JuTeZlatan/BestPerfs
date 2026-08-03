@@ -62,7 +62,7 @@
         if (reduced) {
           pctEl.textContent = "100";
         } else {
-          var duration = 700;
+          var duration = 1000;
           var chargeStart = Date.now();
           var tick = function () {
             var pct = Math.min(100, Math.round(((Date.now() - chargeStart) / duration) * 100));
@@ -76,7 +76,7 @@
         var splash = document.getElementById("splash-screen");
         splash.classList.add("hide");
         setTimeout(function () { splash.style.display = "none"; }, 400);
-      }, 3000);
+      }, 4000);
     })();
   </script>
 
