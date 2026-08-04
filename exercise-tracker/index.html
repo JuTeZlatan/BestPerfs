@@ -82,11 +82,7 @@
 
   <div class="app">
     <div class="top-bar">
-      <nav id="main-nav" class="main-nav">
-        <button class="nav-tab" data-view="timer" data-i18n="nav.toChrono">⏱️ Chrono</button>
-        <button class="nav-tab active" data-view="sports" data-i18n="nav.toSports">🏅 Sports</button>
-      </nav>
-
+      <div class="top-bar-actions">
       <div class="lang-switcher">
         <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
         <div id="lang-menu" class="lang-menu" hidden>
@@ -143,7 +139,24 @@
           <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
         </div>
       </div>
+      </div>
     </div>
+
+    <nav id="bottom-nav" class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <button class="bottom-nav-btn" data-view="timer" type="button">
+          <span class="bottom-nav-icon">⏱️</span>
+          <span class="bottom-nav-label" data-i18n="nav.chronoLabel">Chrono</span>
+        </button>
+        <button class="bottom-nav-btn bottom-nav-center active" data-view="sports" type="button">
+          <span class="bottom-nav-icon">🏅</span>
+        </button>
+        <button class="bottom-nav-btn" data-view="profile" type="button">
+          <span class="bottom-nav-icon">👤</span>
+          <span class="bottom-nav-label" data-i18n="nav.profileLabel">Profil</span>
+        </button>
+      </div>
+    </nav>
 
     <section id="timer-view" hidden>
       <div class="timer-panel">
@@ -298,6 +311,13 @@
       <div id="sport-list" class="exercise-list"></div>
 
       <p id="sport-empty-state" class="empty-state" data-i18n="sport.empty">Aucune performance pour l'instant. Ajoute-en une ci-dessous !</p>
+    </section>
+
+    <section id="profile-view" hidden>
+      <header>
+        <h1 data-i18n="app.title.profile">👤 Profil</h1>
+        <p class="subtitle" data-i18n="profile.comingSoon">Bientôt disponible — reviens plus tard pour configurer ton profil !</p>
+      </header>
     </section>
   </div>
 

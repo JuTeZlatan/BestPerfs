@@ -81,6 +81,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Importer ces données ? Cela remplacera toutes tes données actuelles.",
     "backup.importError": "Fichier invalide. Sélectionne une sauvegarde valide.",
     "sport.bestPerfTitle": "Meilleure performance",
+    "nav.chronoLabel": "Chrono",
+    "nav.profileLabel": "Profil",
+    "app.title.profile": "👤 Profil",
+    "profile.comingSoon": "Bientôt disponible — reviens plus tard pour configurer ton profil !",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -150,6 +154,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Import this data? This will replace all your current data.",
     "backup.importError": "Invalid file. Please select a valid backup.",
     "sport.bestPerfTitle": "Best performance",
+    "nav.chronoLabel": "Timer",
+    "nav.profileLabel": "Profile",
+    "app.title.profile": "👤 Profile",
+    "profile.comingSoon": "Coming soon — check back later to set up your profile!",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -219,6 +227,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "¿Importar estos datos? Esto reemplazará todos tus datos actuales.",
     "backup.importError": "Archivo no válido. Selecciona una copia de seguridad válida.",
     "sport.bestPerfTitle": "Mejor marca",
+    "nav.chronoLabel": "Cronómetro",
+    "nav.profileLabel": "Perfil",
+    "app.title.profile": "👤 Perfil",
+    "profile.comingSoon": "Próximamente — vuelve más tarde para configurar tu perfil.",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -288,6 +300,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Importar estes dados? Isso substituirá todos os seus dados atuais.",
     "backup.importError": "Arquivo inválido. Selecione um backup válido.",
     "sport.bestPerfTitle": "Melhor desempenho",
+    "nav.chronoLabel": "Cronómetro",
+    "nav.profileLabel": "Perfil",
+    "app.title.profile": "👤 Perfil",
+    "profile.comingSoon": "Em breve — volta mais tarde para configurar o teu perfil.",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -357,6 +373,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "导入这些数据吗？这将替换你当前的所有数据。",
     "backup.importError": "文件无效。请选择有效的备份文件。",
     "sport.bestPerfTitle": "最佳成绩",
+    "nav.chronoLabel": "计时器",
+    "nav.profileLabel": "我的",
+    "app.title.profile": "👤 我的资料",
+    "profile.comingSoon": "即将推出——请稍后回来设置你的个人资料！",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -426,6 +446,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "استيراد هذه البيانات؟ سيؤدي هذا إلى استبدال جميع بياناتك الحالية.",
     "backup.importError": "ملف غير صالح. الرجاء اختيار نسخة احتياطية صالحة.",
     "sport.bestPerfTitle": "أفضل أداء",
+    "nav.chronoLabel": "ساعة توقيت",
+    "nav.profileLabel": "الملف الشخصي",
+    "app.title.profile": "👤 الملف الشخصي",
+    "profile.comingSoon": "قريبًا — عد لاحقًا لإعداد ملفك الشخصي!",
   },
   de: {
     "doc.title": "Trainingstracker",
@@ -495,6 +519,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Diese Daten importieren? Dies ersetzt alle deine aktuellen Daten.",
     "backup.importError": "Ungültige Datei. Bitte wähle eine gültige Sicherung.",
     "sport.bestPerfTitle": "Beste Leistung",
+    "nav.chronoLabel": "Stoppuhr",
+    "nav.profileLabel": "Profil",
+    "app.title.profile": "👤 Profil",
+    "profile.comingSoon": "Demnächst verfügbar — schau später wieder vorbei, um dein Profil einzurichten!",
   },
   it: {
     "doc.title": "Monitoraggio allenamenti",
@@ -564,6 +592,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Importare questi dati? Questo sostituirà tutti i tuoi dati attuali.",
     "backup.importError": "File non valido. Seleziona un backup valido.",
     "sport.bestPerfTitle": "Miglior prestazione",
+    "nav.chronoLabel": "Cronometro",
+    "nav.profileLabel": "Profilo",
+    "app.title.profile": "👤 Profilo",
+    "profile.comingSoon": "Presto disponibile — torna più tardi per configurare il tuo profilo!",
   },
   nl: {
     "doc.title": "Trainingstracker",
@@ -633,6 +665,10 @@ const TRANSLATIONS = {
     "backup.importConfirm": "Deze gegevens importeren? Dit vervangt al je huidige gegevens.",
     "backup.importError": "Ongeldig bestand. Selecteer een geldige back-up.",
     "sport.bestPerfTitle": "Beste prestatie",
+    "nav.chronoLabel": "Stopwatch",
+    "nav.profileLabel": "Profiel",
+    "app.title.profile": "👤 Profiel",
+    "profile.comingSoon": "Binnenkort beschikbaar — kom later terug om je profiel in te stellen!",
   },
 };
 

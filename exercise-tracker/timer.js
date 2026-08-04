@@ -1,8 +1,9 @@
-// ---- View navigation (chrono / sports) ----
-const navTabs = document.querySelectorAll(".nav-tab");
+// ---- View navigation (chrono / sports / profile) ----
+const navTabs = document.querySelectorAll(".bottom-nav-btn");
 const timerView = document.getElementById("timer-view");
 const sportsView = document.getElementById("sports-view");
-const NAV_VIEWS = { timer: timerView, sports: sportsView };
+const profileView = document.getElementById("profile-view");
+const NAV_VIEWS = { timer: timerView, sports: sportsView, profile: profileView };
 
 function showView(name) {
   Object.keys(NAV_VIEWS).forEach((key) => {
