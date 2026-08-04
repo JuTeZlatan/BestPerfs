@@ -337,18 +337,21 @@
       <div class="exercise-card">
         <button class="edit-btn" title="Modifier le nom">✏️</button>
         <input type="text" class="preset-name" maxlength="30" placeholder="Nom du chrono" readonly>
-        <label class="inline-field">
-          <span class="inline-field-label">H</span>
-          <input type="number" class="preset-hours" min="0" step="1">
-        </label>
-        <label class="inline-field">
-          <span class="inline-field-label">Min</span>
-          <input type="number" class="preset-minutes" min="0" step="1">
-        </label>
-        <label class="inline-field">
-          <span class="inline-field-label">Sec</span>
-          <input type="number" class="preset-seconds" min="0" max="59" step="1">
-        </label>
+        <span class="preset-time-display">
+          <span class="chip-icon">⏱️</span>
+          <label class="inline-field">
+            <input type="number" class="preset-hours chip-input" min="0" step="1">
+            <span class="chip-unit">h</span>
+          </label>
+          <label class="inline-field">
+            <input type="number" class="preset-minutes chip-input" min="0" step="1">
+            <span class="chip-unit">mn</span>
+          </label>
+          <label class="inline-field">
+            <input type="number" class="preset-seconds chip-input" min="0" max="59" step="1">
+            <span class="chip-unit">s</span>
+          </label>
+        </span>
         <button class="play-btn" title="Démarrer ce chrono">▶</button>
       </div>
       <button class="delete-btn" title="Supprimer">✕</button>

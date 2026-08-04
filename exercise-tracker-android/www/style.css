@@ -726,6 +726,55 @@ h1 {
   flex-shrink: 0;
 }
 
+.preset-time-display {
+  display: inline-flex;
+  align-items: baseline;
+  flex-shrink: 0;
+  padding: 3px 9px 3px 7px;
+  border-radius: 12px;
+  background: rgba(226, 36, 26, 0.14);
+  border: 1px solid var(--card-border);
+}
+
+.preset-time-display .inline-field {
+  gap: 0;
+}
+
+.preset-time-display .chip-icon {
+  font-size: 0.68rem;
+  margin-right: 3px;
+}
+
+.preset-time-display .chip-input {
+  width: 22px;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--accent-2);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: right;
+  outline: none;
+}
+
+.preset-time-display .chip-input:focus {
+  border-bottom-color: var(--accent);
+}
+
+.preset-time-display .chip-unit {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: lowercase;
+  margin: 0 3px 0 1px;
+}
+
+.preset-time-display .inline-field:last-child .chip-unit {
+  margin-right: 0;
+}
+
 .inline-field-label {
   min-width: 24px;
   font-size: 0.62rem;

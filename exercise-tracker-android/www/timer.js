@@ -257,11 +257,6 @@ function renderPresets() {
       nameInput.select();
     });
 
-    const fieldLabels = node.querySelectorAll(".inline-field-label");
-    fieldLabels[0].textContent = "H";
-    fieldLabels[1].textContent = t("field.min");
-    fieldLabels[2].textContent = t("field.sec");
-
     const hoursInput = node.querySelector(".preset-hours");
     const minutesInput = node.querySelector(".preset-minutes");
     const secondsInput = node.querySelector(".preset-seconds");
