@@ -1,22 +1,29 @@
 const BACKUP_KEYS = ["exercise-tracker-data", "exercise-tracker-presets", "exercise-tracker-sports", "exercise-tracker-lang"];
 
-const backupToggle = document.getElementById("profile-backup-toggle");
-const backupPanel = document.getElementById("profile-backup-panel");
+const profileBackupRow = document.getElementById("profile-backup-row");
+const profileViewEl = document.getElementById("profile-view");
+const backupViewEl = document.getElementById("backup-view");
+const backupBackBtn = document.getElementById("backup-back-btn");
 const backupExportBtn = document.getElementById("backup-export-btn");
 const backupImportBtn = document.getElementById("backup-import-btn");
 const backupImportInput = document.getElementById("backup-import-input");
 
 function closeBackupPanel() {
-  backupPanel.hidden = true;
-  backupToggle.setAttribute("aria-expanded", "false");
-  backupToggle.classList.remove("open");
+  backupViewEl.hidden = true;
+  profileViewEl.hidden = false;
 }
 
-backupToggle.addEventListener("click", () => {
-  const willOpen = backupPanel.hidden;
-  backupPanel.hidden = !willOpen;
-  backupToggle.setAttribute("aria-expanded", String(willOpen));
-  backupToggle.classList.toggle("open", willOpen);
+profileBackupRow.addEventListener("click", () => {
+  profileViewEl.hidden = true;
+  backupViewEl.hidden = false;
+});
+
+backupBackBtn.addEventListener("click", closeBackupPanel);
+
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    backupViewEl.hidden = true;
+  });
 });
 
 function exportBackupData() {

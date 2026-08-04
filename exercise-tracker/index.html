@@ -305,22 +305,30 @@
       </header>
 
       <div class="profile-menu">
-        <button id="profile-backup-toggle" class="profile-menu-row" type="button" aria-expanded="false">
+        <button id="profile-backup-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon">💾</span>
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
-          <span class="profile-menu-chevron">▾</span>
+          <span class="profile-menu-chevron">›</span>
         </button>
-        <div id="profile-backup-panel" class="profile-menu-panel" hidden>
-          <button id="backup-export-btn" class="profile-menu-subrow" type="button">
-            <span class="profile-menu-icon">📤</span>
-            <span data-i18n="backup.export">Exporter mes données</span>
-          </button>
-          <button id="backup-import-btn" class="profile-menu-subrow" type="button">
-            <span class="profile-menu-icon">📥</span>
-            <span data-i18n="backup.import">Importer des données</span>
-          </button>
-          <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
-        </div>
+      </div>
+    </section>
+
+    <section id="backup-view" hidden>
+      <div class="subpage-header">
+        <button id="backup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.backupRow">Importer/Exporter les données</h1>
+      </div>
+
+      <div class="profile-menu">
+        <button id="backup-export-btn" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">📤</span>
+          <span data-i18n="backup.export">Exporter mes données</span>
+        </button>
+        <button id="backup-import-btn" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">📥</span>
+          <span data-i18n="backup.import">Importer des données</span>
+        </button>
+        <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
       </div>
     </section>
   </div>

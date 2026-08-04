@@ -231,8 +231,7 @@ body {
   margin-top: 18px;
 }
 
-.profile-menu-row,
-.profile-menu-subrow {
+.profile-menu-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -251,8 +250,7 @@ body {
   transition: border-color 0.15s ease, transform 0.1s ease;
 }
 
-.profile-menu-row:hover,
-.profile-menu-subrow:hover {
+.profile-menu-row:hover {
   border-color: var(--accent);
   transform: translateY(-1px);
 }
@@ -270,26 +268,39 @@ body {
 .profile-menu-chevron {
   flex-shrink: 0;
   color: var(--text-dim);
-  transition: transform 0.15s ease;
 }
 
-.profile-menu-row.open .profile-menu-chevron {
-  transform: rotate(180deg);
-}
-
-.profile-menu-panel {
+.subpage-header {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-left: 12px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
-.profile-menu-panel[hidden] {
-  display: none;
+.subpage-header h1 {
+  margin: 0;
+  font-size: 1.1rem;
 }
 
-.profile-menu-subrow {
-  border-left-color: var(--card-border);
+.subpage-back-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.subpage-back-btn:hover {
+  border-color: var(--accent);
+  transform: translateX(-2px);
 }
 
 header {
