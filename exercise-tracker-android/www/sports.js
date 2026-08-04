@@ -144,6 +144,28 @@ function getSortedSportEntries(entries, sport) {
   return entries;
 }
 
+function computeBestIds(entries, sport) {
+  const groupKeyOf = sport === "triathlon" ? (perf) => perf.size : (perf) => perf.distance;
+  const timeOf = sport === "triathlon" ? triathlonTotal : perfTimeCentiseconds;
+  const groups = new Map();
+  entries.forEach((perf) => {
+    const key = groupKeyOf(perf);
+    if (key == null || key === "") return;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(perf);
+  });
+  const bestIds = new Set();
+  groups.forEach((group) => {
+    if (group.length < 2) return;
+    let best = group[0];
+    group.forEach((perf) => {
+      if (timeOf(perf) < timeOf(best)) best = perf;
+    });
+    bestIds.add(best.id);
+  });
+  return bestIds;
+}
+
 const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
 const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate };
 const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon" };
@@ -245,6 +267,7 @@ function renderSportList() {
   sportEmptyStateEl.classList.toggle("visible", entries.length === 0);
 
   const template = SPORT_TEMPLATES[currentSport];
+  const bestIds = computeBestIds(entries, currentSport);
 
   entries.forEach((perf) => {
     const node = template.content.cloneNode(true);
@@ -289,6 +312,13 @@ function renderSportList() {
 
     const sizeDisplay = node.querySelector(".perf-size-display");
     if (sizeDisplay) sizeDisplay.innerHTML = sizeChipHTML(perf);
+
+    const bestBadge = node.querySelector(".perf-best-badge");
+    if (bestBadge) {
+      const isBest = bestIds.has(perf.id);
+      bestBadge.hidden = !isBest;
+      if (isBest) bestBadge.title = t("sport.bestPerfTitle");
+    }
 
     const timeDisplay = node.querySelector(".perf-time-display");
     if (currentSport === "triathlon") {

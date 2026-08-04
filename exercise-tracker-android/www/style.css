@@ -161,6 +161,12 @@ body {
   flex-shrink: 0;
 }
 
+.backup-icon {
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
 header {
   text-align: center;
   margin-bottom: 18px;
@@ -659,6 +665,16 @@ h1 {
 }
 
 .perf-distance-display[hidden] {
+  display: none;
+}
+
+.perf-best-badge {
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.perf-best-badge[hidden] {
   display: none;
 }
 
@@ -1216,6 +1232,10 @@ input[type="number"]::-webkit-inner-spin-button {
   .perf-size-display,
   .perf-time-display {
     padding: 2px 6px 2px 5px;
+  }
+
+  .perf-best-badge {
+    font-size: 0.8rem;
   }
 
   .perf-distance-display .chip-icon,
