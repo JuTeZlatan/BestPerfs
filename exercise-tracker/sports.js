@@ -156,7 +156,6 @@ function computeBestIds(entries, sport) {
   });
   const bestIds = new Set();
   groups.forEach((group) => {
-    if (group.length < 2) return;
     let best = group[0];
     group.forEach((perf) => {
       if (timeOf(perf) < timeOf(best)) best = perf;
