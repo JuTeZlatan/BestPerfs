@@ -85,6 +85,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Profil",
     "app.title.profile": "👤 Profil",
     "profile.comingSoon": "Bientôt disponible — reviens plus tard pour configurer ton profil !",
+    "profile.backupRow": "Importer/Exporter les données",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -158,6 +159,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Profile",
     "app.title.profile": "👤 Profile",
     "profile.comingSoon": "Coming soon — check back later to set up your profile!",
+    "profile.backupRow": "Import/Export data",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -231,6 +233,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Perfil",
     "app.title.profile": "👤 Perfil",
     "profile.comingSoon": "Próximamente — vuelve más tarde para configurar tu perfil.",
+    "profile.backupRow": "Importar/Exportar datos",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -304,6 +307,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Perfil",
     "app.title.profile": "👤 Perfil",
     "profile.comingSoon": "Em breve — volta mais tarde para configurar o teu perfil.",
+    "profile.backupRow": "Importar/Exportar dados",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -377,6 +381,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "我的",
     "app.title.profile": "👤 我的资料",
     "profile.comingSoon": "即将推出——请稍后回来设置你的个人资料！",
+    "profile.backupRow": "导入/导出数据",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -450,6 +455,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "الملف الشخصي",
     "app.title.profile": "👤 الملف الشخصي",
     "profile.comingSoon": "قريبًا — عد لاحقًا لإعداد ملفك الشخصي!",
+    "profile.backupRow": "استيراد/تصدير البيانات",
   },
   de: {
     "doc.title": "Trainingstracker",
@@ -523,6 +529,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Profil",
     "app.title.profile": "👤 Profil",
     "profile.comingSoon": "Demnächst verfügbar — schau später wieder vorbei, um dein Profil einzurichten!",
+    "profile.backupRow": "Daten importieren/exportieren",
   },
   it: {
     "doc.title": "Monitoraggio allenamenti",
@@ -596,6 +603,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Profilo",
     "app.title.profile": "👤 Profilo",
     "profile.comingSoon": "Presto disponibile — torna più tardi per configurare il tuo profilo!",
+    "profile.backupRow": "Importa/Esporta dati",
   },
   nl: {
     "doc.title": "Trainingstracker",
@@ -669,6 +677,7 @@ const TRANSLATIONS = {
     "nav.profileLabel": "Profiel",
     "app.title.profile": "👤 Profiel",
     "profile.comingSoon": "Binnenkort beschikbaar — kom later terug om je profiel in te stellen!",
+    "profile.backupRow": "Gegevens importeren/exporteren",
   },
 };
 

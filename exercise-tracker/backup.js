@@ -1,20 +1,22 @@
 const BACKUP_KEYS = ["exercise-tracker-data", "exercise-tracker-presets", "exercise-tracker-sports", "exercise-tracker-lang"];
 
-const backupBtn = document.getElementById("backup-btn");
-const backupMenu = document.getElementById("backup-menu");
+const backupToggle = document.getElementById("profile-backup-toggle");
+const backupPanel = document.getElementById("profile-backup-panel");
 const backupExportBtn = document.getElementById("backup-export-btn");
 const backupImportBtn = document.getElementById("backup-import-btn");
 const backupImportInput = document.getElementById("backup-import-input");
 
-backupBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  backupMenu.hidden = !backupMenu.hidden;
-});
+function closeBackupPanel() {
+  backupPanel.hidden = true;
+  backupToggle.setAttribute("aria-expanded", "false");
+  backupToggle.classList.remove("open");
+}
 
-document.addEventListener("click", (e) => {
-  if (!backupMenu.hidden && !backupMenu.contains(e.target) && e.target !== backupBtn) {
-    backupMenu.hidden = true;
-  }
+backupToggle.addEventListener("click", () => {
+  const willOpen = backupPanel.hidden;
+  backupPanel.hidden = !willOpen;
+  backupToggle.setAttribute("aria-expanded", String(willOpen));
+  backupToggle.classList.toggle("open", willOpen);
 });
 
 function exportBackupData() {
@@ -33,7 +35,7 @@ function exportBackupData() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  backupMenu.hidden = true;
+  closeBackupPanel();
 }
 
 function importBackupData(file) {
@@ -65,6 +67,6 @@ backupImportBtn.addEventListener("click", () => {
 
 backupImportInput.addEventListener("change", () => {
   const file = backupImportInput.files[0];
-  backupMenu.hidden = true;
+  closeBackupPanel();
   if (file) importBackupData(file);
 });

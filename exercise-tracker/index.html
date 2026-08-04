@@ -124,21 +124,6 @@
           </button>
         </div>
       </div>
-
-      <div class="lang-switcher">
-        <button id="backup-btn" class="lang-btn" data-i18n-title="backup.title" type="button">💾</button>
-        <div id="backup-menu" class="lang-menu" hidden>
-          <button id="backup-export-btn" class="lang-option" type="button">
-            <span class="backup-icon">📤</span>
-            <span data-i18n="backup.export">Exporter mes données</span>
-          </button>
-          <button id="backup-import-btn" class="lang-option" type="button">
-            <span class="backup-icon">📥</span>
-            <span data-i18n="backup.import">Importer des données</span>
-          </button>
-          <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
-        </div>
-      </div>
       </div>
     </div>
 
@@ -318,6 +303,25 @@
         <h1 data-i18n="app.title.profile">👤 Profil</h1>
         <p class="subtitle" data-i18n="profile.comingSoon">Bientôt disponible — reviens plus tard pour configurer ton profil !</p>
       </header>
+
+      <div class="profile-menu">
+        <button id="profile-backup-toggle" class="profile-menu-row" type="button" aria-expanded="false">
+          <span class="profile-menu-icon">💾</span>
+          <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
+          <span class="profile-menu-chevron">▾</span>
+        </button>
+        <div id="profile-backup-panel" class="profile-menu-panel" hidden>
+          <button id="backup-export-btn" class="profile-menu-subrow" type="button">
+            <span class="profile-menu-icon">📤</span>
+            <span data-i18n="backup.export">Exporter mes données</span>
+          </button>
+          <button id="backup-import-btn" class="profile-menu-subrow" type="button">
+            <span class="profile-menu-icon">📥</span>
+            <span data-i18n="backup.import">Importer des données</span>
+          </button>
+          <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
+        </div>
+      </div>
     </section>
   </div>
 
