@@ -310,6 +310,11 @@
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
           <span class="profile-menu-chevron">›</span>
         </button>
+        <button id="profile-support-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">🆘</span>
+          <span class="profile-menu-label" data-i18n="profile.supportRow">Support</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
       </div>
     </section>
 
@@ -329,6 +334,22 @@
           <span data-i18n="backup.import">Importer des données</span>
         </button>
         <input type="file" id="backup-import-input" accept="application/json,.json" hidden>
+      </div>
+    </section>
+
+    <section id="support-view" hidden>
+      <div class="subpage-header">
+        <button id="support-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.supportRow">Support</h1>
+      </div>
+
+      <p class="subtitle" data-i18n="support.intro">Une question, un bug à signaler ? Écris-nous :</p>
+
+      <div class="profile-menu">
+        <a href="mailto:test@bestperfs.com" class="profile-menu-row">
+          <span class="profile-menu-icon">📧</span>
+          <span class="profile-menu-label">test@bestperfs.com</span>
+        </a>
       </div>
     </section>
   </div>
@@ -454,6 +475,7 @@
   <script src="timer.js"></script>
   <script src="sports.js"></script>
   <script src="backup.js"></script>
+  <script src="profile.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
