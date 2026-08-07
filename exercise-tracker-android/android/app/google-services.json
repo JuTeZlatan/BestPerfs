@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "877329241895",
+    "project_id": "best-perfs",
+    "storage_bucket": "best-perfs.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877329241895:android:a0a6cea36bfbad90bf7b02",
+        "android_client_info": {
+          "package_name": "com.bestperfs.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877329241895-hmk0ahgvmg2377voeqorkepr11rsi41k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLBschXJpL9G14UK0EsZfSpqY11IhjlhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877329241895-hmk0ahgvmg2377voeqorkepr11rsi41k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

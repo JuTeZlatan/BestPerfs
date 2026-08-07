@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v38";
+const CACHE_NAME = "exercise-tracker-v39";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,6 +9,8 @@ const APP_SHELL = [
   "./sports.js",
   "./backup.js",
   "./profile.js",
+  "./firebase-init.js",
+  "./account.js",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
@@ -32,8 +34,11 @@ self.addEventListener("activate", (event) => {
 
 // Network-first: always try to fetch the latest version when online,
 // only fall back to the cached copy when the network is unavailable.
+// Cross-origin requests (Firebase Auth/Firestore, Google) are left untouched
+// so this cache doesn't interfere with auth/session traffic.
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(
     fetch(event.request, { cache: "no-store" })
       .then((response) => {
