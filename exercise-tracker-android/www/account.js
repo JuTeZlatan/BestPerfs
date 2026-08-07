@@ -24,15 +24,10 @@ const accountEmailDisplay = document.getElementById("account-email-display");
 const accountLogoutBtn = document.getElementById("account-logout-btn");
 
 const gateGoogleBtn = document.getElementById("gate-google-btn");
-const gateTabLogin = document.getElementById("gate-tab-login");
-const gateTabSignup = document.getElementById("gate-tab-signup");
-const gateLoginForm = document.getElementById("gate-login-form");
-const gateSignupForm = document.getElementById("gate-signup-form");
-const gateLoginEmailInput = document.getElementById("gate-login-email-input");
-const gateLoginPasswordInput = document.getElementById("gate-login-password-input");
-const gateSignupEmailInput = document.getElementById("gate-signup-email-input");
-const gateSignupPasswordInput = document.getElementById("gate-signup-password-input");
-const gateSignupConfirmInput = document.getElementById("gate-signup-confirm-input");
+const gateAuthForm = document.getElementById("gate-auth-form");
+const gateEmailInput = document.getElementById("gate-email-input");
+const gatePasswordInput = document.getElementById("gate-password-input");
+const gateSignupBtn = document.getElementById("gate-signup-btn");
 const gateErrorEl = document.getElementById("gate-error");
 
 profileAccountRow.addEventListener("click", () => {
@@ -55,22 +50,6 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
 // so hide that option there until the native Google Sign-In plugin is wired up.
 const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
 if (isNativePlatform) gateGoogleBtn.hidden = true;
-
-gateTabLogin.addEventListener("click", () => {
-  gateTabLogin.classList.add("active");
-  gateTabSignup.classList.remove("active");
-  gateLoginForm.hidden = false;
-  gateSignupForm.hidden = true;
-  clearGateError();
-});
-
-gateTabSignup.addEventListener("click", () => {
-  gateTabSignup.classList.add("active");
-  gateTabLogin.classList.remove("active");
-  gateSignupForm.hidden = false;
-  gateLoginForm.hidden = true;
-  clearGateError();
-});
 
 const AUTH_ERROR_KEYS = {
   "auth/email-already-in-use": "auth.errorEmailInUse",
@@ -101,16 +80,11 @@ gateGoogleBtn.addEventListener("click", async () => {
   }
 });
 
-gateSignupForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+gateSignupBtn.addEventListener("click", async () => {
   clearGateError();
-  const email = gateSignupEmailInput.value.trim();
-  const password = gateSignupPasswordInput.value;
-  if (password !== gateSignupConfirmInput.value) {
-    gateErrorEl.textContent = t("auth.errorPasswordMismatch");
-    gateErrorEl.hidden = false;
-    return;
-  }
+  const email = gateEmailInput.value.trim();
+  const password = gatePasswordInput.value;
+  if (!email || !password) return;
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
@@ -118,11 +92,11 @@ gateSignupForm.addEventListener("submit", async (e) => {
   }
 });
 
-gateLoginForm.addEventListener("submit", async (e) => {
+gateAuthForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearGateError();
-  const email = gateLoginEmailInput.value.trim();
-  const password = gateLoginPasswordInput.value;
+  const email = gateEmailInput.value.trim();
+  const password = gatePasswordInput.value;
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
@@ -160,8 +134,7 @@ function showApp() {
 function showGate() {
   appRootEl.hidden = true;
   authGateEl.hidden = false;
-  gateLoginForm.reset();
-  gateSignupForm.reset();
+  gateAuthForm.reset();
   clearGateError();
 }
 

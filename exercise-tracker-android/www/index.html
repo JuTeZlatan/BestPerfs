@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suivi d'exercices</title>
+<title>Workout Tracker</title>
 <link rel="stylesheet" href="style.css">
 <meta name="theme-color" content="#ec2b1e">
 </head>
@@ -73,6 +73,48 @@
     })();
   </script>
 
+  <div class="lang-switcher lang-switcher-fixed">
+    <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
+    <div id="lang-menu" class="lang-menu" hidden>
+      <button class="lang-option" data-lang="fr">
+        <span class="flag-icon-slot"></span>
+        <span>Français</span>
+      </button>
+      <button class="lang-option" data-lang="en">
+        <span class="flag-icon-slot"></span>
+        <span>English</span>
+      </button>
+      <button class="lang-option" data-lang="es">
+        <span class="flag-icon-slot"></span>
+        <span>Español</span>
+      </button>
+      <button class="lang-option" data-lang="pt">
+        <span class="flag-icon-slot"></span>
+        <span>Português</span>
+      </button>
+      <button class="lang-option" data-lang="zh">
+        <span class="flag-icon-slot"></span>
+        <span>中文</span>
+      </button>
+      <button class="lang-option" data-lang="ar">
+        <span class="flag-icon-slot"></span>
+        <span>العربية</span>
+      </button>
+      <button class="lang-option" data-lang="de">
+        <span class="flag-icon-slot"></span>
+        <span>Deutsch</span>
+      </button>
+      <button class="lang-option" data-lang="it">
+        <span class="flag-icon-slot"></span>
+        <span>Italiano</span>
+      </button>
+      <button class="lang-option" data-lang="nl">
+        <span class="flag-icon-slot"></span>
+        <span>Nederlands</span>
+      </button>
+    </div>
+  </div>
+
   <div id="auth-gate" class="auth-gate" hidden>
     <div class="auth-gate-grid"></div>
     <div class="auth-gate-content">
@@ -87,22 +129,13 @@
 
       <div class="auth-divider"><span data-i18n="auth.orDivider">ou</span></div>
 
-      <div class="auth-tabs">
-        <button id="gate-tab-login" class="auth-tab active" type="button" data-i18n="auth.login">Se connecter</button>
-        <button id="gate-tab-signup" class="auth-tab" type="button" data-i18n="auth.createAccount">Créer un compte</button>
-      </div>
-
-      <form id="gate-login-form" class="add-form auth-form">
-        <input type="email" id="gate-login-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
-        <input type="password" id="gate-login-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
-        <button type="submit" data-i18n="auth.login">Se connecter</button>
-      </form>
-
-      <form id="gate-signup-form" class="add-form auth-form" hidden>
-        <input type="email" id="gate-signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
-        <input type="password" id="gate-signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
-        <input type="password" id="gate-signup-confirm-input" data-i18n-placeholder="auth.confirmPassword" placeholder="Confirmer le mot de passe" required>
-        <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
+      <form id="gate-auth-form" class="add-form auth-form">
+        <input type="email" id="gate-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
+        <input type="password" id="gate-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
+        <div class="auth-btn-row">
+          <button type="submit" id="gate-login-btn" data-i18n="auth.login">Se connecter</button>
+          <button type="button" id="gate-signup-btn" data-i18n="auth.createAccount">Créer un compte</button>
+        </div>
       </form>
 
       <p id="gate-error" class="auth-error" hidden></p>
@@ -110,52 +143,6 @@
   </div>
 
   <div id="app-root" class="app" hidden>
-    <div class="top-bar">
-      <div class="top-bar-actions">
-      <div class="lang-switcher">
-        <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
-        <div id="lang-menu" class="lang-menu" hidden>
-          <button class="lang-option" data-lang="fr">
-            <span class="flag-icon-slot"></span>
-            <span>Français</span>
-          </button>
-          <button class="lang-option" data-lang="en">
-            <span class="flag-icon-slot"></span>
-            <span>English</span>
-          </button>
-          <button class="lang-option" data-lang="es">
-            <span class="flag-icon-slot"></span>
-            <span>Español</span>
-          </button>
-          <button class="lang-option" data-lang="pt">
-            <span class="flag-icon-slot"></span>
-            <span>Português</span>
-          </button>
-          <button class="lang-option" data-lang="zh">
-            <span class="flag-icon-slot"></span>
-            <span>中文</span>
-          </button>
-          <button class="lang-option" data-lang="ar">
-            <span class="flag-icon-slot"></span>
-            <span>العربية</span>
-          </button>
-          <button class="lang-option" data-lang="de">
-            <span class="flag-icon-slot"></span>
-            <span>Deutsch</span>
-          </button>
-          <button class="lang-option" data-lang="it">
-            <span class="flag-icon-slot"></span>
-            <span>Italiano</span>
-          </button>
-          <button class="lang-option" data-lang="nl">
-            <span class="flag-icon-slot"></span>
-            <span>Nederlands</span>
-          </button>
-        </div>
-      </div>
-      </div>
-    </div>
-
     <nav id="bottom-nav" class="bottom-nav">
       <div class="bottom-nav-inner">
         <button class="bottom-nav-btn" data-view="timer" type="button">

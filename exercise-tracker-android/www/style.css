@@ -33,21 +33,15 @@ body {
   width: 100%;
   max-width: 640px;
   position: relative;
+  padding-top: 46px;
   padding-bottom: 92px;
 }
 
-.top-bar {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.top-bar-actions {
-  display: flex;
-  gap: 8px;
+.lang-switcher.lang-switcher-fixed {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 600;
 }
 
 .bottom-nav {
@@ -323,6 +317,16 @@ body {
 .auth-form input {
   min-width: 0;
   width: 100%;
+}
+
+.auth-btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+.auth-btn-row button {
+  flex: 1;
+  min-width: 0;
 }
 
 .auth-error {

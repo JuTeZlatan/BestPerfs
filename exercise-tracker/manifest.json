@@ -1,7 +1,7 @@
 {
-  "name": "Suivi d'exercices",
-  "short_name": "Exercices",
-  "description": "Suivi d'exercices, chrono et intervalles pour la salle de sport.",
+  "name": "Best Perfs",
+  "short_name": "Best Perfs",
+  "description": "Workout, timer and sports tracking for the gym.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

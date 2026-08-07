@@ -844,7 +844,7 @@ const TRANSLATIONS = {
 };
 
 function getLang() {
-  return localStorage.getItem(LANG_STORAGE_KEY) || "fr";
+  return localStorage.getItem(LANG_STORAGE_KEY) || "en";
 }
 
 function t(key, vars) {
