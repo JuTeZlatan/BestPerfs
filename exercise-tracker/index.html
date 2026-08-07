@@ -80,7 +80,43 @@
     })();
   </script>
 
-  <div class="app">
+  <div id="auth-gate" class="auth-gate" hidden>
+    <div class="auth-gate-grid"></div>
+    <div class="auth-gate-content">
+      <div class="auth-gate-brand">
+        <span class="auth-gate-wordmark">BEST PERFS</span>
+      </div>
+
+      <button id="gate-google-btn" class="profile-menu-row" type="button">
+        <span class="profile-menu-icon">🔵</span>
+        <span data-i18n="auth.continueWithGoogle">Continuer avec Google</span>
+      </button>
+
+      <div class="auth-divider"><span data-i18n="auth.orDivider">ou</span></div>
+
+      <div class="auth-tabs">
+        <button id="gate-tab-login" class="auth-tab active" type="button" data-i18n="auth.login">Se connecter</button>
+        <button id="gate-tab-signup" class="auth-tab" type="button" data-i18n="auth.createAccount">Créer un compte</button>
+      </div>
+
+      <form id="gate-login-form" class="add-form auth-form">
+        <input type="email" id="gate-login-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
+        <input type="password" id="gate-login-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
+        <button type="submit" data-i18n="auth.login">Se connecter</button>
+      </form>
+
+      <form id="gate-signup-form" class="add-form auth-form" hidden>
+        <input type="email" id="gate-signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
+        <input type="password" id="gate-signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
+        <input type="password" id="gate-signup-confirm-input" data-i18n-placeholder="auth.confirmPassword" placeholder="Confirmer le mot de passe" required>
+        <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
+      </form>
+
+      <p id="gate-error" class="auth-error" hidden></p>
+    </div>
+  </div>
+
+  <div id="app-root" class="app" hidden>
     <div class="top-bar">
       <div class="top-bar-actions">
       <div class="lang-switcher">
@@ -329,36 +365,7 @@
         <h1 data-i18n="profile.accountRow">Compte</h1>
       </div>
 
-      <div id="account-signed-out">
-        <button id="account-google-btn" class="profile-menu-row" type="button">
-          <span class="profile-menu-icon">🔵</span>
-          <span data-i18n="auth.continueWithGoogle">Continuer avec Google</span>
-        </button>
-
-        <div class="auth-divider"><span data-i18n="auth.orDivider">ou</span></div>
-
-        <div class="auth-tabs">
-          <button id="account-tab-login" class="auth-tab active" type="button" data-i18n="auth.login">Se connecter</button>
-          <button id="account-tab-signup" class="auth-tab" type="button" data-i18n="auth.createAccount">Créer un compte</button>
-        </div>
-
-        <form id="account-login-form" class="add-form auth-form">
-          <input type="email" id="login-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
-          <input type="password" id="login-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
-          <button type="submit" data-i18n="auth.login">Se connecter</button>
-        </form>
-
-        <form id="account-signup-form" class="add-form auth-form" hidden>
-          <input type="email" id="signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
-          <input type="password" id="signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
-          <input type="password" id="signup-confirm-input" data-i18n-placeholder="auth.confirmPassword" placeholder="Confirmer le mot de passe" required>
-          <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
-        </form>
-
-        <p id="auth-error" class="auth-error" hidden></p>
-      </div>
-
-      <div id="account-signed-in" hidden>
+      <div id="account-signed-in">
         <p class="subtitle" id="account-email-display"></p>
         <div class="profile-menu">
           <button id="account-logout-btn" class="profile-menu-row" type="button">

@@ -13,30 +13,31 @@ import {
   serverTimestamp,
 } from "./firebase-init.js";
 
+const appRootEl = document.getElementById("app-root");
+const authGateEl = document.getElementById("auth-gate");
+
 const profileAccountRow = document.getElementById("profile-account-row");
 const profileViewForAccount = document.getElementById("profile-view");
 const accountViewEl = document.getElementById("account-view");
 const accountBackBtn = document.getElementById("account-back-btn");
-const accountGoogleBtn = document.getElementById("account-google-btn");
-const accountSignedOutEl = document.getElementById("account-signed-out");
-const accountSignedInEl = document.getElementById("account-signed-in");
 const accountEmailDisplay = document.getElementById("account-email-display");
 const accountLogoutBtn = document.getElementById("account-logout-btn");
-const accountTabLogin = document.getElementById("account-tab-login");
-const accountTabSignup = document.getElementById("account-tab-signup");
-const accountLoginForm = document.getElementById("account-login-form");
-const accountSignupForm = document.getElementById("account-signup-form");
-const loginEmailInput = document.getElementById("login-email-input");
-const loginPasswordInput = document.getElementById("login-password-input");
-const signupEmailInput = document.getElementById("signup-email-input");
-const signupPasswordInput = document.getElementById("signup-password-input");
-const signupConfirmInput = document.getElementById("signup-confirm-input");
-const authErrorEl = document.getElementById("auth-error");
+
+const gateGoogleBtn = document.getElementById("gate-google-btn");
+const gateTabLogin = document.getElementById("gate-tab-login");
+const gateTabSignup = document.getElementById("gate-tab-signup");
+const gateLoginForm = document.getElementById("gate-login-form");
+const gateSignupForm = document.getElementById("gate-signup-form");
+const gateLoginEmailInput = document.getElementById("gate-login-email-input");
+const gateLoginPasswordInput = document.getElementById("gate-login-password-input");
+const gateSignupEmailInput = document.getElementById("gate-signup-email-input");
+const gateSignupPasswordInput = document.getElementById("gate-signup-password-input");
+const gateSignupConfirmInput = document.getElementById("gate-signup-confirm-input");
+const gateErrorEl = document.getElementById("gate-error");
 
 profileAccountRow.addEventListener("click", () => {
   profileViewForAccount.hidden = true;
   accountViewEl.hidden = false;
-  clearAuthError();
 });
 
 accountBackBtn.addEventListener("click", () => {
@@ -53,22 +54,22 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
 // Google OAuth popups are blocked inside embedded WebViews (Capacitor Android),
 // so hide that option there until the native Google Sign-In plugin is wired up.
 const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
-if (isNativePlatform) accountGoogleBtn.hidden = true;
+if (isNativePlatform) gateGoogleBtn.hidden = true;
 
-accountTabLogin.addEventListener("click", () => {
-  accountTabLogin.classList.add("active");
-  accountTabSignup.classList.remove("active");
-  accountLoginForm.hidden = false;
-  accountSignupForm.hidden = true;
-  clearAuthError();
+gateTabLogin.addEventListener("click", () => {
+  gateTabLogin.classList.add("active");
+  gateTabSignup.classList.remove("active");
+  gateLoginForm.hidden = false;
+  gateSignupForm.hidden = true;
+  clearGateError();
 });
 
-accountTabSignup.addEventListener("click", () => {
-  accountTabSignup.classList.add("active");
-  accountTabLogin.classList.remove("active");
-  accountSignupForm.hidden = false;
-  accountLoginForm.hidden = true;
-  clearAuthError();
+gateTabSignup.addEventListener("click", () => {
+  gateTabSignup.classList.add("active");
+  gateTabLogin.classList.remove("active");
+  gateSignupForm.hidden = false;
+  gateLoginForm.hidden = true;
+  clearGateError();
 });
 
 const AUTH_ERROR_KEYS = {
@@ -80,52 +81,52 @@ const AUTH_ERROR_KEYS = {
   "auth/invalid-credential": "auth.errorWrongCredentials",
 };
 
-function showAuthError(error) {
+function showGateError(error) {
   const key = AUTH_ERROR_KEYS[error?.code] || "auth.errorGeneric";
-  authErrorEl.textContent = t(key);
-  authErrorEl.hidden = false;
+  gateErrorEl.textContent = t(key);
+  gateErrorEl.hidden = false;
 }
 
-function clearAuthError() {
-  authErrorEl.hidden = true;
-  authErrorEl.textContent = "";
+function clearGateError() {
+  gateErrorEl.hidden = true;
+  gateErrorEl.textContent = "";
 }
 
-accountGoogleBtn.addEventListener("click", async () => {
-  clearAuthError();
+gateGoogleBtn.addEventListener("click", async () => {
+  clearGateError();
   try {
     await signInWithPopup(auth, googleProvider);
   } catch (error) {
-    if (error?.code !== "auth/popup-closed-by-user") showAuthError(error);
+    if (error?.code !== "auth/popup-closed-by-user") showGateError(error);
   }
 });
 
-accountSignupForm.addEventListener("submit", async (e) => {
+gateSignupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  clearAuthError();
-  const email = signupEmailInput.value.trim();
-  const password = signupPasswordInput.value;
-  if (password !== signupConfirmInput.value) {
-    authErrorEl.textContent = t("auth.errorPasswordMismatch");
-    authErrorEl.hidden = false;
+  clearGateError();
+  const email = gateSignupEmailInput.value.trim();
+  const password = gateSignupPasswordInput.value;
+  if (password !== gateSignupConfirmInput.value) {
+    gateErrorEl.textContent = t("auth.errorPasswordMismatch");
+    gateErrorEl.hidden = false;
     return;
   }
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showAuthError(error);
+    showGateError(error);
   }
 });
 
-accountLoginForm.addEventListener("submit", async (e) => {
+gateLoginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  clearAuthError();
-  const email = loginEmailInput.value.trim();
-  const password = loginPasswordInput.value;
+  clearGateError();
+  const email = gateLoginEmailInput.value.trim();
+  const password = gateLoginPasswordInput.value;
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showAuthError(error);
+    showGateError(error);
   }
 });
 
@@ -151,17 +152,27 @@ localStorage.setItem = function (key, value) {
   }
 };
 
+function showApp() {
+  authGateEl.hidden = true;
+  appRootEl.hidden = false;
+}
+
+function showGate() {
+  appRootEl.hidden = true;
+  authGateEl.hidden = false;
+  gateLoginForm.reset();
+  gateSignupForm.reset();
+  clearGateError();
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     currentUid = null;
-    accountSignedOutEl.hidden = false;
-    accountSignedInEl.hidden = true;
     accountEmailDisplay.textContent = "";
+    showGate();
     return;
   }
 
-  accountSignedOutEl.hidden = true;
-  accountSignedInEl.hidden = false;
   accountEmailDisplay.textContent = user.email || "";
 
   const userDocRef = doc(db, "users", user.uid);
@@ -170,10 +181,12 @@ onAuthStateChanged(auth, async (user) => {
     snap = await getDoc(userDocRef);
   } catch {
     currentUid = user.uid;
+    showApp();
     return;
   }
 
   if (snap.exists()) {
+    const wasAlreadyInApp = !appRootEl.hidden;
     const data = snap.data();
     let anyDiff = false;
     SYNCED_KEYS.forEach((key) => {
@@ -183,7 +196,12 @@ onAuthStateChanged(auth, async (user) => {
       nativeSetItem(key, data[field]);
     });
     currentUid = user.uid;
-    if (anyDiff) location.reload();
+    if (anyDiff && wasAlreadyInApp) {
+      // Data changed while already inside the app (e.g. signed in elsewhere) - reload to pick it up.
+      location.reload();
+    } else {
+      showApp();
+    }
   } else {
     currentUid = user.uid;
     const payload = { updatedAt: serverTimestamp() };
@@ -192,5 +210,6 @@ onAuthStateChanged(auth, async (user) => {
       if (value !== null) payload[KEY_TO_FIELD[key]] = value;
     });
     setDoc(userDocRef, payload, { merge: true }).catch(() => {});
+    showApp();
   }
 });
