@@ -15,11 +15,16 @@ import {
 
 const appRootEl = document.getElementById("app-root");
 const authGateEl = document.getElementById("auth-gate");
+const usernameViewEl = document.getElementById("username-view");
+const usernameForm = document.getElementById("username-form");
+const usernameInput = document.getElementById("username-input");
+const usernameErrorEl = document.getElementById("username-error");
 
 const profileAccountRow = document.getElementById("profile-account-row");
 const profileViewForAccount = document.getElementById("profile-view");
 const accountViewEl = document.getElementById("account-view");
 const accountBackBtn = document.getElementById("account-back-btn");
+const accountUsernameDisplay = document.getElementById("account-username-display");
 const accountEmailDisplay = document.getElementById("account-email-display");
 const accountLogoutBtn = document.getElementById("account-logout-btn");
 
@@ -128,19 +133,44 @@ localStorage.setItem = function (key, value) {
 
 function showApp() {
   authGateEl.hidden = true;
+  usernameViewEl.hidden = true;
   appRootEl.hidden = false;
 }
 
 function showGate() {
   appRootEl.hidden = true;
+  usernameViewEl.hidden = true;
   authGateEl.hidden = false;
   gateAuthForm.reset();
   clearGateError();
 }
 
+function showUsernamePrompt() {
+  authGateEl.hidden = true;
+  appRootEl.hidden = true;
+  usernameViewEl.hidden = false;
+}
+
+usernameForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const value = usernameInput.value.trim();
+  if (!value || !currentUid) return;
+  try {
+    await setDoc(doc(db, "users", currentUid), { username: value }, { merge: true });
+  } catch {
+    usernameErrorEl.textContent = t("auth.errorGeneric");
+    usernameErrorEl.hidden = false;
+    return;
+  }
+  accountUsernameDisplay.textContent = value;
+  usernameForm.reset();
+  showApp();
+});
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     currentUid = null;
+    accountUsernameDisplay.textContent = "";
     accountEmailDisplay.textContent = "";
     showGate();
     return;
@@ -158,9 +188,19 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  currentUid = user.uid;
+
   if (snap.exists()) {
-    const wasAlreadyInApp = !appRootEl.hidden;
     const data = snap.data();
+
+    if (!data.username) {
+      showUsernamePrompt();
+      return;
+    }
+
+    accountUsernameDisplay.textContent = data.username;
+
+    const wasAlreadyInApp = !appRootEl.hidden;
     let anyDiff = false;
     SYNCED_KEYS.forEach((key) => {
       const field = KEY_TO_FIELD[key];
@@ -168,7 +208,6 @@ onAuthStateChanged(auth, async (user) => {
       if (localStorage.getItem(key) !== data[field]) anyDiff = true;
       nativeSetItem(key, data[field]);
     });
-    currentUid = user.uid;
     if (anyDiff && wasAlreadyInApp) {
       // Data changed while already inside the app (e.g. signed in elsewhere) - reload to pick it up.
       location.reload();
@@ -176,13 +215,12 @@ onAuthStateChanged(auth, async (user) => {
       showApp();
     }
   } else {
-    currentUid = user.uid;
     const payload = { updatedAt: serverTimestamp() };
     SYNCED_KEYS.forEach((key) => {
       const value = localStorage.getItem(key);
       if (value !== null) payload[KEY_TO_FIELD[key]] = value;
     });
     setDoc(userDocRef, payload, { merge: true }).catch(() => {});
-    showApp();
+    showUsernamePrompt();
   }
 });
