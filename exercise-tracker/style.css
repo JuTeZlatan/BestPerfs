@@ -373,9 +373,19 @@ body {
   max-width: 360px;
 }
 
+.auth-gate-back-row {
+  margin-bottom: 12px;
+}
+
 .auth-gate-brand {
   text-align: center;
   margin-bottom: 28px;
+}
+
+.auth-hint {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  margin: -2px 0 4px;
 }
 
 .auth-gate-wordmark {

@@ -156,6 +156,28 @@
     </div>
   </div>
 
+  <div id="signup-view" class="auth-gate" hidden>
+    <div class="auth-gate-grid"></div>
+    <div class="auth-gate-content">
+      <div class="auth-gate-back-row">
+        <button id="signup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+      </div>
+
+      <div class="auth-gate-brand">
+        <span class="auth-gate-wordmark">BEST PERFS</span>
+      </div>
+
+      <form id="signup-form" class="add-form auth-form">
+        <input type="email" id="signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
+        <input type="password" id="signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
+        <p class="auth-hint" data-i18n="auth.passwordHint">Au moins 6 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
+        <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
+      </form>
+
+      <p id="signup-error" class="auth-error" hidden></p>
+    </div>
+  </div>
+
   <div id="username-view" class="auth-gate" hidden>
     <div class="auth-gate-grid"></div>
     <div class="auth-gate-content">

@@ -35,6 +35,13 @@ const gatePasswordInput = document.getElementById("gate-password-input");
 const gateSignupBtn = document.getElementById("gate-signup-btn");
 const gateErrorEl = document.getElementById("gate-error");
 
+const signupViewEl = document.getElementById("signup-view");
+const signupBackBtn = document.getElementById("signup-back-btn");
+const signupForm = document.getElementById("signup-form");
+const signupEmailInput = document.getElementById("signup-email-input");
+const signupPasswordInput = document.getElementById("signup-password-input");
+const signupErrorEl = document.getElementById("signup-error");
+
 profileAccountRow.addEventListener("click", () => {
   profileViewForAccount.hidden = true;
   accountViewEl.hidden = false;
@@ -65,15 +72,33 @@ const AUTH_ERROR_KEYS = {
   "auth/invalid-credential": "auth.errorWrongCredentials",
 };
 
-function showGateError(error) {
+function showFieldError(el, error) {
   const key = AUTH_ERROR_KEYS[error?.code] || "auth.errorGeneric";
-  gateErrorEl.textContent = t(key);
-  gateErrorEl.hidden = false;
+  el.textContent = t(key);
+  el.hidden = false;
+}
+
+function clearFieldError(el) {
+  el.hidden = true;
+  el.textContent = "";
+}
+
+function showGateError(error) {
+  showFieldError(gateErrorEl, error);
 }
 
 function clearGateError() {
-  gateErrorEl.hidden = true;
-  gateErrorEl.textContent = "";
+  clearFieldError(gateErrorEl);
+}
+
+function isPasswordValid(password) {
+  return (
+    password.length >= 6 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password)
+  );
 }
 
 gateGoogleBtn.addEventListener("click", async () => {
@@ -85,15 +110,33 @@ gateGoogleBtn.addEventListener("click", async () => {
   }
 });
 
-gateSignupBtn.addEventListener("click", async () => {
-  clearGateError();
-  const email = gateEmailInput.value.trim();
-  const password = gatePasswordInput.value;
-  if (!email || !password) return;
+gateSignupBtn.addEventListener("click", () => {
+  authGateEl.hidden = true;
+  signupViewEl.hidden = false;
+  clearFieldError(signupErrorEl);
+});
+
+signupBackBtn.addEventListener("click", () => {
+  signupViewEl.hidden = true;
+  authGateEl.hidden = false;
+  signupForm.reset();
+  clearFieldError(signupErrorEl);
+});
+
+signupForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFieldError(signupErrorEl);
+  const email = signupEmailInput.value.trim();
+  const password = signupPasswordInput.value;
+  if (!isPasswordValid(password)) {
+    signupErrorEl.textContent = t("auth.errorPasswordRules");
+    signupErrorEl.hidden = false;
+    return;
+  }
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    showGateError(error);
+    showFieldError(signupErrorEl, error);
   }
 });
 
@@ -133,20 +176,25 @@ localStorage.setItem = function (key, value) {
 
 function showApp() {
   authGateEl.hidden = true;
+  signupViewEl.hidden = true;
   usernameViewEl.hidden = true;
   appRootEl.hidden = false;
 }
 
 function showGate() {
   appRootEl.hidden = true;
+  signupViewEl.hidden = true;
   usernameViewEl.hidden = true;
   authGateEl.hidden = false;
   gateAuthForm.reset();
+  signupForm.reset();
   clearGateError();
+  clearFieldError(signupErrorEl);
 }
 
 function showUsernamePrompt() {
   authGateEl.hidden = true;
+  signupViewEl.hidden = true;
   appRootEl.hidden = true;
   usernameViewEl.hidden = false;
 }
