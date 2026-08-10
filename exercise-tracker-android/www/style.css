@@ -319,6 +319,10 @@ body {
   width: 100%;
 }
 
+.auth-form input[type="date"] {
+  color-scheme: dark;
+}
+
 .auth-btn-row {
   display: flex;
   gap: 8px;
@@ -429,11 +433,36 @@ body {
   font-size: 0.85rem;
 }
 
-.account-username {
-  color: var(--text);
-  font-weight: 700;
-  font-size: 1.05rem;
-  margin: 0 0 2px;
+.account-field {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.account-field-label {
+  display: block;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 4px;
+}
+
+.account-field-value {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: var(--field);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  min-height: 1.1em;
+}
+
+.auth-field-label {
+  display: block;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  margin: -2px 0 -4px;
 }
 
 .profile-menu-label {

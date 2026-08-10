@@ -29,6 +29,7 @@ const accountViewEl = document.getElementById("account-view");
 const accountBackBtn = document.getElementById("account-back-btn");
 const accountUsernameDisplay = document.getElementById("account-username-display");
 const accountEmailDisplay = document.getElementById("account-email-display");
+const accountBirthdateDisplay = document.getElementById("account-birthdate-display");
 const accountLogoutBtn = document.getElementById("account-logout-btn");
 
 const gateGoogleBtn = document.getElementById("gate-google-btn");
@@ -43,6 +44,7 @@ const signupBackBtn = document.getElementById("signup-back-btn");
 const signupForm = document.getElementById("signup-form");
 const signupEmailInput = document.getElementById("signup-email-input");
 const signupPasswordInput = document.getElementById("signup-password-input");
+const signupBirthdateInput = document.getElementById("signup-birthdate-input");
 const signupErrorEl = document.getElementById("signup-error");
 
 profileAccountRow.addEventListener("click", () => {
@@ -101,6 +103,14 @@ function isPasswordValid(password) {
   );
 }
 
+function formatBirthdate(value) {
+  if (!value) return "";
+  const parts = value.split("-");
+  if (parts.length !== 3) return value;
+  const [year, month, day] = parts;
+  return `${day}/${month}/${year}`;
+}
+
 gateGoogleBtn.addEventListener("click", async () => {
   clearGateError();
   try {
@@ -133,19 +143,24 @@ signupBackBtn.addEventListener("click", () => {
   clearFieldError(signupErrorEl);
 });
 
+let pendingBirthdate = null;
+
 signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearFieldError(signupErrorEl);
   const email = signupEmailInput.value.trim();
   const password = signupPasswordInput.value;
+  const birthdate = signupBirthdateInput.value;
   if (!isPasswordValid(password)) {
     signupErrorEl.textContent = t("auth.errorPasswordRules");
     signupErrorEl.hidden = false;
     return;
   }
+  pendingBirthdate = birthdate || null;
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
+    pendingBirthdate = null;
     showFieldError(signupErrorEl, error);
   }
 });
@@ -230,6 +245,7 @@ onAuthStateChanged(auth, async (user) => {
     currentUid = null;
     accountUsernameDisplay.textContent = "";
     accountEmailDisplay.textContent = "";
+    accountBirthdateDisplay.textContent = "";
     showGate();
     return;
   }
@@ -257,6 +273,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     accountUsernameDisplay.textContent = data.username;
+    accountBirthdateDisplay.textContent = formatBirthdate(data.birthdate);
 
     const wasAlreadyInApp = !appRootEl.hidden;
     let anyDiff = false;
@@ -274,11 +291,16 @@ onAuthStateChanged(auth, async (user) => {
     }
   } else {
     const payload = { updatedAt: serverTimestamp() };
+    if (pendingBirthdate) {
+      payload.birthdate = pendingBirthdate;
+    }
     SYNCED_KEYS.forEach((key) => {
       const value = localStorage.getItem(key);
       if (value !== null) payload[KEY_TO_FIELD[key]] = value;
     });
     setDoc(userDocRef, payload, { merge: true }).catch(() => {});
+    accountBirthdateDisplay.textContent = formatBirthdate(pendingBirthdate);
+    pendingBirthdate = null;
     showUsernamePrompt();
   }
 });

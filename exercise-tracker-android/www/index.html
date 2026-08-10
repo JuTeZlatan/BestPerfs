@@ -164,6 +164,8 @@
         <input type="email" id="signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
         <input type="password" id="signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
         <p class="auth-hint" data-i18n="auth.passwordHint">Au moins 6 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
+        <label class="auth-field-label" for="signup-birthdate-input" data-i18n="auth.birthdate">Date de naissance</label>
+        <input type="date" id="signup-birthdate-input" required>
         <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
       </form>
 
@@ -393,8 +395,18 @@
       </div>
 
       <div id="account-signed-in">
-        <p class="account-username" id="account-username-display"></p>
-        <p class="subtitle" id="account-email-display"></p>
+        <div class="account-field">
+          <span class="account-field-label" data-i18n="auth.usernamePlaceholder">Pseudo</span>
+          <span class="account-field-value" id="account-username-display"></span>
+        </div>
+        <div class="account-field">
+          <span class="account-field-label" data-i18n="auth.email">Email</span>
+          <span class="account-field-value" id="account-email-display"></span>
+        </div>
+        <div class="account-field">
+          <span class="account-field-label" data-i18n="auth.birthdate">Date de naissance</span>
+          <span class="account-field-value" id="account-birthdate-display"></span>
+        </div>
         <div class="profile-menu">
           <button id="account-logout-btn" class="profile-menu-row" type="button">
             <span class="profile-menu-icon">🚪</span>
