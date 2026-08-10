@@ -2,7 +2,10 @@ import {
   auth,
   db,
   googleProvider,
+  isNativePlatform,
+  GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -58,11 +61,6 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   });
 });
 
-// Google OAuth popups are blocked inside embedded WebViews (Capacitor Android),
-// so hide that option there until the native Google Sign-In plugin is wired up.
-const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
-if (isNativePlatform) gateGoogleBtn.hidden = true;
-
 const AUTH_ERROR_KEYS = {
   "auth/email-already-in-use": "auth.errorEmailInUse",
   "auth/weak-password": "auth.errorWeakPassword",
@@ -104,7 +102,17 @@ function isPasswordValid(password) {
 gateGoogleBtn.addEventListener("click", async () => {
   clearGateError();
   try {
-    await signInWithPopup(auth, googleProvider);
+    if (isNativePlatform) {
+      // Native Google Sign-In (Android/iOS) authenticates on the native layer;
+      // bridge that into the JS SDK so auth/onAuthStateChanged/Firestore see it.
+      const result = await Capacitor.Plugins.FirebaseAuthentication.signInWithGoogle();
+      const idToken = result?.credential?.idToken;
+      if (!idToken) throw new Error("missing-id-token");
+      const credential = GoogleAuthProvider.credential(idToken);
+      await signInWithCredential(auth, credential);
+    } else {
+      await signInWithPopup(auth, googleProvider);
+    }
   } catch (error) {
     if (error?.code !== "auth/popup-closed-by-user") showGateError(error);
   }

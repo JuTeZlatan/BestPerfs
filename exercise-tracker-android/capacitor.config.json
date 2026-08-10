@@ -1,5 +1,11 @@
 {
   "appId": "com.bestperfs.app",
   "appName": "Best Perfs",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": false,
+      "providers": ["google.com"]
+    }
+  }
 }
