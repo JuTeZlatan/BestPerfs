@@ -71,8 +71,10 @@ const AUTH_ERROR_KEYS = {
 };
 
 function showFieldError(el, error) {
+  console.error(error);
   const key = AUTH_ERROR_KEYS[error?.code] || "auth.errorGeneric";
-  el.textContent = t(key);
+  const detail = error?.code || error?.message || "";
+  el.textContent = detail ? `${t(key)} (${detail})` : t(key);
   el.hidden = false;
 }
 
