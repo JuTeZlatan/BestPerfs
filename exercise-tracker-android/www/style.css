@@ -356,7 +356,7 @@ body {
   align-items: center;
   justify-content: center;
   background: #000;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 40px 16px;
 }
 
@@ -380,6 +380,8 @@ body {
   position: relative;
   width: 100%;
   max-width: 360px;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .auth-gate-back-row {
