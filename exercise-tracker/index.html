@@ -86,11 +86,15 @@
       }
 
       setTimeout(function () {
+        // Reveal the BEST PERFS splash (opaque, covers the app) first, then
+        // fade the JBA logo out on top of it - this way whatever is exposed
+        // as the JBA logo becomes transparent is the splash, never the raw
+        // app/login screen underneath.
+        startMainSplash();
         var brand = document.getElementById("brand-splash");
         brand.classList.add("hide");
         setTimeout(function () {
           brand.style.display = "none";
-          startMainSplash();
         }, 350);
       }, 2000);
     })();
