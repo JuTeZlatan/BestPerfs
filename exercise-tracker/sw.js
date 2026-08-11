@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v50";
+const CACHE_NAME = "exercise-tracker-v51";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,6 +14,7 @@ const APP_SHELL = [
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
+  "./jba-logo.png",
 ];
 
 self.addEventListener("install", (event) => {

@@ -15,7 +15,10 @@
 <meta name="apple-mobile-web-app-title" content="Exercices">
 </head>
 <body>
-  <div id="splash-screen" class="splash-screen">
+  <div id="brand-splash" class="brand-splash">
+    <img class="brand-splash-logo" src="jba-logo.png" alt="JBA">
+  </div>
+  <div id="splash-screen" class="splash-screen" hidden>
     <div class="splash-grid"></div>
 
     <div class="splash-shake">
@@ -56,27 +59,40 @@
   </div>
   <script>
     (function () {
-      var pctEl = document.getElementById("splashPct");
-      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (pctEl) {
-        if (reduced) {
-          pctEl.textContent = "100";
-        } else {
-          var duration = 1000;
-          var chargeStart = Date.now();
-          var tick = function () {
-            var pct = Math.min(100, Math.round(((Date.now() - chargeStart) / duration) * 100));
-            pctEl.textContent = pct;
-            if (pct < 100) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        }
-      }
-      setTimeout(function () {
+      function startMainSplash() {
         var splash = document.getElementById("splash-screen");
-        splash.classList.add("hide");
-        setTimeout(function () { splash.style.display = "none"; }, 400);
-      }, 4000);
+        splash.hidden = false;
+
+        var pctEl = document.getElementById("splashPct");
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (pctEl) {
+          if (reduced) {
+            pctEl.textContent = "100";
+          } else {
+            var duration = 1000;
+            var chargeStart = Date.now();
+            var tick = function () {
+              var pct = Math.min(100, Math.round(((Date.now() - chargeStart) / duration) * 100));
+              pctEl.textContent = pct;
+              if (pct < 100) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }
+        }
+        setTimeout(function () {
+          splash.classList.add("hide");
+          setTimeout(function () { splash.style.display = "none"; }, 400);
+        }, 4000);
+      }
+
+      setTimeout(function () {
+        var brand = document.getElementById("brand-splash");
+        brand.classList.add("hide");
+        setTimeout(function () {
+          brand.style.display = "none";
+          startMainSplash();
+        }, 350);
+      }, 2000);
     })();
   </script>
 
