@@ -40,8 +40,18 @@ function beep(freq = 880, durationMs = 150) {
   osc.stop(audioCtx.currentTime + durationMs / 1000);
 }
 
-// ---- Completion notification (works while the app is backgrounded, not after it's fully closed) ----
+// ---- Completion notification ----
+// Web: a JS setTimeout + Notification API, works while the app is backgrounded, not after it's fully closed.
+// Native (Android): an OS-scheduled local notification via @capacitor/local-notifications, so it still
+// fires even if the WebView's JS timers get throttled/paused while the app is backgrounded.
+const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
+const NATIVE_NOTIF_ID = 1;
+
 function requestNotificationPermission() {
+  if (isNativePlatform) {
+    Capacitor.Plugins.LocalNotifications.requestPermissions().catch(() => {});
+    return;
+  }
   if (!("Notification" in window)) return;
   if (Notification.permission === "default") {
     Notification.requestPermission();
@@ -62,6 +72,21 @@ function showCompletionNotification(name) {
   }
 }
 
+function scheduleNativeNotification(remainingSeconds, name) {
+  if (!isNativePlatform) return;
+  const title = t("notif.title");
+  const body = name ? `${name} — ${t("notif.body")}` : t("notif.body");
+  const at = new Date(Date.now() + Math.max(0, remainingSeconds * 1000));
+  Capacitor.Plugins.LocalNotifications.schedule({
+    notifications: [{ id: NATIVE_NOTIF_ID, title, body, schedule: { at } }],
+  }).catch(() => {});
+}
+
+function cancelNativeNotification() {
+  if (!isNativePlatform) return;
+  Capacitor.Plugins.LocalNotifications.cancel({ notifications: [{ id: NATIVE_NOTIF_ID }] }).catch(() => {});
+}
+
 let notifyTimeoutId = null;
 
 function clearScheduledNotification() {
@@ -69,11 +94,13 @@ function clearScheduledNotification() {
     clearTimeout(notifyTimeoutId);
     notifyTimeoutId = null;
   }
+  cancelNativeNotification();
 }
 
 function scheduleNotification(remainingSeconds, name) {
   clearScheduledNotification();
   notifyTimeoutId = setTimeout(() => showCompletionNotification(name), Math.max(0, remainingSeconds * 1000));
+  scheduleNativeNotification(remainingSeconds, name);
 }
 
 // ---- Chrono ----
