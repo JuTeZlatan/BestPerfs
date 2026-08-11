@@ -13,6 +13,7 @@ import {
   doc,
   getDoc,
   setDoc,
+  deleteDoc,
   serverTimestamp,
 } from "./firebase-init.js";
 
@@ -31,6 +32,8 @@ const accountUsernameDisplay = document.getElementById("account-username-display
 const accountEmailDisplay = document.getElementById("account-email-display");
 const accountBirthdateDisplay = document.getElementById("account-birthdate-display");
 const accountLogoutBtn = document.getElementById("account-logout-btn");
+const accountDeleteBtn = document.getElementById("account-delete-btn");
+const accountDeleteErrorEl = document.getElementById("account-delete-error");
 
 const gateGoogleBtn = document.getElementById("gate-google-btn");
 const gateAuthForm = document.getElementById("gate-auth-form");
@@ -50,6 +53,7 @@ const signupErrorEl = document.getElementById("signup-error");
 profileAccountRow.addEventListener("click", () => {
   profileViewForAccount.hidden = true;
   accountViewEl.hidden = false;
+  clearFieldError(accountDeleteErrorEl);
 });
 
 accountBackBtn.addEventListener("click", () => {
@@ -70,6 +74,7 @@ const AUTH_ERROR_KEYS = {
   "auth/user-not-found": "auth.errorWrongCredentials",
   "auth/wrong-password": "auth.errorWrongCredentials",
   "auth/invalid-credential": "auth.errorWrongCredentials",
+  "auth/requires-recent-login": "auth.errorRequiresRecentLogin",
 };
 
 function showFieldError(el, error) {
@@ -179,6 +184,26 @@ gateAuthForm.addEventListener("submit", async (e) => {
 
 accountLogoutBtn.addEventListener("click", () => {
   signOut(auth);
+});
+
+async function deleteAccount() {
+  clearFieldError(accountDeleteErrorEl);
+  const user = auth.currentUser;
+  const uid = currentUid;
+  if (!user || !uid) return;
+  try {
+    await deleteDoc(doc(db, "users", uid));
+    localStorage.removeItem("exercise-tracker-data");
+    localStorage.removeItem("exercise-tracker-presets");
+    localStorage.removeItem("exercise-tracker-sports");
+    await user.delete();
+  } catch (error) {
+    showFieldError(accountDeleteErrorEl, error);
+  }
+}
+
+accountDeleteBtn.addEventListener("click", () => {
+  openConfirmModal(t("auth.deleteAccountConfirm"), deleteAccount);
 });
 
 // ---- Cloud data sync ----

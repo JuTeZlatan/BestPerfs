@@ -254,6 +254,11 @@ body {
   display: none;
 }
 
+.profile-menu-row.danger {
+  border-left-color: var(--danger);
+  color: var(--danger);
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
