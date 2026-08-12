@@ -69,8 +69,19 @@ const triFields = {
   },
 };
 
-const DISTANCE_UNITS = { natation: "m", velo: "km", course: "km" };
 const DISTANCE_SORT_SPORTS = ["natation", "velo", "course"];
+
+function distanceUnitFor(sport) {
+  return sport === "natation" ? mUnitLabel() : kmUnitLabel();
+}
+
+function distanceToDisplay(distance, sport) {
+  return sport === "natation" ? mToDisplay(distance) : kmToDisplay(distance);
+}
+
+function distanceFromDisplay(value, sport) {
+  return sport === "natation" ? mFromDisplay(value) : kmFromDisplay(value);
+}
 const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃", triathlon: "🔱" };
 const TEXT_PLACEHOLDER_KEYS = {
   natation: "sport.swim.stylePlaceholder",
@@ -88,7 +99,8 @@ function timeChipHTML(perf, sport) {
 
 function distanceChipHTML(perf, sport) {
   if (perf.distance == null || perf.distance === "") return "";
-  return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${perf.distance}</span><span class="chip-unit">${DISTANCE_UNITS[sport]}</span>`;
+  const displayValue = distanceToDisplay(perf.distance, sport);
+  return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${displayValue}</span><span class="chip-unit">${distanceUnitFor(sport)}</span>`;
 }
 
 function sizeChipHTML(perf) {
@@ -351,7 +363,7 @@ addSwimForm.addEventListener("submit", (e) => {
   sportPerfs.natation.push({
     id: crypto.randomUUID(),
     text,
-    distance: swimDistanceInput.value === "" ? null : Number(swimDistanceInput.value),
+    distance: swimDistanceInput.value === "" ? null : distanceFromDisplay(Number(swimDistanceInput.value), "natation"),
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
     hundredths: swimHundredthsInput.value === "" ? null : Number(swimHundredthsInput.value),
@@ -369,7 +381,7 @@ addCyclingForm.addEventListener("submit", (e) => {
   sportPerfs.velo.push({
     id: crypto.randomUUID(),
     text,
-    distance: Number(cyclingDistanceInput.value),
+    distance: distanceFromDisplay(Number(cyclingDistanceInput.value), "velo"),
     hours: cyclingHoursInput.value === "" ? null : Number(cyclingHoursInput.value),
     minutes: cyclingMinutesInput.value === "" ? null : Number(cyclingMinutesInput.value),
     seconds: cyclingSecondsInput.value === "" ? null : Number(cyclingSecondsInput.value),
@@ -388,7 +400,7 @@ addRunningForm.addEventListener("submit", (e) => {
   sportPerfs.course.push({
     id: crypto.randomUUID(),
     text,
-    distance: runningDistanceInput.value === "" ? null : Number(runningDistanceInput.value),
+    distance: runningDistanceInput.value === "" ? null : distanceFromDisplay(Number(runningDistanceInput.value), "course"),
     hours: runningHoursInput.value === "" ? null : Number(runningHoursInput.value),
     minutes: runningMinutesInput.value === "" ? null : Number(runningMinutesInput.value),
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
@@ -497,11 +509,25 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && openTriPopup) closeTriPopup();
 });
 
+function updateDistancePlaceholders() {
+  const distanceLabel = t("field.distance");
+  swimDistanceInput.placeholder = `${distanceLabel} (${mUnitLabel()})`;
+  cyclingDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+  runningDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+}
+
 document.addEventListener("languagechange", () => {
   sortSportMenu();
   updateSportSelectLabel();
+  updateDistancePlaceholders();
+  renderSportList();
+});
+
+document.addEventListener("unitschange", () => {
+  updateDistancePlaceholders();
   renderSportList();
 });
 
 sortSportMenu();
+updateDistancePlaceholders();
 selectSport("fitness");

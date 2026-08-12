@@ -78,12 +78,12 @@ function render() {
 
     const fieldLabels = node.querySelectorAll(".inline-field-label");
     fieldLabels[0].textContent = t("field.reps");
-    fieldLabels[1].textContent = t("field.kg");
+    fieldLabels[1].textContent = weightUnitLabel();
 
     const repsInput = node.querySelector(".reps-input");
     const weightInput = node.querySelector(".weight-input");
     repsInput.value = exercise.maxReps ?? "";
-    weightInput.value = exercise.maxWeight ?? "";
+    weightInput.value = exercise.maxWeight == null ? "" : weightToDisplay(exercise.maxWeight);
 
     repsInput.addEventListener("input", () => {
       exercise.maxReps = repsInput.value === "" ? null : Number(repsInput.value);
@@ -91,7 +91,7 @@ function render() {
     });
 
     weightInput.addEventListener("input", () => {
-      exercise.maxWeight = weightInput.value === "" ? null : Number(weightInput.value);
+      exercise.maxWeight = weightInput.value === "" ? null : weightFromDisplay(Number(weightInput.value));
       saveExercises();
     });
 
@@ -169,5 +169,6 @@ sortDescBtn.addEventListener("click", () => {
 });
 
 document.addEventListener("languagechange", render);
+document.addEventListener("unitschange", render);
 
 render();

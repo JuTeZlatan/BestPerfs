@@ -472,6 +472,50 @@ body {
   margin: -2px 0 -4px;
 }
 
+.units-group {
+  margin-bottom: 22px;
+}
+
+.units-group-label {
+  display: block;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.units-toggle-row {
+  display: flex;
+  gap: 8px;
+}
+
+.units-toggle-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text-dim);
+  font-family: "Oswald", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.units-toggle-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.units-toggle-btn.active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: transparent;
+}
+
 .profile-menu-label {
   flex: 1;
 }
@@ -1145,9 +1189,9 @@ h1 {
   border-color: var(--accent);
 }
 
-.weight-input,
-.distance-input {
-  width: 62px;
+.inline-field .weight-input,
+.inline-field .distance-input {
+  width: 70px;
 }
 
 input[type="number"] {
@@ -1703,8 +1747,8 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 34px;
   }
 
-  .weight-input {
-    width: 40px;
+  .inline-field .weight-input {
+    width: 52px;
   }
 
   .triathlon-setup-row {

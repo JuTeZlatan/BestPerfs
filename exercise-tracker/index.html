@@ -305,7 +305,7 @@
 
       <form id="add-swim-form" class="add-form" hidden>
         <input type="text" id="swim-style-input" data-i18n-placeholder="sport.swim.stylePlaceholder" placeholder="Style de nage (ex: Brasse)" maxlength="30" required>
-        <input type="number" id="swim-distance-input" class="distance-field" data-i18n-placeholder="field.distanceM" placeholder="Distance (m)" min="0" step="1">
+        <input type="number" id="swim-distance-input" class="distance-field" placeholder="Distance (m)" min="0" step="1">
         <input type="number" id="swim-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="swim-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <input type="number" id="swim-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
@@ -314,7 +314,7 @@
 
       <form id="add-cycling-form" class="add-form" hidden>
         <input type="text" id="cycling-location-input" data-i18n-placeholder="sport.locationPlaceholder" placeholder="Lieu (ex: Nice)" maxlength="40" required>
-        <input type="number" id="cycling-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1" required>
+        <input type="number" id="cycling-distance-input" class="distance-field" placeholder="Distance (km)" min="0" step="0.1" required>
         <input type="number" id="cycling-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="cycling-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="cycling-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
@@ -324,7 +324,7 @@
 
       <form id="add-running-form" class="add-form" hidden>
         <input type="text" id="running-desc-input" data-i18n-placeholder="sport.running.descPlaceholder" placeholder="Décris la course (ex: 10 km route)" maxlength="40" required>
-        <input type="number" id="running-distance-input" class="distance-field" data-i18n-placeholder="field.distanceKm" placeholder="Distance (km)" min="0" step="0.1">
+        <input type="number" id="running-distance-input" class="distance-field" placeholder="Distance (km)" min="0" step="0.1">
         <input type="number" id="running-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
         <input type="number" id="running-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="running-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
@@ -406,6 +406,11 @@
           <span class="profile-menu-label" data-i18n="profile.accountRow">Compte</span>
           <span class="profile-menu-chevron">›</span>
         </button>
+        <button id="profile-units-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">📏</span>
+          <span class="profile-menu-label" data-i18n="profile.unitsRow">Unités</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
         <button id="profile-backup-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon">💾</span>
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
@@ -449,6 +454,29 @@
           </button>
         </div>
         <p id="account-delete-error" class="auth-error" hidden></p>
+      </div>
+    </section>
+
+    <section id="units-view" hidden>
+      <div class="subpage-header">
+        <button id="units-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.unitsRow">Unités</h1>
+      </div>
+
+      <div class="units-group">
+        <span class="units-group-label" data-i18n="units.weightLabel">Poids</span>
+        <div class="units-toggle-row">
+          <button id="unit-weight-kg-btn" class="units-toggle-btn" type="button" data-i18n="units.kg">Kilogrammes</button>
+          <button id="unit-weight-lb-btn" class="units-toggle-btn" type="button" data-i18n="units.pounds">Livres</button>
+        </div>
+      </div>
+
+      <div class="units-group">
+        <span class="units-group-label" data-i18n="units.distanceLabel">Distance</span>
+        <div class="units-toggle-row">
+          <button id="unit-distance-km-btn" class="units-toggle-btn" type="button" data-i18n="units.km">Kilomètres</button>
+          <button id="unit-distance-mi-btn" class="units-toggle-btn" type="button" data-i18n="units.miles">Miles</button>
+        </div>
       </div>
     </section>
 
@@ -605,6 +633,7 @@
   </template>
 
   <script src="i18n.js"></script>
+  <script src="units.js"></script>
   <script src="script.js"></script>
   <script src="timer.js"></script>
   <script src="sports.js"></script>

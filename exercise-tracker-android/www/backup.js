@@ -1,4 +1,11 @@
-const BACKUP_KEYS = ["exercise-tracker-data", "exercise-tracker-presets", "exercise-tracker-sports", "exercise-tracker-lang"];
+const BACKUP_KEYS = [
+  "exercise-tracker-data",
+  "exercise-tracker-presets",
+  "exercise-tracker-sports",
+  "exercise-tracker-lang",
+  "exercise-tracker-weight-unit",
+  "exercise-tracker-distance-unit",
+];
 
 const profileBackupRow = document.getElementById("profile-backup-row");
 const profileViewEl = document.getElementById("profile-view");
