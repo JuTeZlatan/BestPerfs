@@ -605,7 +605,8 @@ h1 {
   display: none;
 }
 
-.add-form input {
+.add-form input,
+.add-form select {
   flex: 1;
   min-width: 140px;
   padding: 12px 14px;
@@ -617,12 +618,18 @@ h1 {
   outline: none;
 }
 
+.add-form select.distance-field {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
 .add-form input.preset-time-field {
   flex: 0 0 60px;
   min-width: 0;
 }
 
-.add-form input:focus {
+.add-form input:focus,
+.add-form select:focus {
   border-color: var(--accent);
 }
 
@@ -1677,6 +1684,13 @@ input[type="number"]::-webkit-inner-spin-button {
     flex: 0 0 50px;
     width: 50px;
     padding: 8px 4px;
+  }
+
+  .add-form select.distance-field {
+    flex: 0 0 92px;
+    width: 92px;
+    padding: 8px 4px;
+    font-size: 0.8rem;
   }
 
   .add-form:not(.auth-form) button[type="submit"] {

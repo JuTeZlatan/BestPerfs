@@ -15,7 +15,8 @@ const runningTemplate = document.getElementById("running-perf-template");
 
 const addSwimForm = document.getElementById("add-swim-form");
 const swimStyleInput = document.getElementById("swim-style-input");
-const swimDistanceInput = document.getElementById("swim-distance-input");
+const swimDistanceSelect = document.getElementById("swim-distance-select");
+const swimDistanceManualInput = document.getElementById("swim-distance-manual-input");
 const swimMinutesInput = document.getElementById("swim-minutes-input");
 const swimSecondsInput = document.getElementById("swim-seconds-input");
 const swimHundredthsInput = document.getElementById("swim-hundredths-input");
@@ -30,7 +31,8 @@ const cyclingHundredthsInput = document.getElementById("cycling-hundredths-input
 
 const addRunningForm = document.getElementById("add-running-form");
 const runningDescInput = document.getElementById("running-desc-input");
-const runningDistanceInput = document.getElementById("running-distance-input");
+const runningDistanceSelect = document.getElementById("running-distance-select");
+const runningDistanceManualInput = document.getElementById("running-distance-manual-input");
 const runningHoursInput = document.getElementById("running-hours-input");
 const runningMinutesInput = document.getElementById("running-minutes-input");
 const runningSecondsInput = document.getElementById("running-seconds-input");
@@ -69,7 +71,8 @@ const triFields = {
   },
 };
 
-const DISTANCE_SORT_SPORTS = ["natation", "velo", "course"];
+const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon"];
+const TRIATHLON_SIZE_ORDER = { XS: 0, S: 1, M: 2, L: 3, XL: 4 };
 
 function distanceUnitFor(sport) {
   return sport === "natation" ? mUnitLabel() : kmUnitLabel();
@@ -81,6 +84,22 @@ function distanceToDisplay(distance, sport) {
 
 function distanceFromDisplay(value, sport) {
   return sport === "natation" ? mFromDisplay(value) : kmFromDisplay(value);
+}
+
+// Preset options carry the canonical (km or m) value directly since they're
+// fixed real-world distances (e.g. a marathon is always 42.195km); only the
+// "manual" option's typed value needs converting from the display unit.
+function resolveSelectDistance(selectEl, manualInputEl, sport) {
+  if (selectEl.value === "manual") {
+    return manualInputEl.value === "" ? null : distanceFromDisplay(Number(manualInputEl.value), sport);
+  }
+  return Number(selectEl.value);
+}
+
+function bindDistanceSelect(selectEl, manualInputEl) {
+  selectEl.addEventListener("change", () => {
+    manualInputEl.hidden = selectEl.value !== "manual";
+  });
 }
 const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃", triathlon: "🔱" };
 const TEXT_PLACEHOLDER_KEYS = {
@@ -145,11 +164,13 @@ function getSortedSportEntries(entries, sport) {
     return sorted;
   }
   if (sportSortMode === "dist-asc" || sportSortMode === "dist-desc") {
+    const keyOf = sport === "triathlon" ? (perf) => TRIATHLON_SIZE_ORDER[perf.size] ?? 0 : (perf) => perf.distance ?? 0;
+    const timeOf = sport === "triathlon" ? triathlonTotal : perfTimeCentiseconds;
     sorted.sort((a, b) => {
-      const distDiff = (a.distance ?? 0) - (b.distance ?? 0);
+      const distDiff = keyOf(a) - keyOf(b);
       if (distDiff !== 0) return sportSortMode === "dist-asc" ? distDiff : -distDiff;
       // Equal distance: always rank the best performance (fastest time) first.
-      return perfTimeCentiseconds(a) - perfTimeCentiseconds(b);
+      return timeOf(a) - timeOf(b);
     });
     return sorted;
   }
@@ -363,7 +384,7 @@ addSwimForm.addEventListener("submit", (e) => {
   sportPerfs.natation.push({
     id: crypto.randomUUID(),
     text,
-    distance: swimDistanceInput.value === "" ? null : distanceFromDisplay(Number(swimDistanceInput.value), "natation"),
+    distance: resolveSelectDistance(swimDistanceSelect, swimDistanceManualInput, "natation"),
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
     hundredths: swimHundredthsInput.value === "" ? null : Number(swimHundredthsInput.value),
@@ -371,6 +392,7 @@ addSwimForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addSwimForm.reset();
+  swimDistanceManualInput.hidden = true;
   swimStyleInput.focus();
 });
 
@@ -400,7 +422,7 @@ addRunningForm.addEventListener("submit", (e) => {
   sportPerfs.course.push({
     id: crypto.randomUUID(),
     text,
-    distance: runningDistanceInput.value === "" ? null : distanceFromDisplay(Number(runningDistanceInput.value), "course"),
+    distance: resolveSelectDistance(runningDistanceSelect, runningDistanceManualInput, "course"),
     hours: runningHoursInput.value === "" ? null : Number(runningHoursInput.value),
     minutes: runningMinutesInput.value === "" ? null : Number(runningMinutesInput.value),
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
@@ -409,6 +431,7 @@ addRunningForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addRunningForm.reset();
+  runningDistanceManualInput.hidden = true;
   runningDescInput.focus();
 });
 
@@ -511,9 +534,9 @@ document.addEventListener("keydown", (e) => {
 
 function updateDistancePlaceholders() {
   const distanceLabel = t("field.distance");
-  swimDistanceInput.placeholder = `${distanceLabel} (${mUnitLabel()})`;
+  swimDistanceManualInput.placeholder = `${distanceLabel} (${mUnitLabel()})`;
   cyclingDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
-  runningDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+  runningDistanceManualInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
 }
 
 document.addEventListener("languagechange", () => {
@@ -527,6 +550,9 @@ document.addEventListener("unitschange", () => {
   updateDistancePlaceholders();
   renderSportList();
 });
+
+bindDistanceSelect(swimDistanceSelect, swimDistanceManualInput);
+bindDistanceSelect(runningDistanceSelect, runningDistanceManualInput);
 
 sortSportMenu();
 updateDistancePlaceholders();

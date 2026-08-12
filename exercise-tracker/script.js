@@ -68,14 +68,6 @@ function render() {
       render();
     });
 
-    const editBtn = node.querySelector(".edit-btn");
-    editBtn.title = t("edit.title");
-    editBtn.addEventListener("click", () => {
-      nameInput.readOnly = false;
-      nameInput.focus();
-      nameInput.select();
-    });
-
     const fieldLabels = node.querySelectorAll(".inline-field-label");
     fieldLabels[0].textContent = t("field.reps");
     fieldLabels[1].textContent = weightUnitLabel();
@@ -89,10 +81,26 @@ function render() {
       exercise.maxReps = repsInput.value === "" ? null : Number(repsInput.value);
       saveExercises();
     });
+    repsInput.addEventListener("blur", () => {
+      repsInput.readOnly = true;
+    });
 
     weightInput.addEventListener("input", () => {
       exercise.maxWeight = weightInput.value === "" ? null : weightFromDisplay(Number(weightInput.value));
       saveExercises();
+    });
+    weightInput.addEventListener("blur", () => {
+      weightInput.readOnly = true;
+    });
+
+    const editBtn = node.querySelector(".edit-btn");
+    editBtn.title = t("edit.title");
+    editBtn.addEventListener("click", () => {
+      nameInput.readOnly = false;
+      repsInput.readOnly = false;
+      weightInput.readOnly = false;
+      nameInput.focus();
+      nameInput.select();
     });
 
     const deleteBtn = node.querySelector(".delete-btn");
