@@ -8,6 +8,7 @@ import {
   signInWithCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   onAuthStateChanged,
   doc,
@@ -41,6 +42,14 @@ const gateEmailInput = document.getElementById("gate-email-input");
 const gatePasswordInput = document.getElementById("gate-password-input");
 const gateSignupBtn = document.getElementById("gate-signup-btn");
 const gateErrorEl = document.getElementById("gate-error");
+const gateForgotPasswordBtn = document.getElementById("gate-forgot-password-btn");
+
+const forgotPasswordViewEl = document.getElementById("forgot-password-view");
+const forgotPasswordBackBtn = document.getElementById("forgot-password-back-btn");
+const forgotPasswordForm = document.getElementById("forgot-password-form");
+const forgotPasswordEmailInput = document.getElementById("forgot-password-email-input");
+const forgotPasswordErrorEl = document.getElementById("forgot-password-error");
+const forgotPasswordSuccessEl = document.getElementById("forgot-password-success");
 
 const signupViewEl = document.getElementById("signup-view");
 const signupBackBtn = document.getElementById("signup-back-btn");
@@ -148,6 +157,42 @@ signupBackBtn.addEventListener("click", () => {
   clearFieldError(signupErrorEl);
 });
 
+gateForgotPasswordBtn.addEventListener("click", () => {
+  authGateEl.hidden = true;
+  forgotPasswordViewEl.hidden = false;
+  forgotPasswordForm.reset();
+  clearFieldError(forgotPasswordErrorEl);
+  forgotPasswordSuccessEl.hidden = true;
+});
+
+forgotPasswordBackBtn.addEventListener("click", () => {
+  forgotPasswordViewEl.hidden = true;
+  authGateEl.hidden = false;
+  forgotPasswordForm.reset();
+  clearFieldError(forgotPasswordErrorEl);
+  forgotPasswordSuccessEl.hidden = true;
+});
+
+forgotPasswordForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFieldError(forgotPasswordErrorEl);
+  forgotPasswordSuccessEl.hidden = true;
+  const email = forgotPasswordEmailInput.value.trim();
+  try {
+    await sendPasswordResetEmail(auth, email);
+    forgotPasswordSuccessEl.hidden = false;
+    forgotPasswordForm.reset();
+  } catch (error) {
+    if (error?.code === "auth/user-not-found") {
+      // Don't reveal whether an account exists for this email - same outcome either way.
+      forgotPasswordSuccessEl.hidden = false;
+      forgotPasswordForm.reset();
+      return;
+    }
+    showFieldError(forgotPasswordErrorEl, error);
+  }
+});
+
 let pendingBirthdate = null;
 
 signupForm.addEventListener("submit", async (e) => {
@@ -227,6 +272,7 @@ localStorage.setItem = function (key, value) {
 function showApp() {
   authGateEl.hidden = true;
   signupViewEl.hidden = true;
+  forgotPasswordViewEl.hidden = true;
   usernameViewEl.hidden = true;
   appRootEl.hidden = false;
 }
@@ -234,6 +280,7 @@ function showApp() {
 function showGate() {
   appRootEl.hidden = true;
   signupViewEl.hidden = true;
+  forgotPasswordViewEl.hidden = true;
   usernameViewEl.hidden = true;
   authGateEl.hidden = false;
   gateAuthForm.reset();
@@ -245,6 +292,7 @@ function showGate() {
 function showUsernamePrompt() {
   authGateEl.hidden = true;
   signupViewEl.hidden = true;
+  forgotPasswordViewEl.hidden = true;
   appRootEl.hidden = true;
   usernameViewEl.hidden = false;
 }
