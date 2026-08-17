@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "877329241895-fc90p6jijak1eo0j33voeacqfkkj9nqq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bestperfs.app",
+            "certificate_hash": "292191369aa4a66932498ffbc6ceadc92af9a26c"
+          }
+        },
+        {
           "client_id": "877329241895-hmk0ahgvmg2377voeqorkepr11rsi41k.apps.googleusercontent.com",
           "client_type": 3
         }
