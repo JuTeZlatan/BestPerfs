@@ -23,6 +23,7 @@ const authGateEl = document.getElementById("auth-gate");
 const usernameViewEl = document.getElementById("username-view");
 const usernameForm = document.getElementById("username-form");
 const usernameInput = document.getElementById("username-input");
+const usernameBirthdateInput = document.getElementById("username-birthdate-input");
 const usernameErrorEl = document.getElementById("username-error");
 
 const profileAccountRow = document.getElementById("profile-account-row");
@@ -56,7 +57,6 @@ const signupBackBtn = document.getElementById("signup-back-btn");
 const signupForm = document.getElementById("signup-form");
 const signupEmailInput = document.getElementById("signup-email-input");
 const signupPasswordInput = document.getElementById("signup-password-input");
-const signupBirthdateInput = document.getElementById("signup-birthdate-input");
 const signupErrorEl = document.getElementById("signup-error");
 
 profileAccountRow.addEventListener("click", () => {
@@ -193,24 +193,19 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   }
 });
 
-let pendingBirthdate = null;
-
 signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearFieldError(signupErrorEl);
   const email = signupEmailInput.value.trim();
   const password = signupPasswordInput.value;
-  const birthdate = signupBirthdateInput.value;
   if (!isPasswordValid(password)) {
     signupErrorEl.textContent = t("auth.errorPasswordRules");
     signupErrorEl.hidden = false;
     return;
   }
-  pendingBirthdate = birthdate || null;
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
-    pendingBirthdate = null;
     showFieldError(signupErrorEl, error);
   }
 });
@@ -300,15 +295,17 @@ function showUsernamePrompt() {
 usernameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const value = usernameInput.value.trim();
-  if (!value || !currentUid) return;
+  const birthdate = usernameBirthdateInput.value;
+  if (!value || !birthdate || !currentUid) return;
   try {
-    await setDoc(doc(db, "users", currentUid), { username: value }, { merge: true });
+    await setDoc(doc(db, "users", currentUid), { username: value, birthdate }, { merge: true });
   } catch {
     usernameErrorEl.textContent = t("auth.errorGeneric");
     usernameErrorEl.hidden = false;
     return;
   }
   accountUsernameDisplay.textContent = value;
+  accountBirthdateDisplay.textContent = formatBirthdate(birthdate);
   usernameForm.reset();
   showApp();
 });
@@ -364,16 +361,11 @@ onAuthStateChanged(auth, async (user) => {
     }
   } else {
     const payload = { updatedAt: serverTimestamp() };
-    if (pendingBirthdate) {
-      payload.birthdate = pendingBirthdate;
-    }
     SYNCED_KEYS.forEach((key) => {
       const value = localStorage.getItem(key);
       if (value !== null) payload[KEY_TO_FIELD[key]] = value;
     });
     setDoc(userDocRef, payload, { merge: true }).catch(() => {});
-    accountBirthdateDisplay.textContent = formatBirthdate(pendingBirthdate);
-    pendingBirthdate = null;
     showUsernamePrompt();
   }
 });

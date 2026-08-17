@@ -213,8 +213,6 @@
         <input type="email" id="signup-email-input" data-i18n-placeholder="auth.email" placeholder="Email" required>
         <input type="password" id="signup-password-input" data-i18n-placeholder="auth.password" placeholder="Mot de passe" required>
         <p class="auth-hint" data-i18n="auth.passwordHint">Au moins 6 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
-        <label class="auth-field-label" for="signup-birthdate-input" data-i18n="auth.birthdate">Date de naissance</label>
-        <input type="date" id="signup-birthdate-input" required>
         <button type="submit" data-i18n="auth.createAccount">Créer un compte</button>
       </form>
 
@@ -233,6 +231,8 @@
 
       <form id="username-form" class="add-form auth-form">
         <input type="text" id="username-input" data-i18n-placeholder="auth.usernamePlaceholder" placeholder="Pseudo" maxlength="24" required>
+        <label class="auth-field-label" for="username-birthdate-input" data-i18n="auth.birthdate">Date de naissance</label>
+        <input type="date" id="username-birthdate-input" required>
         <button type="submit" data-i18n="common.validate">Valider</button>
       </form>
 
