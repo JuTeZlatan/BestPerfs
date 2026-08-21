@@ -15,6 +15,7 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  writeBatch,
   serverTimestamp,
 } from "./firebase-init.js";
 
@@ -123,6 +124,23 @@ function formatBirthdate(value) {
   if (parts.length !== 3) return value;
   const [year, month, day] = parts;
   return `${day}/${month}/${year}`;
+}
+
+// Backfill for accounts created before the usernames/{lower} lookup collection
+// existed: claim the mapping on next sign-in if it's still missing. Best-effort,
+// never blocks showApp() - a rare pre-existing case-insensitive collision just
+// stays unfindable by friend search rather than breaking anything.
+async function ensureUsernameMapping(uid, username) {
+  if (!username) return;
+  try {
+    const mappingRef = doc(db, "usernames", username.toLowerCase());
+    const mappingSnap = await getDoc(mappingRef);
+    if (!mappingSnap.exists()) {
+      await setDoc(mappingRef, { uid, username });
+    }
+  } catch (error) {
+    console.warn("ensureUsernameMapping failed", error);
+  }
 }
 
 gateGoogleBtn.addEventListener("click", async () => {
@@ -294,13 +312,21 @@ function showUsernamePrompt() {
 
 usernameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  usernameErrorEl.hidden = true;
   const value = usernameInput.value.trim();
   const birthdate = usernameBirthdateInput.value;
   if (!value || !birthdate || !currentUid) return;
   try {
-    await setDoc(doc(db, "users", currentUid), { username: value, birthdate }, { merge: true });
-  } catch {
-    usernameErrorEl.textContent = t("auth.errorGeneric");
+    // Claiming the lowercased usernames/{lower} doc and setting users/{uid}.username
+    // happen atomically: if the name is already taken, security rules reject the
+    // usernames write and the whole batch fails, so the user is never left with a
+    // "set" username that was never actually claimed (there's no rename UI to fix that later).
+    const batch = writeBatch(db);
+    batch.set(doc(db, "users", currentUid), { username: value, birthdate }, { merge: true });
+    batch.set(doc(db, "usernames", value.toLowerCase()), { uid: currentUid, username: value });
+    await batch.commit();
+  } catch (error) {
+    usernameErrorEl.textContent = t(error?.code === "permission-denied" ? "auth.errorUsernameTaken" : "auth.errorGeneric");
     usernameErrorEl.hidden = false;
     return;
   }
@@ -344,6 +370,7 @@ onAuthStateChanged(auth, async (user) => {
 
     accountUsernameDisplay.textContent = data.username;
     accountBirthdateDisplay.textContent = formatBirthdate(data.birthdate);
+    ensureUsernameMapping(currentUid, data.username);
 
     const wasAlreadyInApp = !appRootEl.hidden;
     let anyDiff = false;

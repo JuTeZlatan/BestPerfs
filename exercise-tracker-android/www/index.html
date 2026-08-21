@@ -440,6 +440,11 @@
           <span class="profile-menu-label" data-i18n="profile.accountRow">Compte</span>
           <span class="profile-menu-chevron">›</span>
         </button>
+        <button id="profile-friends-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">🧑‍🤝‍🧑</span>
+          <span class="profile-menu-label" data-i18n="profile.friendsRow">Amis</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
         <button id="profile-units-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon">📏</span>
           <span class="profile-menu-label" data-i18n="profile.unitsRow">Unités</span>
@@ -489,6 +494,31 @@
         </div>
         <p id="account-delete-error" class="auth-error" hidden></p>
       </div>
+    </section>
+
+    <section id="friends-view" hidden>
+      <div class="subpage-header">
+        <button id="friends-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.friendsRow">Amis</h1>
+      </div>
+
+      <form id="friends-add-form" class="add-form">
+        <input type="text" id="friends-add-input" data-i18n-placeholder="friends.addPlaceholder" placeholder="Pseudo de ton ami" maxlength="24" required>
+        <button type="submit" data-i18n="friends.addButton">Ajouter</button>
+      </form>
+      <p id="friends-add-error" class="auth-error" hidden></p>
+
+      <h2 class="section-title" data-i18n="friends.incomingTitle">Demandes reçues</h2>
+      <div id="friends-incoming-list" class="exercise-list"></div>
+      <p id="friends-incoming-empty" class="empty-state" data-i18n="friends.emptyIncoming">Aucune demande reçue.</p>
+
+      <h2 class="section-title" data-i18n="friends.outgoingTitle">Demandes envoyées</h2>
+      <div id="friends-outgoing-list" class="exercise-list"></div>
+      <p id="friends-outgoing-empty" class="empty-state" data-i18n="friends.emptyOutgoing">Aucune demande envoyée.</p>
+
+      <h2 class="section-title" data-i18n="friends.listTitle">Mes amis</h2>
+      <div id="friends-list" class="exercise-list"></div>
+      <p id="friends-list-empty" class="empty-state" data-i18n="friends.emptyList">Aucun ami pour l'instant.</p>
     </section>
 
     <section id="units-view" hidden>
@@ -666,6 +696,31 @@
     </div>
   </template>
 
+  <template id="friend-incoming-template">
+    <div class="friend-row">
+      <span class="friend-row-name"></span>
+      <div class="friend-row-actions">
+        <button class="friend-accept-btn" type="button" data-i18n="friends.acceptBtn">Accepter</button>
+        <button class="friend-decline-btn" type="button" data-i18n="friends.declineBtn">Refuser</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="friend-outgoing-template">
+    <div class="friend-row">
+      <span class="friend-row-name"></span>
+      <span class="friend-row-pending" data-i18n="friends.pendingLabel">En attente</span>
+      <button class="friend-cancel-btn" type="button" data-i18n="friends.cancelBtn">Annuler</button>
+    </div>
+  </template>
+
+  <template id="friend-template">
+    <div class="friend-row">
+      <span class="friend-row-name"></span>
+      <button class="friend-remove-btn" type="button" data-i18n="friends.removeBtn">Retirer</button>
+    </div>
+  </template>
+
   <script src="i18n.js"></script>
   <script src="units.js"></script>
   <script src="script.js"></script>
@@ -675,5 +730,6 @@
   <script src="profile.js"></script>
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="account.js"></script>
+  <script type="module" src="friends.js"></script>
 </body>
 </html>

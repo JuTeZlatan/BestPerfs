@@ -1,0 +1,220 @@
+import {
+  auth,
+  db,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+} from "./firebase-init.js";
+
+const profileFriendsRow = document.getElementById("profile-friends-row");
+const profileViewForFriends = document.getElementById("profile-view");
+const friendsViewEl = document.getElementById("friends-view");
+const friendsBackBtn = document.getElementById("friends-back-btn");
+
+const friendsAddForm = document.getElementById("friends-add-form");
+const friendsAddInput = document.getElementById("friends-add-input");
+const friendsAddErrorEl = document.getElementById("friends-add-error");
+
+const friendsIncomingList = document.getElementById("friends-incoming-list");
+const friendsIncomingEmpty = document.getElementById("friends-incoming-empty");
+const friendsOutgoingList = document.getElementById("friends-outgoing-list");
+const friendsOutgoingEmpty = document.getElementById("friends-outgoing-empty");
+const friendsListEl = document.getElementById("friends-list");
+const friendsListEmpty = document.getElementById("friends-list-empty");
+
+const friendIncomingTemplate = document.getElementById("friend-incoming-template");
+const friendOutgoingTemplate = document.getElementById("friend-outgoing-template");
+const friendTemplate = document.getElementById("friend-template");
+
+function pairId(uidA, uidB) {
+  return uidA < uidB ? `${uidA}_${uidB}` : `${uidB}_${uidA}`;
+}
+
+function myUsername() {
+  return document.getElementById("account-username-display").textContent.trim();
+}
+
+function clearAddError() {
+  friendsAddErrorEl.hidden = true;
+  friendsAddErrorEl.textContent = "";
+}
+
+function showAddError(key) {
+  friendsAddErrorEl.textContent = t(key);
+  friendsAddErrorEl.hidden = false;
+}
+
+profileFriendsRow.addEventListener("click", () => {
+  profileViewForFriends.hidden = true;
+  friendsViewEl.hidden = false;
+  clearAddError();
+  refreshFriendsData();
+});
+
+friendsBackBtn.addEventListener("click", () => {
+  friendsViewEl.hidden = true;
+  profileViewForFriends.hidden = false;
+});
+
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    friendsViewEl.hidden = true;
+  });
+});
+
+async function refreshFriendsData() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return;
+
+  const requestsRef = collection(db, "friendRequests");
+  const [incomingSnap, outgoingSnap, friendsAsFromSnap, friendsAsToSnap] = await Promise.all([
+    getDocs(query(requestsRef, where("toUid", "==", uid), where("status", "==", "pending"))),
+    getDocs(query(requestsRef, where("fromUid", "==", uid), where("status", "==", "pending"))),
+    getDocs(query(requestsRef, where("fromUid", "==", uid), where("status", "==", "accepted"))),
+    getDocs(query(requestsRef, where("toUid", "==", uid), where("status", "==", "accepted"))),
+  ]).catch((error) => {
+    console.error(error);
+    return [];
+  });
+
+  if (!incomingSnap) return;
+
+  renderIncoming(incomingSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  renderOutgoing(outgoingSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  const friends = [
+    ...friendsAsFromSnap.docs.map((d) => ({ id: d.id, username: d.data().toUsername })),
+    ...friendsAsToSnap.docs.map((d) => ({ id: d.id, username: d.data().fromUsername })),
+  ];
+  renderFriends(friends);
+}
+
+function renderIncoming(requests) {
+  friendsIncomingList.innerHTML = "";
+  friendsIncomingEmpty.classList.toggle("visible", requests.length === 0);
+  requests.forEach((request) => {
+    const node = friendIncomingTemplate.content.cloneNode(true);
+    node.querySelector(".friend-row-name").textContent = request.fromUsername;
+    node.querySelector(".friend-accept-btn").textContent = t("friends.acceptBtn");
+    node.querySelector(".friend-decline-btn").textContent = t("friends.declineBtn");
+
+    node.querySelector(".friend-accept-btn").addEventListener("click", async () => {
+      try {
+        await updateDoc(doc(db, "friendRequests", request.id), { status: "accepted" });
+      } catch (error) {
+        console.error(error);
+      }
+      refreshFriendsData();
+    });
+
+    node.querySelector(".friend-decline-btn").addEventListener("click", async () => {
+      try {
+        await deleteDoc(doc(db, "friendRequests", request.id));
+      } catch (error) {
+        console.error(error);
+      }
+      refreshFriendsData();
+    });
+
+    friendsIncomingList.appendChild(node);
+  });
+}
+
+function renderOutgoing(requests) {
+  friendsOutgoingList.innerHTML = "";
+  friendsOutgoingEmpty.classList.toggle("visible", requests.length === 0);
+  requests.forEach((request) => {
+    const node = friendOutgoingTemplate.content.cloneNode(true);
+    node.querySelector(".friend-row-name").textContent = request.toUsername;
+    node.querySelector(".friend-row-pending").textContent = t("friends.pendingLabel");
+    node.querySelector(".friend-cancel-btn").textContent = t("friends.cancelBtn");
+
+    node.querySelector(".friend-cancel-btn").addEventListener("click", async () => {
+      try {
+        await deleteDoc(doc(db, "friendRequests", request.id));
+      } catch (error) {
+        console.error(error);
+      }
+      refreshFriendsData();
+    });
+
+    friendsOutgoingList.appendChild(node);
+  });
+}
+
+function renderFriends(friends) {
+  friendsListEl.innerHTML = "";
+  friendsListEmpty.classList.toggle("visible", friends.length === 0);
+  friends.forEach((friend) => {
+    const node = friendTemplate.content.cloneNode(true);
+    node.querySelector(".friend-row-name").textContent = friend.username;
+    node.querySelector(".friend-remove-btn").textContent = t("friends.removeBtn");
+
+    node.querySelector(".friend-remove-btn").addEventListener("click", () => {
+      window.openConfirmModal(t("friends.unfriendConfirm", { name: friend.username }), async () => {
+        try {
+          await deleteDoc(doc(db, "friendRequests", friend.id));
+        } catch (error) {
+          console.error(error);
+        }
+        refreshFriendsData();
+      });
+    });
+
+    friendsListEl.appendChild(node);
+  });
+}
+
+friendsAddForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearAddError();
+  const myUid = auth.currentUser?.uid;
+  const typed = friendsAddInput.value.trim();
+  if (!typed || !myUid) return;
+  const lower = typed.toLowerCase();
+
+  try {
+    const mappingSnap = await getDoc(doc(db, "usernames", lower));
+    if (!mappingSnap.exists()) {
+      showAddError("friends.errorNotFound");
+      return;
+    }
+    const targetUid = mappingSnap.data().uid;
+    const targetUsername = mappingSnap.data().username;
+    if (targetUid === myUid) {
+      showAddError("friends.errorSelf");
+      return;
+    }
+
+    const requestId = pairId(myUid, targetUid);
+    const existingSnap = await getDoc(doc(db, "friendRequests", requestId));
+    if (existingSnap.exists()) {
+      showAddError(existingSnap.data().status === "accepted" ? "friends.errorAlreadyFriends" : "friends.errorAlreadyPending");
+      return;
+    }
+
+    await setDoc(doc(db, "friendRequests", requestId), {
+      fromUid: myUid,
+      toUid: targetUid,
+      fromUsername: myUsername(),
+      toUsername: targetUsername,
+      status: "pending",
+      createdAt: serverTimestamp(),
+    });
+    friendsAddForm.reset();
+    refreshFriendsData();
+  } catch (error) {
+    console.error(error);
+    showAddError("friends.errorGeneric");
+  }
+});
+
+document.addEventListener("languagechange", () => {
+  if (!friendsViewEl.hidden) refreshFriendsData();
+});
