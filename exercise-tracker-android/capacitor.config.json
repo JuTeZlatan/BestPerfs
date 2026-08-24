@@ -6,6 +6,10 @@
     "FirebaseAuthentication": {
       "skipNativeAuth": false,
       "providers": ["google.com"]
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_notify",
+      "iconColor": "#ec2b1e"
     }
   }
 }

@@ -24,7 +24,7 @@
         <div class="splash-core">
           <div class="core-ring core-ring-1"></div>
           <div class="core-ring core-ring-2"></div>
-          <div class="core-dot"></div>
+          <img class="core-logo" src="logo-mark.png" alt="">
         </div>
 
         <div class="splash-burst" aria-hidden="true">
@@ -44,6 +44,9 @@
           <span class="word-main">BEST PERFS</span>
         </div>
 
+        <div class="splash-progress">
+          <div class="splash-progress-fill" id="splashProgressFill"></div>
+        </div>
         <div class="splash-readout"><span id="splashPct">0</span>%</div>
       </div>
     </div>
@@ -57,16 +60,19 @@
         splash.hidden = false;
 
         var pctEl = document.getElementById("splashPct");
+        var fillEl = document.getElementById("splashProgressFill");
         var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         if (pctEl) {
           if (reduced) {
             pctEl.textContent = "100";
+            if (fillEl) fillEl.style.width = "100%";
           } else {
             var duration = 1000;
             var chargeStart = Date.now();
             var tick = function () {
               var pct = Math.min(100, Math.round(((Date.now() - chargeStart) / duration) * 100));
               pctEl.textContent = pct;
+              if (fillEl) fillEl.style.width = pct + "%";
               if (pct < 100) requestAnimationFrame(tick);
             };
             requestAnimationFrame(tick);
