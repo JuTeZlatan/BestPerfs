@@ -29,6 +29,37 @@ const friendsOutgoingEmpty = document.getElementById("friends-outgoing-empty");
 const friendsListEl = document.getElementById("friends-list");
 const friendsListEmpty = document.getElementById("friends-list-empty");
 
+const friendsTabBtns = Array.from(document.querySelectorAll(".friends-tab-btn"));
+const friendsTabViewport = document.getElementById("friends-tab-viewport");
+const friendsTabTrack = document.getElementById("friends-tab-track");
+let activeTabIndex = 0;
+
+function setActiveTab(index) {
+  activeTabIndex = index;
+  friendsTabBtns.forEach((btn, i) => btn.classList.toggle("active", i === index));
+  friendsTabTrack.style.transform = `translateX(-${index * 100}%)`;
+}
+
+friendsTabBtns.forEach((btn, i) => {
+  btn.addEventListener("click", () => setActiveTab(i));
+});
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+friendsTabViewport.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+
+friendsTabViewport.addEventListener("touchend", (e) => {
+  const deltaX = e.changedTouches[0].clientX - touchStartX;
+  const deltaY = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+  if (deltaX < 0 && activeTabIndex < friendsTabBtns.length - 1) setActiveTab(activeTabIndex + 1);
+  else if (deltaX > 0 && activeTabIndex > 0) setActiveTab(activeTabIndex - 1);
+});
+
 const friendIncomingTemplate = document.getElementById("friend-incoming-template");
 const friendOutgoingTemplate = document.getElementById("friend-outgoing-template");
 const friendTemplate = document.getElementById("friend-template");
@@ -55,6 +86,7 @@ profileFriendsRow.addEventListener("click", () => {
   profileViewForFriends.hidden = true;
   friendsViewEl.hidden = false;
   clearAddError();
+  setActiveTab(0);
   refreshFriendsData();
 });
 

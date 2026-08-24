@@ -985,6 +985,53 @@ h1 {
   min-width: 80px;
 }
 
+.friends-tab-bar {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  margin-bottom: 14px;
+}
+
+.friends-tab-btn {
+  flex: 1;
+  padding: 10px 6px;
+  border: none;
+  background: var(--card);
+  color: var(--text-dim);
+  font-family: "Oswald", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.friends-tab-btn.active {
+  color: var(--on-accent);
+  background: var(--accent);
+}
+
+.friends-tab-viewport {
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.friends-tab-track {
+  display: flex;
+  transition: transform 0.25s ease;
+}
+
+.friends-tab-page {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.friends-tab-page .empty-state {
+  margin-top: 16px;
+}
+
 .friend-row {
   display: flex;
   align-items: center;

@@ -502,23 +502,32 @@
         <h1 data-i18n="profile.friendsRow">Amis</h1>
       </div>
 
+      <div class="friends-tab-bar">
+        <button class="friends-tab-btn active" type="button" data-i18n="friends.outgoingTitle">Demandes envoyées</button>
+        <button class="friends-tab-btn" type="button" data-i18n="friends.incomingTitle">Demandes reçues</button>
+      </div>
+      <div id="friends-tab-viewport" class="friends-tab-viewport">
+        <div id="friends-tab-track" class="friends-tab-track">
+          <div class="friends-tab-page">
+            <div id="friends-outgoing-list" class="exercise-list"></div>
+            <p id="friends-outgoing-empty" class="empty-state" data-i18n="friends.emptyOutgoing">Aucune demande envoyée.</p>
+          </div>
+          <div class="friends-tab-page">
+            <div id="friends-incoming-list" class="exercise-list"></div>
+            <p id="friends-incoming-empty" class="empty-state" data-i18n="friends.emptyIncoming">Aucune demande reçue.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title" data-i18n="friends.listTitle">Mes amis</h2>
+      <div id="friends-list" class="exercise-list"></div>
+      <p id="friends-list-empty" class="empty-state" data-i18n="friends.emptyList">Aucun ami pour l'instant.</p>
+
       <form id="friends-add-form" class="add-form">
         <input type="text" id="friends-add-input" data-i18n-placeholder="friends.addPlaceholder" placeholder="Pseudo de ton ami" maxlength="24" required>
         <button type="submit" data-i18n="friends.addButton">Ajouter</button>
       </form>
       <p id="friends-add-error" class="auth-error" hidden></p>
-
-      <h2 class="section-title" data-i18n="friends.incomingTitle">Demandes reçues</h2>
-      <div id="friends-incoming-list" class="exercise-list"></div>
-      <p id="friends-incoming-empty" class="empty-state" data-i18n="friends.emptyIncoming">Aucune demande reçue.</p>
-
-      <h2 class="section-title" data-i18n="friends.outgoingTitle">Demandes envoyées</h2>
-      <div id="friends-outgoing-list" class="exercise-list"></div>
-      <p id="friends-outgoing-empty" class="empty-state" data-i18n="friends.emptyOutgoing">Aucune demande envoyée.</p>
-
-      <h2 class="section-title" data-i18n="friends.listTitle">Mes amis</h2>
-      <div id="friends-list" class="exercise-list"></div>
-      <p id="friends-list-empty" class="empty-state" data-i18n="friends.emptyList">Aucun ami pour l'instant.</p>
     </section>
 
     <section id="units-view" hidden>
