@@ -25,6 +25,7 @@ import {
   getDocs,
   writeBatch,
   serverTimestamp,
+  arrayUnion,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -70,4 +71,5 @@ export {
   getDocs,
   writeBatch,
   serverTimestamp,
+  arrayUnion,
 };

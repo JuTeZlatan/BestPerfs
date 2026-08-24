@@ -17,6 +17,7 @@ import {
   deleteDoc,
   writeBatch,
   serverTimestamp,
+  arrayUnion,
 } from "./firebase-init.js";
 
 const appRootEl = document.getElementById("app-root");
@@ -140,6 +141,28 @@ async function ensureUsernameMapping(uid, username) {
     }
   } catch (error) {
     console.warn("ensureUsernameMapping failed", error);
+  }
+}
+
+// Registers this device for push notifications (friend requests, accepted
+// requests - see functions/index.js) by saving its FCM token onto the user's
+// doc. Native-only: there's no web push setup (VAPID key / messaging service
+// worker) yet, so this is a no-op in the browser.
+async function registerPushToken(uid) {
+  if (!isNativePlatform) return;
+  try {
+    const permStatus = await Capacitor.Plugins.FirebaseMessaging.checkPermissions();
+    let receive = permStatus.receive;
+    if (receive === "prompt" || receive === "prompt-with-rationale") {
+      const requested = await Capacitor.Plugins.FirebaseMessaging.requestPermissions();
+      receive = requested.receive;
+    }
+    if (receive !== "granted") return;
+    const { token } = await Capacitor.Plugins.FirebaseMessaging.getToken();
+    if (!token) return;
+    await setDoc(doc(db, "users", uid), { fcmTokens: arrayUnion(token) }, { merge: true });
+  } catch (error) {
+    console.warn("registerPushToken failed", error);
   }
 }
 
@@ -371,6 +394,7 @@ onAuthStateChanged(auth, async (user) => {
     accountUsernameDisplay.textContent = data.username;
     accountBirthdateDisplay.textContent = formatBirthdate(data.birthdate);
     ensureUsernameMapping(currentUid, data.username);
+    registerPushToken(currentUid);
 
     const wasAlreadyInApp = !appRootEl.hidden;
     let anyDiff = false;
