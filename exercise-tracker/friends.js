@@ -18,6 +18,7 @@ const profileViewForFriends = document.getElementById("profile-view");
 const friendsViewEl = document.getElementById("friends-view");
 const friendsBackBtn = document.getElementById("friends-back-btn");
 
+const friendsAddToggleBtn = document.getElementById("friends-add-toggle");
 const friendsAddForm = document.getElementById("friends-add-form");
 const friendsAddInput = document.getElementById("friends-add-input");
 const friendsAddErrorEl = document.getElementById("friends-add-error");
@@ -82,10 +83,24 @@ function showAddError(key) {
   friendsAddErrorEl.hidden = false;
 }
 
+function closeAddForm() {
+  friendsAddForm.hidden = true;
+  friendsAddForm.reset();
+  clearAddError();
+}
+
+friendsAddToggleBtn.addEventListener("click", () => {
+  friendsAddForm.hidden = !friendsAddForm.hidden;
+  if (!friendsAddForm.hidden) {
+    clearAddError();
+    friendsAddInput.focus();
+  }
+});
+
 profileFriendsRow.addEventListener("click", () => {
   profileViewForFriends.hidden = true;
   friendsViewEl.hidden = false;
-  clearAddError();
+  closeAddForm();
   setActiveTab(0);
   refreshFriendsData();
 });
@@ -239,7 +254,7 @@ friendsAddForm.addEventListener("submit", async (e) => {
       status: "pending",
       createdAt: serverTimestamp(),
     });
-    friendsAddForm.reset();
+    closeAddForm();
     refreshFriendsData();
   } catch (error) {
     console.error(error);

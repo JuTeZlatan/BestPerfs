@@ -502,11 +502,14 @@
         </div>
       </div>
 
-      <h2 class="section-title" data-i18n="friends.listTitle">Mes amis</h2>
+      <div class="friends-list-header">
+        <h2 class="section-title" data-i18n="friends.listTitle">Mes amis</h2>
+        <button id="friends-add-toggle" class="friends-add-toggle-btn" type="button" data-i18n-title="friends.addButton">+</button>
+      </div>
       <div id="friends-list" class="exercise-list"></div>
       <p id="friends-list-empty" class="empty-state" data-i18n="friends.emptyList">Aucun ami pour l'instant.</p>
 
-      <form id="friends-add-form" class="add-form">
+      <form id="friends-add-form" class="add-form" hidden>
         <input type="text" id="friends-add-input" data-i18n-placeholder="friends.addPlaceholder" placeholder="Pseudo de ton ami" maxlength="24" required>
         <button type="submit" data-i18n="friends.addButton">Ajouter</button>
       </form>

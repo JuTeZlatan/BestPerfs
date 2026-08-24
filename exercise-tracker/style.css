@@ -1107,6 +1107,39 @@ h1 {
   margin-top: 16px;
 }
 
+.friends-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.friends-list-header .section-title {
+  margin: 32px 0 12px;
+}
+
+.friends-add-toggle-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  clip-path: var(--cut-sm);
+  background: var(--accent-gradient);
+  color: var(--on-accent);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.friends-add-toggle-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-soft);
+}
+
 .friend-row {
   display: flex;
   align-items: center;
