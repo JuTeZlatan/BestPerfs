@@ -483,8 +483,8 @@ body::before {
 .auth-gate-wordmark {
   display: inline-block;
   font-family: "Orbitron", "Oswald", sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.9rem, 9vw, 2.6rem);
+  font-weight: 900;
+  font-size: clamp(2.3rem, 11vw, 3.2rem);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: var(--text);
