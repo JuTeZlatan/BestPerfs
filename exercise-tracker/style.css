@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;800&family=Orbitron:wght@700;800;900&family=Russo+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;800&family=M+PLUS+Rounded+1c:wght@900&display=swap");
 
 :root {
   --bg: #1c0f0d;
@@ -482,22 +482,24 @@ body::before {
 
 .auth-gate-wordmark {
   display: inline-block;
-  font-family: "Russo One", "Oswald", sans-serif;
-  font-weight: 400;
+  font-family: "M PLUS Rounded 1c", "Oswald", sans-serif;
+  font-weight: 900;
   font-size: clamp(2.1rem, 10vw, 3rem);
   text-transform: uppercase;
   letter-spacing: 0;
-  color: var(--text);
-  text-shadow: 0 0 10px rgba(255, 26, 26, 0.95), 0 0 30px rgba(255, 26, 26, 0.7), 0 0 64px rgba(255, 26, 26, 0.4);
-  animation: word-glow 2.6s ease-in-out infinite;
+  color: var(--accent);
+  transform: skewX(-8deg);
+  text-shadow:
+    1px 1px 0 rgb(154, 17, 30),
+    2px 2px 0 rgb(140, 15, 28),
+    3px 3px 0 rgb(126, 13, 25),
+    4px 4px 0 rgb(112, 11, 22),
+    5px 5px 0 rgb(98, 9, 19),
+    6px 7px 8px rgba(0, 0, 0, 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .auth-gate-grid {
-    animation: none;
-  }
-
-  .auth-gate-wordmark {
     animation: none;
   }
 }
