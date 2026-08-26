@@ -288,11 +288,23 @@ accountDeleteBtn.addEventListener("click", () => {
 });
 
 // ---- Cloud data sync ----
-const SYNCED_KEYS = ["exercise-tracker-data", "exercise-tracker-presets", "exercise-tracker-sports"];
+const SYNCED_KEYS = [
+  "exercise-tracker-data",
+  "exercise-tracker-presets",
+  "exercise-tracker-sports",
+  "exercise-tracker-lang",
+  "exercise-tracker-weight-unit",
+  "exercise-tracker-distance-unit",
+  "exercise-tracker-theme",
+];
 const KEY_TO_FIELD = {
   "exercise-tracker-data": "exerciseData",
   "exercise-tracker-presets": "presetsData",
   "exercise-tracker-sports": "sportsData",
+  "exercise-tracker-lang": "lang",
+  "exercise-tracker-weight-unit": "weightUnit",
+  "exercise-tracker-distance-unit": "distanceUnit",
+  "exercise-tracker-theme": "theme",
 };
 
 let currentUid = null;
@@ -396,7 +408,6 @@ onAuthStateChanged(auth, async (user) => {
     ensureUsernameMapping(currentUid, data.username);
     registerPushToken(currentUid);
 
-    const wasAlreadyInApp = !appRootEl.hidden;
     let anyDiff = false;
     SYNCED_KEYS.forEach((key) => {
       const field = KEY_TO_FIELD[key];
@@ -404,8 +415,11 @@ onAuthStateChanged(auth, async (user) => {
       if (localStorage.getItem(key) !== data[field]) anyDiff = true;
       nativeSetItem(key, data[field]);
     });
-    if (anyDiff && wasAlreadyInApp) {
-      // Data changed while already inside the app (e.g. signed in elsewhere) - reload to pick it up.
+    if (anyDiff) {
+      // Cloud data differs from what's on this device (first time signing in
+      // here, or it changed elsewhere) - the scripts that render from
+      // localStorage already ran with the old value, so a reload is the only
+      // way to get them to pick up what was just pulled down.
       location.reload();
     } else {
       showApp();

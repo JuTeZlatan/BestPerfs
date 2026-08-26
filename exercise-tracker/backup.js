@@ -5,6 +5,7 @@ const BACKUP_KEYS = [
   "exercise-tracker-lang",
   "exercise-tracker-weight-unit",
   "exercise-tracker-distance-unit",
+  "exercise-tracker-theme",
 ];
 
 const profileBackupRow = document.getElementById("profile-backup-row");
