@@ -180,20 +180,6 @@ body {
   padding: 40px 16px;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(var(--accent-rgb), 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(var(--accent-rgb), 0.05) 1px, transparent 1px);
-  background-size: 38px 38px;
-  -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 75%);
-  mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 75%);
-}
-
 .app {
   position: relative;
   z-index: 1;
