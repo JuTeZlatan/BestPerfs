@@ -17,6 +17,7 @@
     "account-view",
     "friends-view",
     "units-view",
+    "themes-view",
     "backup-view",
     "support-view",
   ];

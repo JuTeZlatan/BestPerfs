@@ -84,54 +84,6 @@
     })();
   </script>
 
-  <div class="theme-switcher theme-switcher-fixed">
-    <button id="theme-btn" class="theme-btn" type="button" data-i18n-title="theme.title">
-      <span class="theme-swatch" data-theme-swatch="classic"></span>
-    </button>
-    <div id="theme-menu" class="theme-menu" hidden>
-      <button class="theme-option" type="button" data-theme="classic">
-        <span class="theme-swatch" data-theme-swatch="classic"></span>
-        <span data-i18n="theme.classic">Classique</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="ocean">
-        <span class="theme-swatch" data-theme-swatch="ocean"></span>
-        <span data-i18n="theme.ocean">Océan</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="emerald">
-        <span class="theme-swatch" data-theme-swatch="emerald"></span>
-        <span data-i18n="theme.emerald">Émeraude</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="violet">
-        <span class="theme-swatch" data-theme-swatch="violet"></span>
-        <span data-i18n="theme.violet">Violet</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="gold">
-        <span class="theme-swatch" data-theme-swatch="gold"></span>
-        <span data-i18n="theme.gold">Or Royal</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="pink">
-        <span class="theme-swatch" data-theme-swatch="pink"></span>
-        <span data-i18n="theme.pink">Rose Cyber</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="charcoal">
-        <span class="theme-swatch" data-theme-swatch="charcoal"></span>
-        <span data-i18n="theme.charcoal">Charbon</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="sunset">
-        <span class="theme-swatch" data-theme-swatch="sunset"></span>
-        <span data-i18n="theme.sunset">Coucher de Soleil</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="arctic">
-        <span class="theme-swatch" data-theme-swatch="arctic"></span>
-        <span data-i18n="theme.arctic">Arctique</span>
-      </button>
-      <button class="theme-option" type="button" data-theme="indigo">
-        <span class="theme-swatch" data-theme-swatch="indigo"></span>
-        <span data-i18n="theme.indigo">Indigo Minuit</span>
-      </button>
-    </div>
-  </div>
-
   <div class="lang-switcher lang-switcher-fixed">
     <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
     <div id="lang-menu" class="lang-menu" hidden>
@@ -489,6 +441,11 @@
           <span class="profile-menu-label" data-i18n="profile.unitsRow">Unités</span>
           <span class="profile-menu-chevron">›</span>
         </button>
+        <button id="profile-themes-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon">🎨</span>
+          <span class="profile-menu-label" data-i18n="profile.themesRow">Thèmes</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
         <button id="profile-backup-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon">💾</span>
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
@@ -586,6 +543,66 @@
           <button id="unit-distance-km-btn" class="units-toggle-btn" type="button" data-i18n="units.km">Kilomètres</button>
           <button id="unit-distance-mi-btn" class="units-toggle-btn" type="button" data-i18n="units.miles">Miles</button>
         </div>
+      </div>
+    </section>
+
+    <section id="themes-view" hidden>
+      <div class="subpage-header">
+        <button id="themes-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.themesRow">Thèmes</h1>
+      </div>
+
+      <div class="profile-menu">
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="classic">
+          <span class="theme-swatch" data-theme-swatch="classic"></span>
+          <span class="profile-menu-label" data-i18n="theme.classic">Classique</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="ocean">
+          <span class="theme-swatch" data-theme-swatch="ocean"></span>
+          <span class="profile-menu-label" data-i18n="theme.ocean">Océan</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="emerald">
+          <span class="theme-swatch" data-theme-swatch="emerald"></span>
+          <span class="profile-menu-label" data-i18n="theme.emerald">Émeraude</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="violet">
+          <span class="theme-swatch" data-theme-swatch="violet"></span>
+          <span class="profile-menu-label" data-i18n="theme.violet">Violet</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="gold">
+          <span class="theme-swatch" data-theme-swatch="gold"></span>
+          <span class="profile-menu-label" data-i18n="theme.gold">Or Royal</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="pink">
+          <span class="theme-swatch" data-theme-swatch="pink"></span>
+          <span class="profile-menu-label" data-i18n="theme.pink">Rose Cyber</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="charcoal">
+          <span class="theme-swatch" data-theme-swatch="charcoal"></span>
+          <span class="profile-menu-label" data-i18n="theme.charcoal">Charbon</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="sunset">
+          <span class="theme-swatch" data-theme-swatch="sunset"></span>
+          <span class="profile-menu-label" data-i18n="theme.sunset">Coucher de Soleil</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="arctic">
+          <span class="theme-swatch" data-theme-swatch="arctic"></span>
+          <span class="profile-menu-label" data-i18n="theme.arctic">Arctique</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row theme-row" type="button" data-theme-id="indigo">
+          <span class="theme-swatch" data-theme-swatch="indigo"></span>
+          <span class="profile-menu-label" data-i18n="theme.indigo">Indigo Minuit</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
       </div>
     </section>
 

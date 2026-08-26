@@ -14,11 +14,12 @@ function applyTheme(theme) {
   }
 }
 
-function updateThemeButton() {
-  const swatch = themeBtn.querySelector(".theme-swatch");
-  if (swatch) swatch.setAttribute("data-theme-swatch", getTheme());
-  document.querySelectorAll(".theme-option").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.theme === getTheme());
+function updateThemeRows() {
+  document.querySelectorAll(".theme-row").forEach((btn) => {
+    const active = btn.dataset.themeId === getTheme();
+    btn.classList.toggle("active", active);
+    const check = btn.querySelector(".theme-row-check");
+    if (check) check.textContent = active ? "✓" : "";
   });
 }
 
@@ -26,34 +27,37 @@ function setTheme(theme) {
   if (!THEMES.includes(theme)) return;
   localStorage.setItem(THEME_STORAGE_KEY, theme);
   applyTheme(theme);
-  updateThemeButton();
+  updateThemeRows();
 }
 window.setTheme = setTheme;
 
-const themeBtn = document.getElementById("theme-btn");
-const themeMenu = document.getElementById("theme-menu");
+// ---- Preferences UI (Profil > Thèmes) ----
+const profileThemesRow = document.getElementById("profile-themes-row");
+const profileViewForThemes = document.getElementById("profile-view");
+const themesViewEl = document.getElementById("themes-view");
+const themesBackBtn = document.getElementById("themes-back-btn");
 
-themeBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  themeMenu.hidden = !themeMenu.hidden;
+profileThemesRow.addEventListener("click", () => {
+  profileViewForThemes.hidden = true;
+  themesViewEl.hidden = false;
 });
 
-themeMenu.querySelectorAll(".theme-option").forEach((btn) => {
+themesBackBtn.addEventListener("click", () => {
+  themesViewEl.hidden = true;
+  profileViewForThemes.hidden = false;
+});
+
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    setTheme(btn.dataset.theme);
-    themeMenu.hidden = true;
+    themesViewEl.hidden = true;
   });
 });
 
-document.addEventListener("click", (e) => {
-  if (!themeMenu.hidden && !themeMenu.contains(e.target) && e.target !== themeBtn) {
-    themeMenu.hidden = true;
-  }
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !themeMenu.hidden) themeMenu.hidden = true;
+document.querySelectorAll(".theme-row").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setTheme(btn.dataset.themeId);
+  });
 });
 
 applyTheme(getTheme());
-updateThemeButton();
+updateThemeRows();
