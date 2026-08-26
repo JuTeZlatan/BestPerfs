@@ -16,11 +16,19 @@ import {
 // sports.js/index.html) - only these are comparable across users. ----
 const LEADERBOARD_SPORTS = ["course", "natation", "triathlon"];
 const PRESET_KEYS = {
-  course: ["5", "10", "half", "marathon"],
+  course: ["0.8", "1.5", "3", "5", "10", "half", "marathon"],
   natation: ["50", "100", "200", "400", "800", "1500"],
   triathlon: ["XS", "S", "M", "L", "XL"],
 };
-const RUNNING_DISTANCE_TO_KEY = { "5": "5", "10": "10", "21.0975": "half", "42.195": "marathon" };
+const RUNNING_DISTANCE_TO_KEY = {
+  "0.8": "0.8",
+  "1.5": "1.5",
+  "3": "3",
+  "5": "5",
+  "10": "10",
+  "21.0975": "half",
+  "42.195": "marathon",
+};
 
 function perfSeconds(perf) {
   return (perf.hours ?? 0) * 3600 + (perf.minutes ?? 0) * 60 + (perf.seconds ?? 0) + (perf.hundredths ?? 0) / 100;
@@ -89,7 +97,7 @@ const classementSportLabel = document.getElementById("classement-sport-select-la
 const classementSportMenu = document.getElementById("classement-sport-menu");
 const classementListEl = document.getElementById("classement-list");
 const classementEmptyEl = document.getElementById("classement-empty-state");
-const classementPresetRows = {
+const classementPresetSelects = {
   course: document.getElementById("classement-preset-course"),
   natation: document.getElementById("classement-preset-natation"),
   triathlon: document.getElementById("classement-preset-triathlon"),
@@ -112,9 +120,9 @@ function selectClassementSport(sport) {
   classementSportMenu.querySelectorAll(".sport-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.sport === sport);
   });
-  Object.keys(classementPresetRows).forEach((key) => {
-    classementPresetRows[key].hidden = key !== sport;
-    classementPresetRows[key].querySelectorAll(".classement-preset-btn").forEach((btn) => btn.classList.remove("active"));
+  Object.keys(classementPresetSelects).forEach((key) => {
+    classementPresetSelects[key].hidden = key !== sport;
+    classementPresetSelects[key].value = "";
   });
   updateClassementSportLabel();
   renderClassementList();
@@ -138,14 +146,10 @@ document.addEventListener("click", (e) => {
   }
 });
 
-Object.values(classementPresetRows).forEach((row) => {
-  row.querySelectorAll(".classement-preset-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      row.querySelectorAll(".classement-preset-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      classementPreset = btn.dataset.preset;
-      renderClassementList();
-    });
+Object.values(classementPresetSelects).forEach((select) => {
+  select.addEventListener("change", () => {
+    classementPreset = select.value || null;
+    renderClassementList();
   });
 });
 
