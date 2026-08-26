@@ -15,6 +15,8 @@ function applyTheme(theme) {
 }
 
 function updateThemeButton() {
+  const swatch = themeBtn.querySelector(".theme-swatch");
+  if (swatch) swatch.setAttribute("data-theme-swatch", getTheme());
   document.querySelectorAll(".theme-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.theme === getTheme());
   });

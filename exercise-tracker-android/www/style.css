@@ -208,6 +208,11 @@ body::before {
   top: 16px;
   left: 16px;
   z-index: 600;
+  display: none;
+}
+
+body:has(#app-root:not([hidden])) .theme-switcher.theme-switcher-fixed {
+  display: block;
 }
 
 .bottom-nav {
