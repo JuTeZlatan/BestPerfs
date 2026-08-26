@@ -12,6 +12,19 @@ function applyTheme(theme) {
   } else {
     document.documentElement.setAttribute("data-theme", theme);
   }
+  syncNativeStatusBar();
+}
+
+// The Android status bar is native chrome, not CSS - it has to be told
+// about theme changes explicitly, otherwise it stays stuck on
+// whatever color it last had (Capacitor's default indigo blue, until
+// this was wired up).
+function syncNativeStatusBar() {
+  const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
+  if (!isNativePlatform || !Capacitor.Plugins.StatusBar) return;
+  const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  Capacitor.Plugins.StatusBar.setBackgroundColor({ color: bg }).catch(() => {});
+  Capacitor.Plugins.StatusBar.setStyle({ style: "DARK" }).catch(() => {});
 }
 
 function updateThemeRows() {
