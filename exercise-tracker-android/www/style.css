@@ -200,6 +200,18 @@ body {
   z-index: 600;
 }
 
+.classement-switcher.classement-switcher-fixed {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 600;
+  display: none;
+}
+
+body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed {
+  display: block;
+}
+
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -330,6 +342,28 @@ body {
 }
 
 .lang-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--float-shadow), var(--glow-soft);
+}
+
+.classement-icon-btn {
+  width: 36px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 10px;
+  border: none;
+  background: var(--card-gradient), var(--card-glass);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--float-shadow);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.classement-icon-btn:hover {
   transform: translateY(-1px);
   box-shadow: var(--float-shadow), var(--glow-soft);
 }

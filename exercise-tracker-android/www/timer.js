@@ -12,6 +12,7 @@ function showView(name) {
   });
   navTabs.forEach((btn) => btn.classList.toggle("active", btn.dataset.view === name));
 }
+window.showView = showView;
 
 navTabs.forEach((btn) => {
   btn.addEventListener("click", () => showView(btn.dataset.view));

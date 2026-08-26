@@ -203,10 +203,9 @@ async function renderClassementList() {
   });
 }
 
-document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    if (btn.dataset.view === "classement") selectClassementSport(classementSport);
-  });
+document.getElementById("classement-icon-btn").addEventListener("click", () => {
+  window.showView("classement");
+  selectClassementSport(classementSport);
 });
 
 document.addEventListener("languagechange", () => {
