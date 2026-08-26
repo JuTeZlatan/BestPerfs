@@ -24,6 +24,33 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+:root[data-theme="carbon"] {
+  --bg: #0a0a0a;
+  --card: #161616;
+  --card-rgb: 22, 22, 22;
+  --card-border: #3a3a3a;
+  --field: #111111;
+  --text: #f5f0ee;
+  --text-dim: #a89a96;
+  --accent: #ff2020;
+  --accent-2: #ff5c3d;
+  --accent-rgb: 255, 32, 32;
+  --on-accent: #ffffff;
+}
+
+:root[data-theme="carbon"] body {
+  background:
+    radial-gradient(circle at 85% 0%, rgba(var(--accent-rgb), 0.32) 0%, transparent 45%),
+    radial-gradient(circle at 10% 100%, rgba(var(--accent-rgb), 0.2) 0%, transparent 50%),
+    linear-gradient(27deg, rgba(0, 0, 0, 0.85) 4px, transparent 4px) 0 4px,
+    linear-gradient(207deg, rgba(0, 0, 0, 0.85) 4px, transparent 4px) 8px 0,
+    linear-gradient(27deg, rgba(255, 255, 255, 0.14) 4px, transparent 4px) 0 8px,
+    linear-gradient(207deg, rgba(255, 255, 255, 0.14) 4px, transparent 4px) 8px 4px,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 8px, transparent 8px),
+    var(--bg);
+  background-size: 100% 100%, 100% 100%, 16px 16px, 16px 16px, 16px 16px, 16px 16px, 16px 16px, 100% 100%;
+}
+
 :root[data-theme="ocean"] {
   --bg: #0d1620;
   --card: #17222f;
@@ -419,6 +446,7 @@ body::before {
 }
 
 [data-theme-swatch="classic"] { background: #ec2b1e; }
+[data-theme-swatch="carbon"] { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.55) 0 2px, transparent 2px 4px), #ff2020; }
 [data-theme-swatch="ocean"] { background: #1e8fec; }
 [data-theme-swatch="emerald"] { background: #1eec7a; }
 [data-theme-swatch="violet"] { background: #a12bec; }

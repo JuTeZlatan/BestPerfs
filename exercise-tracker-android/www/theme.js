@@ -1,5 +1,5 @@
 const THEME_STORAGE_KEY = "exercise-tracker-theme";
-const THEMES = ["classic", "ocean", "emerald", "violet", "gold", "pink", "charcoal", "sunset", "arctic", "indigo"];
+const THEMES = ["classic", "carbon", "ocean", "emerald", "violet", "gold", "pink", "charcoal", "sunset", "arctic", "indigo"];
 
 function getTheme() {
   const saved = localStorage.getItem(THEME_STORAGE_KEY);
