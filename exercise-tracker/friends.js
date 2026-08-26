@@ -19,9 +19,11 @@ const friendsViewEl = document.getElementById("friends-view");
 const friendsBackBtn = document.getElementById("friends-back-btn");
 
 const friendsAddToggleBtn = document.getElementById("friends-add-toggle");
+const friendsAddModal = document.getElementById("friends-add-modal");
 const friendsAddForm = document.getElementById("friends-add-form");
 const friendsAddInput = document.getElementById("friends-add-input");
 const friendsAddErrorEl = document.getElementById("friends-add-error");
+const friendsAddCancelBtn = document.getElementById("friends-add-cancel-btn");
 
 const friendsIncomingList = document.getElementById("friends-incoming-list");
 const friendsIncomingEmpty = document.getElementById("friends-incoming-empty");
@@ -84,17 +86,19 @@ function showAddError(key) {
 }
 
 function closeAddForm() {
-  friendsAddForm.hidden = true;
+  friendsAddModal.hidden = true;
   friendsAddForm.reset();
   clearAddError();
 }
 
 friendsAddToggleBtn.addEventListener("click", () => {
-  friendsAddForm.hidden = !friendsAddForm.hidden;
-  if (!friendsAddForm.hidden) {
-    clearAddError();
-    friendsAddInput.focus();
-  }
+  friendsAddModal.hidden = false;
+  clearAddError();
+  friendsAddInput.focus();
+});
+
+friendsAddCancelBtn.addEventListener("click", () => {
+  closeAddForm();
 });
 
 profileFriendsRow.addEventListener("click", () => {
