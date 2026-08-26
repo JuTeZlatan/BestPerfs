@@ -16,6 +16,23 @@ let exercises = loadExercises();
 let sortOrder = null; // null | "asc" | "desc"
 let pendingConfirmAction = null;
 
+// ---- Row "..." menu (edit / delete), shared by script.js and sports.js ----
+function closeAllRowMenus() {
+  document.querySelectorAll(".row-menu-dropdown").forEach((dropdown) => {
+    dropdown.hidden = true;
+  });
+}
+
+function toggleRowMenu(dropdown) {
+  const wasHidden = dropdown.hidden;
+  closeAllRowMenus();
+  dropdown.hidden = !wasHidden;
+}
+
+document.addEventListener("click", () => {
+  closeAllRowMenus();
+});
+
 function loadExercises() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -93,9 +110,18 @@ function render() {
       weightInput.readOnly = true;
     });
 
-    const editBtn = node.querySelector(".edit-btn");
-    editBtn.title = t("edit.title");
-    editBtn.addEventListener("click", () => {
+    const rowMenuBtn = node.querySelector(".row-menu-btn");
+    const rowMenuDropdown = node.querySelector(".row-menu-dropdown");
+    rowMenuBtn.title = t("rowMenu.title");
+    rowMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleRowMenu(rowMenuDropdown);
+    });
+
+    const rowMenuEditBtn = node.querySelector(".row-menu-edit");
+    rowMenuEditBtn.textContent = t("edit.title");
+    rowMenuEditBtn.addEventListener("click", () => {
+      closeAllRowMenus();
       nameInput.readOnly = false;
       repsInput.readOnly = false;
       weightInput.readOnly = false;
@@ -103,9 +129,10 @@ function render() {
       nameInput.select();
     });
 
-    const deleteBtn = node.querySelector(".delete-btn");
-    deleteBtn.title = t("delete.title");
-    deleteBtn.addEventListener("click", () => {
+    const rowMenuDeleteBtn = node.querySelector(".row-menu-delete");
+    rowMenuDeleteBtn.textContent = t("delete.title");
+    rowMenuDeleteBtn.addEventListener("click", () => {
+      closeAllRowMenus();
       openConfirmModal(t("modal.deleteExercise"), () => deleteExercise(exercise.id));
     });
 

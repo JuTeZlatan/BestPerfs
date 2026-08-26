@@ -326,9 +326,10 @@ function renderSportList() {
         renderSportList();
       });
 
-      const editBtn = node.querySelector(".edit-btn");
-      editBtn.title = t("edit.title");
-      editBtn.addEventListener("click", () => {
+      const rowMenuEditBtn = node.querySelector(".row-menu-edit");
+      rowMenuEditBtn.textContent = t("edit.title");
+      rowMenuEditBtn.addEventListener("click", () => {
+        closeAllRowMenus();
         textInput.readOnly = false;
         textInput.focus();
         textInput.select();
@@ -363,9 +364,18 @@ function renderSportList() {
       timeDisplay.innerHTML = timeChipHTML(perf, currentSport);
     }
 
-    const deleteBtn = node.querySelector(".delete-btn");
-    deleteBtn.title = t("delete.title");
-    deleteBtn.addEventListener("click", () => {
+    const rowMenuBtn = node.querySelector(".row-menu-btn");
+    const rowMenuDropdown = node.querySelector(".row-menu-dropdown");
+    rowMenuBtn.title = t("rowMenu.title");
+    rowMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleRowMenu(rowMenuDropdown);
+    });
+
+    const rowMenuDeleteBtn = node.querySelector(".row-menu-delete");
+    rowMenuDeleteBtn.textContent = t("delete.title");
+    rowMenuDeleteBtn.addEventListener("click", () => {
+      closeAllRowMenus();
       window.openConfirmModal(t("modal.deletePerf"), () => {
         sportPerfs[currentSport] = sportPerfs[currentSport].filter((p) => p.id !== perf.id);
         saveSportPerfs();

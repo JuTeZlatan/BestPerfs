@@ -589,7 +589,6 @@
   <template id="exercise-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <button class="edit-btn" title="Modifier le nom">✏️</button>
         <input type="text" class="exercise-name" maxlength="40" placeholder="Nom de l'exercice" readonly>
         <div class="reps-kg-stack">
           <label class="inline-field">
@@ -602,7 +601,13 @@
           </label>
         </div>
       </div>
-      <button class="delete-btn" title="Supprimer">✕</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
     </div>
   </template>
 
@@ -643,52 +648,72 @@
   <template id="swim-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="30" placeholder="Style de nage" readonly>
         <span class="perf-best-badge" hidden>🏆</span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
-      <button class="delete-btn" title="Supprimer">✕</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
     </div>
   </template>
 
   <template id="cycling-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden>🏆</span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
-      <button class="delete-btn" title="Supprimer">✕</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
     </div>
   </template>
 
   <template id="running-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
         <span class="perf-best-badge" hidden>🏆</span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
-      <button class="delete-btn" title="Supprimer">✕</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
     </div>
   </template>
 
   <template id="triathlon-perf-template">
     <div class="exercise-row">
       <div class="exercise-card">
-        <button class="edit-btn" title="Modifier">✏️</button>
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden>🏆</span>
         <span class="perf-size-display"></span>
         <span class="perf-time-display perf-time-tappable"></span>
       </div>
-      <button class="delete-btn" title="Supprimer">✕</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
     </div>
   </template>
 
