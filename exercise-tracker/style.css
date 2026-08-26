@@ -15,40 +15,14 @@
   --danger: #ffa04d;
   --success: #4caf50;
   --card-glass: rgba(var(--card-rgb), 0.6);
-  --card-gradient: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.1) 60%);
+  --card-gradient: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.12) 55%), radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.18), transparent 55%);
   --accent-gradient: linear-gradient(135deg, var(--accent-2), var(--accent) 70%);
   --glow-soft: 0 0 14px rgba(var(--accent-rgb), 0.3);
   --glow-strong: 0 0 24px rgba(var(--accent-rgb), 0.55);
-  --cut: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
-  --cut-sm: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  --float-shadow: 0 10px 22px rgba(0, 0, 0, 0.4), 0 3px 8px rgba(0, 0, 0, 0.28);
+  --cut: 20px;
+  --cut-sm: 14px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-:root[data-theme="carbon"] {
-  --bg: #0a0a0a;
-  --card: #161616;
-  --card-rgb: 22, 22, 22;
-  --card-border: #3a3a3a;
-  --field: #111111;
-  --text: #f5f0ee;
-  --text-dim: #a89a96;
-  --accent: #ff2020;
-  --accent-2: #ff5c3d;
-  --accent-rgb: 255, 32, 32;
-  --on-accent: #ffffff;
-}
-
-:root[data-theme="carbon"] body {
-  background:
-    radial-gradient(circle at 85% 0%, rgba(var(--accent-rgb), 0.32) 0%, transparent 45%),
-    radial-gradient(circle at 10% 100%, rgba(var(--accent-rgb), 0.2) 0%, transparent 50%),
-    linear-gradient(27deg, rgba(0, 0, 0, 0.85) 4px, transparent 4px) 0 4px,
-    linear-gradient(207deg, rgba(0, 0, 0, 0.85) 4px, transparent 4px) 8px 0,
-    linear-gradient(27deg, rgba(255, 255, 255, 0.14) 4px, transparent 4px) 0 8px,
-    linear-gradient(207deg, rgba(255, 255, 255, 0.14) 4px, transparent 4px) 8px 4px,
-    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 8px, transparent 8px),
-    var(--bg);
-  background-size: 100% 100%, 100% 100%, 16px 16px, 16px 16px, 16px 16px, 16px 16px, 16px 16px, 100% 100%;
 }
 
 :root[data-theme="ocean"] {
@@ -269,7 +243,7 @@ body::before {
   color: var(--text-dim);
   cursor: pointer;
   padding: 4px 4px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-family: "Oswald", sans-serif;
   transition: color 0.15s ease;
 }
@@ -350,7 +324,7 @@ body::before {
   align-items: center;
   justify-content: center;
   padding: 0;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
@@ -381,7 +355,7 @@ body::before {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 6px;
   box-shadow: var(--glow-strong), 0 8px 24px rgba(0, 0, 0, 0.5);
 }
@@ -395,7 +369,7 @@ body::before {
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   background: none;
   color: var(--text);
@@ -446,7 +420,6 @@ body::before {
 }
 
 [data-theme-swatch="classic"] { background: #ec2b1e; }
-[data-theme-swatch="carbon"] { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.55) 0 2px, transparent 2px 4px), #ff2020; }
 [data-theme-swatch="ocean"] { background: #1e8fec; }
 [data-theme-swatch="emerald"] { background: #1eec7a; }
 [data-theme-swatch="violet"] { background: #a12bec; }
@@ -470,11 +443,12 @@ body::before {
   gap: 10px;
   width: 100%;
   padding: 12px 14px;
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
   border: 1px solid var(--card-border);
   border-left: 3px solid var(--accent);
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
+  box-shadow: var(--float-shadow);
   color: var(--text);
   font-family: inherit;
   font-size: 0.85rem;
@@ -487,8 +461,8 @@ body::before {
 
 .profile-menu-row:hover {
   border-color: var(--accent);
-  transform: translateY(-1px);
-  box-shadow: var(--glow-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--float-shadow), var(--glow-soft);
 }
 
 .profile-menu-row[hidden] {
@@ -528,7 +502,7 @@ body::before {
 .auth-tab {
   flex: 1;
   padding: 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text-dim);
@@ -583,7 +557,7 @@ body::before {
 .auth-error {
   margin: 14px 0 0;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--danger);
   background: rgba(255, 145, 66, 0.14);
   color: var(--danger);
@@ -593,7 +567,7 @@ body::before {
 .auth-success {
   margin: 14px 0 0;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--success);
   background: rgba(76, 175, 80, 0.14);
   color: var(--success);
@@ -721,7 +695,7 @@ body::before {
 .account-field-value {
   display: block;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   background: var(--field);
   border: 1px solid var(--card-border);
   color: var(--text-dim);
@@ -757,7 +731,7 @@ body::before {
 .units-toggle-btn {
   flex: 1;
   padding: 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text-dim);
@@ -809,7 +783,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text);
@@ -829,9 +803,9 @@ header {
   margin-bottom: 18px;
   padding: 14px 16px;
   border: 1px solid rgba(var(--accent-rgb), 0.55);
-  clip-path: var(--cut);
+  border-radius: var(--cut);
   background: var(--card-gradient), var(--field);
-  box-shadow: var(--glow-soft), inset 0 0 30px rgba(var(--accent-rgb), 0.06);
+  box-shadow: var(--float-shadow), var(--glow-soft), inset 0 0 30px rgba(var(--accent-rgb), 0.06);
   backdrop-filter: blur(6px);
   overflow: hidden;
 }
@@ -887,7 +861,7 @@ h1 {
   flex: 1;
   min-width: 140px;
   padding: 12px 14px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text);
@@ -914,7 +888,7 @@ h1 {
 
 .add-form button {
   padding: 12px 20px;
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
   border: none;
   background: var(--accent-gradient);
   color: var(--on-accent);
@@ -923,6 +897,7 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
+  box-shadow: var(--float-shadow);
   transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
@@ -953,7 +928,7 @@ h1 {
 
 .sport-sort-select {
   padding: 6px 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text);
@@ -970,7 +945,7 @@ h1 {
 
 .sort-btn {
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text-dim);
@@ -1000,10 +975,11 @@ h1 {
   justify-content: space-between;
   gap: 8px;
   padding: 11px 14px;
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
   border: 1px solid var(--card-border);
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
+  box-shadow: var(--float-shadow);
   color: var(--text);
   font-family: "Oswald", sans-serif;
   font-size: 0.9rem;
@@ -1036,7 +1012,7 @@ h1 {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 6px;
   box-shadow: var(--glow-strong), 0 8px 24px rgba(0, 0, 0, 0.5);
 }
@@ -1047,7 +1023,7 @@ h1 {
 
 .sport-option {
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   background: none;
   color: var(--text);
@@ -1085,7 +1061,7 @@ h1 {
   flex: 1;
   min-width: 0;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text);
@@ -1100,7 +1076,7 @@ h1 {
 .triathlon-size-select {
   flex: 0 0 68px;
   padding: 10px 4px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--card);
   color: var(--text);
@@ -1114,7 +1090,8 @@ h1 {
   backdrop-filter: blur(6px);
   border: 1px solid var(--card-border);
   border-left: 3px solid var(--accent);
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
+  box-shadow: var(--float-shadow);
   padding: 8px 10px;
 }
 
@@ -1139,7 +1116,7 @@ h1 {
   flex: 0 0 50px;
   min-width: 0;
   padding: 8px 6px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
@@ -1156,7 +1133,7 @@ h1 {
   margin-left: auto;
   flex-shrink: 0;
   padding: 8px 14px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   background: var(--accent-gradient);
   color: var(--on-accent);
@@ -1182,7 +1159,7 @@ h1 {
   z-index: 200;
   background: var(--card);
   border: 1px solid var(--accent);
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 8px 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -1228,7 +1205,8 @@ h1 {
   backdrop-filter: blur(6px);
   border: 1px solid var(--card-border);
   border-left: 3px solid var(--accent);
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
+  box-shadow: var(--float-shadow);
   padding: 5px 8px;
   display: flex;
   flex-wrap: wrap;
@@ -1238,7 +1216,7 @@ h1 {
 }
 
 .exercise-card:hover {
-  box-shadow: var(--glow-soft);
+  box-shadow: var(--float-shadow), var(--glow-soft);
 }
 
 .exercise-name {
@@ -1248,7 +1226,7 @@ h1 {
 
 .friends-tab-bar {
   display: flex;
-  border-radius: 4px;
+  border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--card-border);
   margin-bottom: 14px;
@@ -1314,18 +1292,19 @@ h1 {
   align-items: center;
   justify-content: center;
   border: none;
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
   background: var(--accent-gradient);
   color: var(--on-accent);
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
+  box-shadow: var(--float-shadow);
   transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .friends-add-toggle-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--glow-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--float-shadow), var(--glow-soft);
 }
 
 .friend-row {
@@ -1336,7 +1315,8 @@ h1 {
   backdrop-filter: blur(6px);
   border: 1px solid var(--card-border);
   border-left: 3px solid var(--accent);
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
+  box-shadow: var(--float-shadow);
   padding: 8px 10px;
 }
 
@@ -1369,7 +1349,7 @@ h1 {
 .friend-remove-btn {
   flex-shrink: 0;
   padding: 6px 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
@@ -1403,7 +1383,7 @@ h1 {
   color: var(--text);
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 3px 5px;
   margin: -3px -5px;
   outline: none;
@@ -1431,7 +1411,7 @@ h1 {
   font-size: 0.85rem;
   line-height: 1;
   padding: 3px;
-  border-radius: 4px;
+  border-radius: 10px;
   flex-shrink: 0;
 }
 
@@ -1443,7 +1423,7 @@ h1 {
   width: 34px;
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-radius: 4px;
+  border-radius: 10px;
   color: var(--text-dim);
   cursor: pointer;
   font-size: 0.85rem;
@@ -1463,7 +1443,7 @@ h1 {
   justify-content: center;
   background: var(--card);
   border: 1px solid var(--card-border);
-  border-radius: 4px;
+  border-radius: 10px;
   color: var(--text-dim);
   cursor: pointer;
   font-size: 1.05rem;
@@ -1493,14 +1473,14 @@ h1 {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 6px;
   box-shadow: var(--glow-strong), 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .row-menu-dropdown button {
   padding: 8px 10px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: none;
   background: none;
   color: var(--text);
@@ -1522,19 +1502,20 @@ h1 {
   flex-shrink: 0;
   margin-left: auto;
   border: none;
-  clip-path: var(--cut-sm);
+  border-radius: var(--cut-sm);
   background: var(--accent-gradient);
   color: var(--on-accent);
   font-size: 0.9rem;
   line-height: 1;
   padding: 8px 14px;
   cursor: pointer;
+  box-shadow: var(--float-shadow);
   transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .play-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--glow-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--float-shadow), var(--glow-strong);
 }
 
 .edit-btn:hover {
@@ -1566,6 +1547,7 @@ h1 {
   border-radius: 12px;
   background: linear-gradient(120deg, rgba(var(--accent-rgb), 0.22), rgba(var(--accent-rgb), 0.1));
   border: 1px solid rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .perf-distance-display[hidden] {
@@ -1638,6 +1620,7 @@ h1 {
   border-radius: 12px;
   background: linear-gradient(120deg, rgba(var(--accent-rgb), 0.22), rgba(var(--accent-rgb), 0.1));
   border: 1px solid rgba(var(--accent-rgb), 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .preset-time-display .inline-field {
@@ -1690,7 +1673,7 @@ h1 {
 .inline-field input {
   width: 46px;
   padding: 3px 5px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
@@ -1732,10 +1715,10 @@ input[type="number"]::-webkit-inner-spin-button {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
   border: 1px solid var(--card-border);
-  clip-path: var(--cut);
+  border-radius: var(--cut);
   padding: 14px;
   text-align: center;
-  box-shadow: var(--glow-soft);
+  box-shadow: var(--float-shadow), var(--glow-soft);
 }
 
 .timer-display {
@@ -1758,7 +1741,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .timer-btn {
   padding: 9px 16px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
@@ -1792,7 +1775,7 @@ input[type="number"]::-webkit-inner-spin-button {
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 4px;
+  border-radius: 10px;
   background: var(--field);
   border: 1px solid var(--card-border);
   border-left: 4px solid var(--accent);
@@ -1840,12 +1823,12 @@ input[type="number"]::-webkit-inner-spin-button {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
-  clip-path: var(--cut);
+  border-radius: var(--cut);
   padding: 24px;
   max-width: 320px;
   width: 100%;
   text-align: center;
-  box-shadow: var(--glow-strong);
+  box-shadow: var(--float-shadow), var(--glow-strong);
 }
 
 .modal-message {
@@ -1862,7 +1845,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .modal-btn {
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
@@ -1884,7 +1867,7 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 100%;
   margin-bottom: 16px;
   padding: 12px 14px;
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid var(--card-border);
   background: var(--field);
   color: var(--text);
