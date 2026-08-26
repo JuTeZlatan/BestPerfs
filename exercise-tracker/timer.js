@@ -2,8 +2,9 @@
 const navTabs = document.querySelectorAll(".bottom-nav-btn");
 const timerView = document.getElementById("timer-view");
 const sportsView = document.getElementById("sports-view");
+const classementView = document.getElementById("classement-view");
 const profileView = document.getElementById("profile-view");
-const NAV_VIEWS = { timer: timerView, sports: sportsView, profile: profileView };
+const NAV_VIEWS = { timer: timerView, sports: sportsView, classement: classementView, profile: profileView };
 
 function showView(name) {
   Object.keys(NAV_VIEWS).forEach((key) => {

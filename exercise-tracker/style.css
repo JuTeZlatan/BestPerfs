@@ -1328,6 +1328,46 @@ h1 {
   letter-spacing: 0.03em;
 }
 
+.classement-preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.classement-preset-row[hidden] {
+  display: none;
+}
+
+.classement-preset-btn {
+  flex: 0 0 auto;
+}
+
+.classement-rank {
+  flex-shrink: 0;
+  min-width: 32px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.classement-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.classement-row-you {
+  box-shadow: var(--float-shadow), var(--glow-soft);
+}
+
+.classement-row-you .classement-name {
+  color: var(--accent-2);
+}
+
 .friend-accept-btn,
 .friend-decline-btn,
 .friend-cancel-btn,

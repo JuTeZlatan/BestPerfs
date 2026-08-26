@@ -241,6 +241,10 @@
         <button class="bottom-nav-btn bottom-nav-center active" data-view="sports" type="button">
           <span class="bottom-nav-icon">🏅</span>
         </button>
+        <button class="bottom-nav-btn" data-view="classement" type="button">
+          <span class="bottom-nav-icon">🏆</span>
+          <span class="bottom-nav-label" data-i18n="nav.classementLabel">Classement</span>
+        </button>
         <button class="bottom-nav-btn" data-view="profile" type="button">
           <span class="bottom-nav-icon">👤</span>
           <span class="bottom-nav-label" data-i18n="nav.profileLabel">Profil</span>
@@ -418,6 +422,60 @@
 
       <p id="sport-empty-state" class="empty-state" data-i18n="sport.empty">Aucune performance pour l'instant. Ajoute-en une ci-dessous !</p>
     </section>
+
+    <section id="classement-view" hidden>
+      <header>
+        <h1 data-i18n="app.title.classement">🏆 Classement</h1>
+        <p class="subtitle" data-i18n="app.subtitle.classement">Compare tes chronos avec tes amis sur les mêmes épreuves.</p>
+      </header>
+
+      <div class="sport-dropdown">
+        <button id="classement-sport-select-btn" class="sport-select-btn" type="button">
+          <span id="classement-sport-select-label"></span>
+          <span class="dropdown-arrow">▾</span>
+        </button>
+        <div id="classement-sport-menu" class="sport-menu" hidden>
+          <button class="sport-option active" data-sport="course" data-i18n="sport.running">🏃 Course à pied</button>
+          <button class="sport-option" data-sport="natation" data-i18n="sport.swimming">🏊 Natation</button>
+          <button class="sport-option" data-sport="triathlon" data-i18n="sport.triathlon">🔱 Triathlon</button>
+        </div>
+      </div>
+
+      <div id="classement-preset-course" class="classement-preset-row">
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="5">5 km</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="10">10 km</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="half" data-i18n="sport.halfMarathon">Semi-marathon</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="marathon" data-i18n="sport.marathon">Marathon</button>
+      </div>
+      <div id="classement-preset-natation" class="classement-preset-row" hidden>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="50">50 m</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="100">100 m</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="200">200 m</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="400">400 m</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="800">800 m</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="1500">1500 m</button>
+      </div>
+      <div id="classement-preset-triathlon" class="classement-preset-row" hidden>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="XS">XS</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="S">S</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="M">M</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="L">L</button>
+        <button class="units-toggle-btn classement-preset-btn" type="button" data-preset="XL">XL</button>
+      </div>
+
+      <div id="classement-list" class="exercise-list"></div>
+      <p id="classement-empty-state" class="empty-state" data-i18n="classement.empty">Personne n'a encore de temps sur cette épreuve.</p>
+    </section>
+
+    <template id="classement-row-template">
+      <div class="exercise-row">
+        <div class="exercise-card">
+          <span class="classement-rank"></span>
+          <span class="classement-name"></span>
+          <span class="perf-time-display"><span class="chip-icon">⏱️</span><span class="chip-num classement-time"></span></span>
+        </div>
+      </div>
+    </template>
 
     <section id="profile-view" hidden>
       <header>
@@ -834,6 +892,7 @@
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="account.js"></script>
   <script type="module" src="friends.js"></script>
+  <script type="module" src="leaderboard.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {

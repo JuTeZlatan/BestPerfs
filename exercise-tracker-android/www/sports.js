@@ -222,6 +222,7 @@ function loadSportPerfs() {
 
 function saveSportPerfs() {
   localStorage.setItem(SPORTS_STORAGE_KEY, JSON.stringify(sportPerfs));
+  window.syncLeaderboardEntries && window.syncLeaderboardEntries(sportPerfs);
 }
 
 function updateSportSelectLabel() {

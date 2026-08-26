@@ -13,6 +13,7 @@
     "app-root",
     "timer-view",
     "sports-view",
+    "classement-view",
     "profile-view",
     "account-view",
     "friends-view",
