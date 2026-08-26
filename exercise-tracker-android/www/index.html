@@ -4,8 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Workout Tracker</title>
+<script>
+  (function () {
+    try {
+      var theme = localStorage.getItem("exercise-tracker-theme");
+      if (theme && theme !== "classic") document.documentElement.setAttribute("data-theme", theme);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ec2b1e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Exercices">
 </head>
 <body>
   <div id="brand-splash" class="brand-splash">
@@ -68,6 +83,52 @@
       }, 2000);
     })();
   </script>
+
+  <div class="theme-switcher theme-switcher-fixed">
+    <button id="theme-btn" class="theme-btn" type="button" data-i18n-title="theme.title">🎨</button>
+    <div id="theme-menu" class="theme-menu" hidden>
+      <button class="theme-option" type="button" data-theme="classic">
+        <span class="theme-swatch" data-theme-swatch="classic"></span>
+        <span data-i18n="theme.classic">Classique</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="ocean">
+        <span class="theme-swatch" data-theme-swatch="ocean"></span>
+        <span data-i18n="theme.ocean">Océan</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="emerald">
+        <span class="theme-swatch" data-theme-swatch="emerald"></span>
+        <span data-i18n="theme.emerald">Émeraude</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="violet">
+        <span class="theme-swatch" data-theme-swatch="violet"></span>
+        <span data-i18n="theme.violet">Violet</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="gold">
+        <span class="theme-swatch" data-theme-swatch="gold"></span>
+        <span data-i18n="theme.gold">Or Royal</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="pink">
+        <span class="theme-swatch" data-theme-swatch="pink"></span>
+        <span data-i18n="theme.pink">Rose Cyber</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="charcoal">
+        <span class="theme-swatch" data-theme-swatch="charcoal"></span>
+        <span data-i18n="theme.charcoal">Charbon</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="sunset">
+        <span class="theme-swatch" data-theme-swatch="sunset"></span>
+        <span data-i18n="theme.sunset">Coucher de Soleil</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="arctic">
+        <span class="theme-swatch" data-theme-swatch="arctic"></span>
+        <span data-i18n="theme.arctic">Arctique</span>
+      </button>
+      <button class="theme-option" type="button" data-theme="indigo">
+        <span class="theme-swatch" data-theme-swatch="indigo"></span>
+        <span data-i18n="theme.indigo">Indigo Minuit</span>
+      </button>
+    </div>
+  </div>
 
   <div class="lang-switcher lang-switcher-fixed">
     <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
@@ -742,6 +803,7 @@
     </div>
   </template>
 
+  <script src="theme.js"></script>
   <script src="i18n.js"></script>
   <script src="units.js"></script>
   <script src="script.js"></script>
@@ -753,5 +815,12 @@
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="account.js"></script>
   <script type="module" src="friends.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
