@@ -569,7 +569,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
 .auth-btn-row {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 22px;
 }
 
 .auth-btn-row button {
