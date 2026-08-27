@@ -1076,7 +1076,7 @@ h1 {
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
-.add-form button {
+.add-form button[type="submit"] {
   padding: 12px 20px;
   border-radius: var(--cut-sm);
   border: none;
@@ -1091,11 +1091,11 @@ h1 {
   transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
 
-.add-form button:hover {
+.add-form button[type="submit"]:hover {
   transform: translateY(-1px);
   box-shadow: var(--glow-strong);
 }
-.add-form button:active { transform: translateY(0); }
+.add-form button[type="submit"]:active { transform: translateY(0); }
 
 
 .sort-bar {
