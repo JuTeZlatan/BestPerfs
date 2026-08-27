@@ -90,16 +90,52 @@ function distanceFromDisplay(value, sport) {
 // Preset options carry the canonical (km or m) value directly since they're
 // fixed real-world distances (e.g. a marathon is always 42.195km); only the
 // "manual" option's typed value needs converting from the display unit.
-function resolveSelectDistance(selectEl, manualInputEl, sport) {
-  if (selectEl.value === "manual") {
+function resolveSelectDistance(dropdownEl, manualInputEl, sport) {
+  const value = dropdownEl.dataset.value;
+  if (value === "manual") {
     return manualInputEl.value === "" ? null : distanceFromDisplay(Number(manualInputEl.value), sport);
   }
-  return Number(selectEl.value);
+  return Number(value);
 }
 
-function bindDistanceSelect(selectEl, manualInputEl) {
-  selectEl.addEventListener("change", () => {
-    manualInputEl.hidden = selectEl.value !== "manual";
+function resetDistanceDropdown(dropdownEl) {
+  const menu = dropdownEl.querySelector(".distance-dropdown-menu");
+  const label = dropdownEl.querySelector(".distance-dropdown-label");
+  const options = menu.querySelectorAll(".sport-option");
+  const first = options[0];
+  options.forEach((o) => o.classList.toggle("active", o === first));
+  dropdownEl.dataset.value = first.dataset.value;
+  label.textContent = first.textContent;
+}
+
+function bindDistanceSelect(dropdownEl, manualInputEl) {
+  const btn = dropdownEl.querySelector(".distance-dropdown-btn");
+  const label = dropdownEl.querySelector(".distance-dropdown-label");
+  const menu = dropdownEl.querySelector(".distance-dropdown-menu");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.hidden = !menu.hidden;
+  });
+
+  menu.querySelectorAll(".sport-option").forEach((option) => {
+    option.addEventListener("click", () => {
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+      option.classList.add("active");
+      dropdownEl.dataset.value = option.dataset.value;
+      label.textContent = option.textContent;
+      menu.hidden = true;
+      manualInputEl.hidden = option.dataset.value !== "manual";
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !dropdownEl.contains(e.target)) menu.hidden = true;
+  });
+
+  document.addEventListener("languagechange", () => {
+    const active = menu.querySelector(".sport-option.active");
+    if (active) label.textContent = active.textContent;
   });
 }
 const ICON_CHRONO = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9"/><path d="M9 3h6"/><path d="M12 3v2"/></svg>';
@@ -412,6 +448,7 @@ addSwimForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addSwimForm.reset();
+  resetDistanceDropdown(swimDistanceSelect);
   swimDistanceManualInput.hidden = true;
   swimStyleInput.focus();
 });
@@ -451,6 +488,7 @@ addRunningForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addRunningForm.reset();
+  resetDistanceDropdown(runningDistanceSelect);
   runningDistanceManualInput.hidden = true;
   runningDescInput.focus();
 });

@@ -1038,6 +1038,31 @@ h1 {
   min-width: 0;
 }
 
+.add-form .distance-dropdown {
+  flex: 0 0 auto;
+  min-width: 0;
+  position: relative;
+}
+
+.distance-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.distance-dropdown-menu {
+  min-width: 140px;
+}
+
 .add-form input.preset-time-field {
   flex: 0 0 60px;
   min-width: 0;
@@ -2251,6 +2276,17 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 92px;
     padding: 8px 4px;
     font-size: 0.8rem;
+  }
+
+  .add-form .distance-dropdown {
+    flex: 0 0 92px;
+    width: 92px;
+  }
+
+  .distance-dropdown-btn {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+    justify-content: space-between;
   }
 
   .add-form:not(.auth-form) button[type="submit"] {
