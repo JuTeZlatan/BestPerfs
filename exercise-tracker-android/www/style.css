@@ -237,7 +237,7 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
   display: none;
 }
 
-body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed {
+body:has(#sports-view:not([hidden])) .classement-switcher.classement-switcher-fixed {
   display: block;
 }
 
@@ -387,6 +387,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
   box-shadow: var(--float-shadow);
+  color: var(--text);
   font-size: 1.1rem;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.15s ease;
@@ -410,6 +411,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);
   box-shadow: var(--float-shadow);
+  color: var(--text);
   font-size: 1.1rem;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.15s ease;
