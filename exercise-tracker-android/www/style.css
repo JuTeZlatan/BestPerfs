@@ -646,7 +646,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   padding: 10px;
   border-radius: 10px;
   border: 1px solid var(--card-border);
-  background: var(--card);
+  background: rgba(var(--accent-rgb), 0.14);
   color: var(--text-dim);
   font-family: "Oswald", sans-serif;
   font-size: 0.78rem;
@@ -876,7 +876,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   padding: 12px;
   border-radius: 10px;
   border: 1px solid var(--card-border);
-  background: var(--card);
+  background: rgba(var(--accent-rgb), 0.14);
   color: var(--text-dim);
   font-family: "Oswald", sans-serif;
   font-size: 0.85rem;
@@ -928,7 +928,7 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   justify-content: center;
   border-radius: 10px;
   border: none;
-  background: var(--card);
+  background: var(--card-gradient), var(--card-glass);
   color: var(--text);
   font-size: 1.1rem;
   cursor: pointer;
@@ -948,7 +948,7 @@ header {
   padding: 14px 16px;
   border: none;
   border-radius: var(--cut);
-  background: var(--card-gradient), var(--field);
+  background: var(--card-gradient), var(--card-glass);
   box-shadow: var(--float-shadow), var(--glow-soft), inset 0 0 30px rgba(var(--accent-rgb), 0.06);
   backdrop-filter: blur(6px);
   overflow: hidden;
@@ -1074,7 +1074,7 @@ h1 {
   padding: 6px 10px;
   border-radius: 10px;
   border: 1px solid var(--card-border);
-  background: var(--card);
+  background: rgba(var(--accent-rgb), 0.14);
   color: var(--text);
   font-family: "Oswald", sans-serif;
   font-size: 0.8rem;
@@ -1091,7 +1091,7 @@ h1 {
   padding: 6px 12px;
   border-radius: 10px;
   border: 1px solid var(--card-border);
-  background: var(--card);
+  background: rgba(var(--accent-rgb), 0.14);
   color: var(--text-dim);
   font-family: "Oswald", sans-serif;
   font-size: 0.8rem;
