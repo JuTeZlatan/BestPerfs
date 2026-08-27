@@ -107,7 +107,7 @@ const classementRowTemplate = document.getElementById("classement-row-template")
 
 const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon" };
 const CLASSEMENT_SPORT_ICONS = {
-  course: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="1.7"/><path d="M7 20l3-6"/><path d="M10 14l2.5-3 3 1.5 3 5.5"/><path d="M8.5 11l2-3.5 3.5-1"/><path d="M6 9l3.5-1.5"/></svg>',
+  course: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l6 6-6.5 6"/><path d="M13.5 6l6 6-6.5 6"/></svg>',
   natation: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg>',
   triathlon: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>',
 };
@@ -120,6 +120,14 @@ function updateClassementSportLabel() {
   classementSportIcon.innerHTML = CLASSEMENT_SPORT_ICONS[classementSport] || "";
 }
 
+function resetPresetDropdown(dropdown) {
+  const label = dropdown.querySelector(".classement-preset-label");
+  label.textContent = t("classement.choosePreset");
+  label.dataset.i18n = "classement.choosePreset";
+  dropdown.querySelectorAll(".sport-option").forEach((btn) => btn.classList.remove("active"));
+  dropdown.querySelector(".classement-preset-menu").hidden = true;
+}
+
 function selectClassementSport(sport) {
   classementSport = sport;
   classementPreset = null;
@@ -128,7 +136,7 @@ function selectClassementSport(sport) {
   });
   Object.keys(classementPresetSelects).forEach((key) => {
     classementPresetSelects[key].hidden = key !== sport;
-    classementPresetSelects[key].value = "";
+    resetPresetDropdown(classementPresetSelects[key]);
   });
   updateClassementSportLabel();
   renderClassementList();
@@ -150,12 +158,32 @@ document.addEventListener("click", (e) => {
   if (!classementSportMenu.hidden && !classementSportMenu.contains(e.target) && e.target !== classementSportBtn) {
     classementSportMenu.hidden = true;
   }
+  Object.values(classementPresetSelects).forEach((dropdown) => {
+    const menu = dropdown.querySelector(".classement-preset-menu");
+    if (!menu.hidden && !dropdown.contains(e.target)) menu.hidden = true;
+  });
 });
 
-Object.values(classementPresetSelects).forEach((select) => {
-  select.addEventListener("change", () => {
-    classementPreset = select.value || null;
-    renderClassementList();
+Object.values(classementPresetSelects).forEach((dropdown) => {
+  const btn = dropdown.querySelector(".classement-preset-btn");
+  const menu = dropdown.querySelector(".classement-preset-menu");
+  const label = dropdown.querySelector(".classement-preset-label");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.hidden = !menu.hidden;
+  });
+
+  menu.querySelectorAll(".sport-option").forEach((option) => {
+    option.addEventListener("click", () => {
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+      option.classList.add("active");
+      delete label.dataset.i18n;
+      label.textContent = option.textContent;
+      menu.hidden = true;
+      classementPreset = option.dataset.value || null;
+      renderClassementList();
+    });
   });
 });
 
@@ -224,6 +252,9 @@ document.getElementById("classement-icon-btn").addEventListener("click", () => {
 
 document.addEventListener("languagechange", () => {
   updateClassementSportLabel();
+  const activeDropdown = classementPresetSelects[classementSport];
+  const activeOption = activeDropdown?.querySelector(".sport-option.active");
+  if (activeOption) activeDropdown.querySelector(".classement-preset-label").textContent = activeOption.textContent;
   if (!document.getElementById("classement-view").hidden) renderClassementList();
 });
 

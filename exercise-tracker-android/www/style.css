@@ -1500,17 +1500,17 @@ h1 {
   letter-spacing: 0.03em;
 }
 
-.classement-preset-select {
-  display: block;
-  width: auto;
+.classement-preset-dropdown {
   max-width: 220px;
-  margin-bottom: 20px;
-  padding: 10px 14px;
-  font-size: 0.85rem;
 }
 
-.classement-preset-select[hidden] {
+.classement-preset-dropdown[hidden] {
   display: none;
+}
+
+.classement-preset-btn {
+  font-size: 0.85rem;
+  padding: 10px 14px;
 }
 
 .classement-rank {
