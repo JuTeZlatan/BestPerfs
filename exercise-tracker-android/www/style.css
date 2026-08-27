@@ -294,12 +294,12 @@ body:has(#app-root:not([hidden])) .classement-switcher.classement-switcher-fixed
   height: 64px;
   margin-top: -28px;
   border-radius: 50%;
-  background: var(--card);
+  background: var(--card-gradient), var(--card-glass);
   color: var(--text-dim);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   border: 3px solid var(--bg);
   position: relative;
-  transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  transition: box-shadow 0.15s ease, color 0.15s ease;
 }
 
 .bottom-nav-center::after {
