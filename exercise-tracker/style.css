@@ -1061,6 +1061,8 @@ h1 {
 
 .distance-dropdown-menu {
   min-width: 140px;
+  max-height: 190px;
+  overflow-y: auto;
 }
 
 .add-form input.preset-time-field {
@@ -1529,6 +1531,11 @@ h1 {
 
 .classement-preset-dropdown {
   max-width: 220px;
+}
+
+.classement-preset-menu {
+  max-height: 190px;
+  overflow-y: auto;
 }
 
 .classement-preset-dropdown[hidden] {
