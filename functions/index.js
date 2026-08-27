@@ -1,6 +1,6 @@
 const { onDocumentCreated, onDocumentUpdated } = require("firebase-functions/v2/firestore");
 const { initializeApp } = require("firebase-admin/app");
-const { getFirestore } = require("firebase-admin/firestore");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
 
 initializeApp();
@@ -37,7 +37,15 @@ async function sendToUser(uid, title, body) {
 exports.onFriendRequestCreated = onDocumentCreated("friendRequests/{requestId}", async (event) => {
   const data = event.data.data();
   if (data.status !== "pending") return;
-  await sendToUser(data.toUid, "Best Perfs", `${data.fromUsername} veut devenir ton ami`);
+  await Promise.all([
+    sendToUser(data.toUid, "Best Perfs", `${data.fromUsername} veut devenir ton ami`),
+    db.collection("notifications").add({
+      uid: data.toUid,
+      type: "friend_request",
+      fromUsername: data.fromUsername,
+      createdAt: FieldValue.serverTimestamp(),
+    }),
+  ]);
 });
 
 // Friend request accepted.
@@ -45,5 +53,13 @@ exports.onFriendRequestAccepted = onDocumentUpdated("friendRequests/{requestId}"
   const before = event.data.before.data();
   const after = event.data.after.data();
   if (before.status !== "pending" || after.status !== "accepted") return;
-  await sendToUser(after.fromUid, "Best Perfs", `${after.toUsername} a accepté ta demande d'ami`);
+  await Promise.all([
+    sendToUser(after.fromUid, "Best Perfs", `${after.toUsername} a accepté ta demande d'ami`),
+    db.collection("notifications").add({
+      uid: after.fromUid,
+      type: "friend_accepted",
+      fromUsername: after.toUsername,
+      createdAt: FieldValue.serverTimestamp(),
+    }),
+  ]);
 });

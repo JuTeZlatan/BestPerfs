@@ -88,6 +88,24 @@
     <button id="classement-icon-btn" class="classement-icon-btn" type="button" data-i18n-title="nav.classementLabel">🏆</button>
   </div>
 
+  <div class="notif-switcher notif-switcher-fixed">
+    <button id="notif-icon-btn" class="notif-icon-btn" type="button" data-i18n-title="notifications.title">
+      🔔
+      <span id="notif-badge" class="notif-badge" hidden>0</span>
+    </button>
+    <div id="notif-menu" class="notif-menu" hidden>
+      <div id="notif-list"></div>
+      <p id="notif-empty" class="empty-state visible" data-i18n="notifications.empty">Aucune notification pour l'instant.</p>
+    </div>
+  </div>
+
+  <template id="notif-row-template">
+    <div class="notif-row">
+      <span class="notif-row-text"></span>
+      <button class="notif-row-delete" type="button" data-i18n-title="delete.title">✕</button>
+    </div>
+  </template>
+
   <div class="lang-switcher lang-switcher-fixed">
     <button id="lang-btn" class="lang-btn" data-i18n-title="lang.title"></button>
     <div id="lang-menu" class="lang-menu" hidden>
@@ -902,6 +920,7 @@
   <script type="module" src="account.js"></script>
   <script type="module" src="friends.js"></script>
   <script type="module" src="leaderboard.js"></script>
+  <script type="module" src="notifications.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {

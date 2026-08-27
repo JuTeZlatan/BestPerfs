@@ -101,13 +101,16 @@ friendsAddCancelBtn.addEventListener("click", () => {
   closeAddForm();
 });
 
-profileFriendsRow.addEventListener("click", () => {
+function openFriendsView(tabIndex) {
   profileViewForFriends.hidden = true;
   friendsViewEl.hidden = false;
   closeAddForm();
-  setActiveTab(0);
+  setActiveTab(tabIndex);
   refreshFriendsData();
-});
+}
+window.openFriendsView = openFriendsView;
+
+profileFriendsRow.addEventListener("click", () => openFriendsView(0));
 
 friendsBackBtn.addEventListener("click", () => {
   friendsViewEl.hidden = true;
