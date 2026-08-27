@@ -94,6 +94,7 @@ window.syncLeaderboardEntries = syncLeaderboardEntries;
 // ---- UI: sport/preset pickers + ranking ----
 const classementSportBtn = document.getElementById("classement-sport-select-btn");
 const classementSportLabel = document.getElementById("classement-sport-select-label");
+const classementSportIcon = document.getElementById("classement-sport-select-icon");
 const classementSportMenu = document.getElementById("classement-sport-menu");
 const classementListEl = document.getElementById("classement-list");
 const classementEmptyEl = document.getElementById("classement-empty-state");
@@ -105,13 +106,18 @@ const classementPresetSelects = {
 const classementRowTemplate = document.getElementById("classement-row-template");
 
 const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon" };
-const MEDALS = ["🥇", "🥈", "🥉"];
+const CLASSEMENT_SPORT_ICONS = {
+  course: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="1.7"/><path d="M7 20l3-6"/><path d="M10 14l2.5-3 3 1.5 3 5.5"/><path d="M8.5 11l2-3.5 3.5-1"/><path d="M6 9l3.5-1.5"/></svg>',
+  natation: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg>',
+  triathlon: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>',
+};
 
 let classementSport = "course";
 let classementPreset = null;
 
 function updateClassementSportLabel() {
   classementSportLabel.textContent = t(CLASSEMENT_SPORT_LABEL_KEYS[classementSport]);
+  classementSportIcon.innerHTML = CLASSEMENT_SPORT_ICONS[classementSport] || "";
 }
 
 function selectClassementSport(sport) {
@@ -198,7 +204,11 @@ async function renderClassementList() {
   rows.forEach((row, index) => {
     const node = classementRowTemplate.content.cloneNode(true);
     const card = node.querySelector(".exercise-card");
-    node.querySelector(".classement-rank").textContent = MEDALS[index] || String(index + 1);
+    const rankEl = node.querySelector(".classement-rank");
+    rankEl.textContent = String(index + 1);
+    rankEl.classList.toggle("rank-gold", index === 0);
+    rankEl.classList.toggle("rank-silver", index === 1);
+    rankEl.classList.toggle("rank-bronze", index === 2);
     const nameEl = node.querySelector(".classement-name");
     nameEl.textContent = row.uid === myUid ? `${row.username} ${t("classement.you")}` : row.username;
     if (row.uid === myUid) card.classList.add("classement-row-you");

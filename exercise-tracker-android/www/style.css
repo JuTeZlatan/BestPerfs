@@ -1,5 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500;700;800&family=M+PLUS+Rounded+1c:wght@900&display=swap");
 
+svg { vertical-align: -0.15em; flex-shrink: 0; }
+
+.view-icon {
+  display: inline-flex;
+  margin-right: 4px;
+  vertical-align: -0.2em;
+}
+
+.sport-select-icon {
+  display: inline-flex;
+  margin-right: 2px;
+}
+
+.chip-icon svg {
+  vertical-align: -0.1em;
+}
+
 :root {
   --bg: #1c0f0d;
   --bg-rgb: 28, 15, 13;
@@ -1502,6 +1519,21 @@ h1 {
   font-size: 1.1rem;
   font-weight: 700;
   text-align: center;
+}
+
+.classement-rank.rank-gold {
+  color: #ecab1e;
+  text-shadow: 0 0 8px rgba(236, 171, 30, 0.55);
+}
+
+.classement-rank.rank-silver {
+  color: #d5d5d5;
+  text-shadow: 0 0 8px rgba(213, 213, 213, 0.45);
+}
+
+.classement-rank.rank-bronze {
+  color: #cd7f32;
+  text-shadow: 0 0 8px rgba(205, 127, 50, 0.5);
 }
 
 .classement-name {

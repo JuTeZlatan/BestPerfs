@@ -2,6 +2,7 @@ const SPORTS_STORAGE_KEY = "exercise-tracker-sports";
 
 const sportSelectBtn = document.getElementById("sport-select-btn");
 const sportSelectLabel = document.getElementById("sport-select-label");
+const sportSelectIcon = document.getElementById("sport-select-icon");
 const sportMenuEl = document.getElementById("sport-menu");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
@@ -101,7 +102,14 @@ function bindDistanceSelect(selectEl, manualInputEl) {
     manualInputEl.hidden = selectEl.value !== "manual";
   });
 }
-const SPORT_ICONS = { natation: "🏊", velo: "🚴", course: "🏃", triathlon: "🔱" };
+const ICON_CHRONO = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9"/><path d="M9 3h6"/><path d="M12 3v2"/></svg>';
+const ICON_RUNNING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="1.7"/><path d="M7 20l3-6"/><path d="M10 14l2.5-3 3 1.5 3 5.5"/><path d="M8.5 11l2-3.5 3.5-1"/><path d="M6 9l3.5-1.5"/></svg>';
+const ICON_SWIMMING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg>';
+const ICON_CYCLING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="3.4"/><circle cx="18" cy="17" r="3.4"/><path d="M6 17l4-8h4"/><path d="M10 9h3l4 8"/><path d="M12 9l2 4h4"/></svg>';
+const ICON_TRIATHLON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>';
+const ICON_FITNESS = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="10" width="4" height="4" rx="1"/><rect x="17.5" y="10" width="4" height="4" rx="1"/><path d="M6.5 12h11"/><path d="M8 9v6"/><path d="M16 9v6"/></svg>';
+const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
+const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
 const TEXT_PLACEHOLDER_KEYS = {
   natation: "sport.swim.stylePlaceholder",
   velo: "sport.locationPlaceholder",
@@ -113,7 +121,7 @@ function timeChipHTML(perf, sport) {
   const pad = (n) => String(n ?? 0).padStart(2, "0");
   const hoursPart =
     sport === "natation" ? "" : `<span class="chip-num">${pad(perf.hours)}</span><span class="chip-unit">h</span>`;
-  return `<span class="chip-icon">⏱️</span>${hoursPart}<span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span><span class="chip-num chip-num-sub">${pad(perf.hundredths)}</span>`;
+  return `<span class="chip-icon">${ICON_CHRONO}</span>${hoursPart}<span class="chip-num">${pad(perf.minutes)}</span><span class="chip-unit">mn</span><span class="chip-num">${pad(perf.seconds)}</span><span class="chip-unit">s</span><span class="chip-num chip-num-sub">${pad(perf.hundredths)}</span>`;
 }
 
 function distanceChipHTML(perf, sport) {
@@ -123,7 +131,7 @@ function distanceChipHTML(perf, sport) {
 }
 
 function sizeChipHTML(perf) {
-  return `<span class="chip-icon">🔱</span><span class="chip-num">${perf.size}</span>`;
+  return `<span class="chip-icon">${ICON_TRIATHLON}</span><span class="chip-num">${perf.size}</span>`;
 }
 
 function legToCentiseconds(leg) {
@@ -227,13 +235,14 @@ function saveSportPerfs() {
 
 function updateSportSelectLabel() {
   sportSelectLabel.textContent = t(SPORT_LABEL_KEYS[currentSport]);
+  sportSelectIcon.innerHTML = SPORT_SELECT_ICONS[currentSport] || "";
 }
 
 function sortSportMenu() {
   const buttons = Array.from(sportMenuEl.querySelectorAll(".sport-option"));
   buttons.sort((a, b) => {
-    const textA = t(SPORT_LABEL_KEYS[a.dataset.sport]).replace(/^\S+\s*/, "");
-    const textB = t(SPORT_LABEL_KEYS[b.dataset.sport]).replace(/^\S+\s*/, "");
+    const textA = t(SPORT_LABEL_KEYS[a.dataset.sport]);
+    const textB = t(SPORT_LABEL_KEYS[b.dataset.sport]);
     return textA.localeCompare(textB, getLang());
   });
   buttons.forEach((btn) => sportMenuEl.appendChild(btn));
@@ -524,7 +533,7 @@ function toggleTriPopup(anchorEl, perf) {
   const popup = document.createElement("div");
   popup.className = "tri-popup";
   popup.innerHTML =
-    triLegRowHTML("🏊", perf.swim) + triLegRowHTML("🚴", perf.bike) + triLegRowHTML("🏃", perf.run);
+    triLegRowHTML(ICON_SWIMMING, perf.swim) + triLegRowHTML(ICON_CYCLING, perf.bike) + triLegRowHTML(ICON_RUNNING, perf.run);
   document.body.appendChild(popup);
 
   const rect = anchorEl.getBoundingClientRect();
