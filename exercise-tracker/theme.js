@@ -23,6 +23,11 @@ function syncNativeStatusBar() {
   const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
   if (!isNativePlatform || !Capacitor.Plugins.StatusBar) return;
   const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  // Without this, the WebView draws full-screen under the status bar (worse on
+  // Android 15+, which enforces edge-to-edge by default) and the app's fixed
+  // top bar/icons render partly hidden behind the clock/network/notification
+  // icons instead of below them.
+  Capacitor.Plugins.StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {});
   Capacitor.Plugins.StatusBar.setBackgroundColor({ color: bg }).catch(() => {});
   Capacitor.Plugins.StatusBar.setStyle({ style: "DARK" }).catch(() => {});
 }
