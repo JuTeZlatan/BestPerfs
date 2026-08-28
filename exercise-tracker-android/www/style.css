@@ -1070,6 +1070,10 @@ h1 {
   overflow-y: auto;
 }
 
+.exercise-select-menu {
+  max-height: none;
+}
+
 .add-form input.preset-time-field {
   flex: 0 0 60px;
   min-width: 0;
@@ -2336,6 +2340,11 @@ input[type="number"]::-webkit-inner-spin-button {
   .add-form .distance-dropdown {
     flex: 0 0 92px;
     width: 92px;
+  }
+
+  #exercise-select {
+    flex: 0 0 152px;
+    width: 152px;
   }
 
   .distance-dropdown-btn {
