@@ -16,11 +16,14 @@ import {
 // sports.js/index.html) - only these are comparable across users. ----
 const LEADERBOARD_SPORTS = ["course", "natation", "triathlon"];
 const PRESET_KEYS = {
-  course: ["0.8", "1.5", "3", "5", "10", "half", "marathon"],
-  natation: ["50", "100", "200", "400", "800", "1500"],
+  course: ["0.1", "0.2", "0.4", "0.8", "1.5", "3", "5", "10", "half", "marathon"],
+  natation: ["50", "100", "200", "400", "800", "1500", "5000", "10000"],
   triathlon: ["XS", "S", "M", "L", "XL"],
 };
 const RUNNING_DISTANCE_TO_KEY = {
+  "0.1": "0.1",
+  "0.2": "0.2",
+  "0.4": "0.4",
   "0.8": "0.8",
   "1.5": "1.5",
   "3": "3",
