@@ -24,6 +24,7 @@
     "themes-view",
     "language-view",
     "backup-view",
+    "proofs-view",
     "support-view",
   ];
 
@@ -95,6 +96,7 @@
     "themes-view": "profile-view",
     "language-view": "profile-view",
     "backup-view": "profile-view",
+    "proofs-view": "profile-view",
     "support-view": "profile-view",
     "profile-view": "sports-view",
     "timer-view": "sports-view",

@@ -27,6 +27,13 @@ import {
   serverTimestamp,
   arrayUnion,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCQecXfxS-tFFB9EH8-Gy-5OM-g5byu_gA",
@@ -49,6 +56,7 @@ export const auth = isNativePlatform
   ? initializeAuth(app, { persistence: indexedDBLocalPersistence })
   : getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export {
@@ -72,4 +80,8 @@ export {
   writeBatch,
   serverTimestamp,
   arrayUnion,
+  storageRef,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
 };

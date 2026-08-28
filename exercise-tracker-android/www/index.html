@@ -609,6 +609,7 @@
           <span class="classement-rank"></span>
           <span class="classement-name"></span>
           <span class="perf-time-display"><span class="chip-icon">⏱️</span><span class="chip-num classement-time"></span></span>
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         </div>
       </div>
     </template>
@@ -648,6 +649,11 @@
         <button id="profile-backup-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16a4.5 4.5 0 0 1 .5-9c.9-2.4 3.1-4 5.8-4 3.3 0 6 2.6 6.2 5.9A4 4 0 0 1 18.5 16H7Z"/><path d="M12 11v7"/><path d="M9.5 15.5 12 18l2.5-2.5"/></svg></span>
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
+        <button id="profile-proofs-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></span>
+          <span class="profile-menu-label" data-i18n="profile.proofsRow">Preuves</span>
           <span class="profile-menu-chevron">›</span>
         </button>
         <button id="profile-support-row" class="profile-menu-row" type="button">
@@ -884,6 +890,36 @@
       </div>
     </section>
 
+    <section id="proofs-view" hidden>
+      <div class="subpage-header">
+        <button id="proofs-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <h1 data-i18n="profile.proofsRow">Preuves</h1>
+      </div>
+
+      <p class="subtitle" data-i18n="proofs.subtitle">Gère le partage et le stockage de tes preuves photo.</p>
+
+      <div class="profile-menu">
+        <button id="proofs-share-row" class="profile-menu-row theme-row" type="button">
+          <span class="profile-menu-label" data-i18n="proofs.shareLabel">Partager mes preuves avec mes amis</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+      </div>
+
+      <p class="subtitle proofs-section-label" data-i18n="proofs.storageSectionLabel">Stockage des preuves</p>
+
+      <div class="profile-menu">
+        <button class="profile-menu-row proofs-storage-row theme-row" type="button" data-storage-mode="cloud">
+          <span class="profile-menu-label" data-i18n="proofs.storageCloud">Cloud</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+        <button class="profile-menu-row proofs-storage-row theme-row" type="button" data-storage-mode="local">
+          <span class="profile-menu-label" data-i18n="proofs.storageLocal">Cet appareil</span>
+          <span class="profile-menu-chevron theme-row-check"></span>
+        </button>
+      </div>
+      <p class="subtitle proofs-note" id="proofs-storage-note"></p>
+    </section>
+
     <section id="support-view" hidden>
       <div class="subpage-header">
         <button id="support-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
@@ -925,10 +961,28 @@
     </div>
   </div>
 
+  <div id="proof-prompt-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="proofs.promptMessage">Ajouter des preuves (photos) à cette stat ?</p>
+      <div class="modal-actions">
+        <button id="proof-prompt-no-btn" class="modal-btn" data-i18n="proofs.promptNo">Non</button>
+        <button id="proof-prompt-yes-btn" class="modal-btn primary" data-i18n="proofs.promptYes">Oui, ajouter</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="proof-file-input" accept="image/*" multiple hidden data-i18n-title="proofs.maxReached" title="Maximum 2 photos par stat.">
+
+  <div id="proof-viewer" class="proof-viewer" hidden>
+    <button id="proof-viewer-close-btn" class="proof-viewer-close-btn" type="button" data-i18n-title="common.close">×</button>
+    <div id="proof-viewer-track" class="proof-viewer-track"></div>
+  </div>
+
   <template id="exercise-template">
     <div class="exercise-row">
       <div class="exercise-card">
         <input type="text" class="exercise-name" maxlength="40" placeholder="Nom de l'exercice" readonly>
+        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         <div class="reps-kg-stack">
           <label class="inline-field">
             <span class="inline-field-label">Reps</span>
@@ -989,6 +1043,7 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="30" placeholder="Style de nage" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1008,6 +1063,7 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1027,6 +1083,7 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1046,6 +1103,7 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
         <span class="perf-size-display"></span>
         <span class="perf-time-display perf-time-tappable"></span>
       </div>
@@ -1099,6 +1157,7 @@
   <script type="module" src="friends.js"></script>
   <script type="module" src="leaderboard.js"></script>
   <script type="module" src="notifications.js"></script>
+  <script type="module" src="proofs.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {

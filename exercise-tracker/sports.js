@@ -441,6 +441,15 @@ function renderSportList() {
       if (isBest) bestBadge.title = t("sport.bestPerfTitle");
     }
 
+    const proofBtn = node.querySelector(".perf-proof-btn");
+    if (proofBtn) {
+      proofBtn.hidden = !(perf.photos && perf.photos.length);
+      proofBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.openProofViewer && window.openProofViewer(perf.photos);
+      });
+    }
+
     const timeDisplay = node.querySelector(".perf-time-display");
     if (currentSport === "triathlon") {
       timeDisplay.innerHTML = timeChipHTML(centisecondsToHMSC(triathlonTotal(perf)), "velo");
@@ -475,6 +484,7 @@ function renderSportList() {
     rowMenuDeleteBtn.addEventListener("click", () => {
       closeAllRowMenus();
       window.openConfirmModal(t("modal.deletePerf"), () => {
+        window.deleteProofPhotos && window.deleteProofPhotos(perf.photos);
         sportPerfs[currentSport] = sportPerfs[currentSport].filter((p) => p.id !== perf.id);
         saveSportPerfs();
         renderSportList();
@@ -487,7 +497,7 @@ function renderSportList() {
 
 addSwimForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  sportPerfs.natation.push({
+  const perf = {
     id: crypto.randomUUID(),
     date: todayISO(),
     text: swimStyleSelect.dataset.value,
@@ -495,20 +505,25 @@ addSwimForm.addEventListener("submit", (e) => {
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
     hundredths: swimHundredthsInput.value === "" ? null : Number(swimHundredthsInput.value),
-  });
+  };
+  sportPerfs.natation.push(perf);
   saveSportPerfs();
   renderSportList();
   addSwimForm.reset();
   resetDistanceDropdown(swimStyleSelect);
   resetDistanceDropdown(swimDistanceSelect);
   swimDistanceManualInput.hidden = true;
+  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+    saveSportPerfs();
+    renderSportList();
+  });
 });
 
 addCyclingForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const text = cyclingLocationInput.value.trim();
   if (!text || cyclingDistanceInput.value === "") return;
-  sportPerfs.velo.push({
+  const perf = {
     id: crypto.randomUUID(),
     date: todayISO(),
     text,
@@ -517,18 +532,23 @@ addCyclingForm.addEventListener("submit", (e) => {
     minutes: cyclingMinutesInput.value === "" ? null : Number(cyclingMinutesInput.value),
     seconds: cyclingSecondsInput.value === "" ? null : Number(cyclingSecondsInput.value),
     hundredths: cyclingHundredthsInput.value === "" ? null : Number(cyclingHundredthsInput.value),
-  });
+  };
+  sportPerfs.velo.push(perf);
   saveSportPerfs();
   renderSportList();
   addCyclingForm.reset();
   cyclingLocationInput.focus();
+  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+    saveSportPerfs();
+    renderSportList();
+  });
 });
 
 addRunningForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const text = runningDescInput.value.trim();
   if (!text) return;
-  sportPerfs.course.push({
+  const perf = {
     id: crypto.randomUUID(),
     date: todayISO(),
     text,
@@ -537,13 +557,18 @@ addRunningForm.addEventListener("submit", (e) => {
     minutes: runningMinutesInput.value === "" ? null : Number(runningMinutesInput.value),
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
     hundredths: runningHundredthsInput.value === "" ? null : Number(runningHundredthsInput.value),
-  });
+  };
+  sportPerfs.course.push(perf);
   saveSportPerfs();
   renderSportList();
   addRunningForm.reset();
   resetDistanceDropdown(runningDistanceSelect);
   runningDistanceManualInput.hidden = true;
   runningDescInput.focus();
+  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+    saveSportPerfs();
+    renderSportList();
+  });
 });
 
 // ---- Triathlon step wizard ----
@@ -596,7 +621,7 @@ triFields.run.validate.addEventListener("click", () => {
     return;
   }
   triathlonDraft.run = readTriLeg("run");
-  sportPerfs.triathlon.push({
+  const perf = {
     id: crypto.randomUUID(),
     date: todayISO(),
     text,
@@ -604,10 +629,15 @@ triFields.run.validate.addEventListener("click", () => {
     swim: triathlonDraft.swim,
     bike: triathlonDraft.bike,
     run: triathlonDraft.run,
-  });
+  };
+  sportPerfs.triathlon.push(perf);
   saveSportPerfs();
   renderSportList();
   resetTriathlonWizard();
+  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+    saveSportPerfs();
+    renderSportList();
+  });
 });
 
 // ---- Small floating popups anchored to a row (triathlon breakdown, date info) ----

@@ -296,6 +296,8 @@ const SYNCED_KEYS = [
   "exercise-tracker-weight-unit",
   "exercise-tracker-distance-unit",
   "exercise-tracker-theme",
+  "exercise-tracker-share-proofs",
+  "exercise-tracker-photo-storage-mode",
 ];
 const KEY_TO_FIELD = {
   "exercise-tracker-data": "exerciseData",
@@ -305,6 +307,8 @@ const KEY_TO_FIELD = {
   "exercise-tracker-weight-unit": "weightUnit",
   "exercise-tracker-distance-unit": "distanceUnit",
   "exercise-tracker-theme": "theme",
+  "exercise-tracker-share-proofs": "shareProofs",
+  "exercise-tracker-photo-storage-mode": "photoStorageMode",
 };
 
 let currentUid = null;

@@ -1853,6 +1853,80 @@ h1 {
   display: none;
 }
 
+.perf-proof-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--accent-2);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.perf-proof-btn[hidden] {
+  display: none;
+}
+
+.proof-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+}
+
+.proof-viewer[hidden] {
+  display: none;
+}
+
+.proof-viewer-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.proof-viewer-img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  scroll-snap-align: center;
+}
+
+.proof-viewer-close-btn {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  z-index: 951;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.proofs-section-label {
+  margin-top: 20px;
+}
+
+.proofs-note {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
 .perf-distance-display .chip-icon,
 .perf-size-display .chip-icon,
 .perf-time-display .chip-icon {

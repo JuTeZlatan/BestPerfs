@@ -73,7 +73,7 @@ service cloud.firestore {
         && request.resource.data.totalSeconds > 0
         && request.resource.data.username is string
         && entryId == request.resource.data.uid + '_' + request.resource.data.sport + '_' + request.resource.data.presetKey
-        && request.resource.data.keys().hasOnly(['uid', 'username', 'sport', 'presetKey', 'totalSeconds', 'updatedAt']);
+        && request.resource.data.keys().hasOnly(['uid', 'username', 'sport', 'presetKey', 'totalSeconds', 'updatedAt', 'photoUrls']);
 
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
     }

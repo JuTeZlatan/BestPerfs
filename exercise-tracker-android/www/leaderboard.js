@@ -79,6 +79,17 @@ function myUsername() {
   return el ? el.textContent.trim() : "";
 }
 
+// Only publish photo URLs to a shared leaderboard entry when the photos were
+// actually uploaded to the cloud (a purely local photo can't be fetched by a
+// friend) and the user hasn't opted out of sharing proofs.
+function sharedPhotoUrls(perf) {
+  if (!perf || !perf.photos || !perf.photos.length) return null;
+  if (typeof window.getPhotoStorageMode !== "function" || window.getPhotoStorageMode() !== "cloud") return null;
+  if (typeof window.getShareProofs !== "function" || !window.getShareProofs()) return null;
+  const urls = perf.photos.filter((p) => p.mode === "cloud" && p.url).map((p) => p.url);
+  return urls.length ? urls : null;
+}
+
 // ---- Sync local bests to Firestore: one doc per sport+preset holding the
 // current best time only, called from sports.js's saveSportPerfs(). ----
 async function syncLeaderboardEntries(sportPerfs) {
@@ -90,24 +101,31 @@ async function syncLeaderboardEntries(sportPerfs) {
   LEADERBOARD_SPORTS.forEach((sport) => {
     const entries = sportPerfs[sport] || [];
     const bestBySeconds = {};
+    const bestPerfByKey = {};
     entries.forEach((perf) => {
       const key = presetKeyForEntry(sport, perf);
       if (!key) return;
       const seconds = sport === "triathlon" ? triathlonSeconds(perf) : perfSeconds(perf);
-      if (!(key in bestBySeconds) || seconds < bestBySeconds[key]) bestBySeconds[key] = seconds;
+      if (!(key in bestBySeconds) || seconds < bestBySeconds[key]) {
+        bestBySeconds[key] = seconds;
+        bestPerfByKey[key] = perf;
+      }
     });
 
     PRESET_KEYS[sport].forEach((presetKey) => {
       const ref = doc(db, "leaderboardEntries", `${uid}_${sport}_${presetKey}`);
       if (presetKey in bestBySeconds) {
-        setDoc(ref, {
+        const payload = {
           uid,
           username,
           sport,
           presetKey,
           totalSeconds: bestBySeconds[presetKey],
           updatedAt: serverTimestamp(),
-        }).catch(() => {});
+        };
+        const photoUrls = sharedPhotoUrls(bestPerfByKey[presetKey]);
+        if (photoUrls) payload.photoUrls = photoUrls;
+        setDoc(ref, payload).catch(() => {});
       } else {
         deleteDoc(ref).catch(() => {});
       }
@@ -126,26 +144,33 @@ async function syncFitnessLeaderboardEntries(exercises) {
   if (!username) return;
 
   const bestByKey = {};
+  const bestExerciseByKey = {};
   exercises.forEach((exercise) => {
     const key = exercise.exerciseKey;
     if (!key || !PRESET_KEYS.fitness.includes(key)) return;
     const metric = FITNESS_METRIC[key];
     const value = metric === "reps" ? exercise.maxReps : exercise.maxWeight;
     if (value == null) return;
-    if (!(key in bestByKey) || value > bestByKey[key]) bestByKey[key] = value;
+    if (!(key in bestByKey) || value > bestByKey[key]) {
+      bestByKey[key] = value;
+      bestExerciseByKey[key] = exercise;
+    }
   });
 
   PRESET_KEYS.fitness.forEach((presetKey) => {
     const ref = doc(db, "leaderboardEntries", `${uid}_fitness_${presetKey}`);
     if (presetKey in bestByKey) {
-      setDoc(ref, {
+      const payload = {
         uid,
         username,
         sport: "fitness",
         presetKey,
         totalSeconds: bestByKey[presetKey],
         updatedAt: serverTimestamp(),
-      }).catch(() => {});
+      };
+      const photoUrls = sharedPhotoUrls(bestExerciseByKey[presetKey]);
+      if (photoUrls) payload.photoUrls = photoUrls;
+      setDoc(ref, payload).catch(() => {});
     } else {
       deleteDoc(ref).catch(() => {});
     }
@@ -321,6 +346,14 @@ async function renderClassementList() {
     if (row.uid === myUid) card.classList.add("classement-row-you");
     node.querySelector(".classement-time").textContent =
       row.sport === "fitness" ? formatFitnessValue(row.totalSeconds, row.presetKey) : formatSeconds(row.totalSeconds);
+    const proofBtn = node.querySelector(".perf-proof-btn");
+    if (proofBtn) {
+      proofBtn.hidden = !(row.photoUrls && row.photoUrls.length);
+      proofBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.openProofViewer && window.openProofViewer(row.photoUrls);
+      });
+    }
     classementListEl.appendChild(node);
   });
 }

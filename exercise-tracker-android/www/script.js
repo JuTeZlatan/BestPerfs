@@ -142,6 +142,15 @@ function render() {
       weightInput.readOnly = true;
     });
 
+    const proofBtn = node.querySelector(".perf-proof-btn");
+    if (proofBtn) {
+      proofBtn.hidden = !(exercise.photos && exercise.photos.length);
+      proofBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.openProofViewer && window.openProofViewer(exercise.photos);
+      });
+    }
+
     const rowMenuBtn = node.querySelector(".row-menu-btn");
     const rowMenuDropdown = node.querySelector(".row-menu-dropdown");
     rowMenuBtn.title = t("rowMenu.title");
@@ -185,6 +194,8 @@ function closeConfirmModal() {
 }
 
 function deleteExercise(id) {
+  const exercise = exercises.find((e) => e.id === id);
+  window.deleteProofPhotos && window.deleteProofPhotos(exercise && exercise.photos);
   exercises = exercises.filter((e) => e.id !== id);
   saveExercises();
   render();
@@ -206,15 +217,17 @@ document.addEventListener("keydown", (e) => {
 });
 
 function addExercise(exerciseKey, name, reps, weight) {
-  exercises.push({
+  const exercise = {
     id: crypto.randomUUID(),
     exerciseKey,
     name,
     maxReps: reps,
     maxWeight: weight,
-  });
+  };
+  exercises.push(exercise);
   saveExercises();
   render();
+  return exercise;
 }
 
 function hasWeightForSelectValue(value) {
@@ -287,14 +300,19 @@ formEl.addEventListener("submit", (e) => {
   const key = exerciseSelectEl.dataset.value;
   const reps = repsInputEl.value === "" ? null : Number(repsInputEl.value);
   const weight = weightInputEl.hidden || weightInputEl.value === "" ? null : weightFromDisplay(Number(weightInputEl.value));
+  let exercise;
   if (key === "manual") {
     const name = inputEl.value.trim();
     if (!name) return;
-    addExercise(null, name, reps, weight);
+    exercise = addExercise(null, name, reps, weight);
   } else {
-    addExercise(key, null, reps, weight);
+    exercise = addExercise(key, null, reps, weight);
   }
   resetExerciseSelect();
+  window.promptForProofPhotos && window.promptForProofPhotos(exercise, () => {
+    saveExercises();
+    render();
+  });
 });
 
 sortAscBtn.addEventListener("click", () => {
