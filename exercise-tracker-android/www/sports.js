@@ -451,6 +451,16 @@ function renderSportList() {
       toggleRowMenu(rowMenuDropdown);
     });
 
+    const rowMenuInfoBtn = node.querySelector(".row-menu-info");
+    if (rowMenuInfoBtn) {
+      rowMenuInfoBtn.textContent = t("info.title");
+      rowMenuInfoBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeAllRowMenus();
+        toggleInfoPopup(rowMenuBtn, perf);
+      });
+    }
+
     const rowMenuDeleteBtn = node.querySelector(".row-menu-delete");
     rowMenuDeleteBtn.textContent = t("delete.title");
     rowMenuDeleteBtn.addEventListener("click", () => {
@@ -593,25 +603,25 @@ triFields.run.validate.addEventListener("click", () => {
   resetTriathlonWizard();
 });
 
-// ---- Triathlon breakdown popup ----
-let openTriPopup = null;
+// ---- Small floating popups anchored to a row (triathlon breakdown, date info) ----
+let openFloatingPopup = null;
 
-function closeTriPopup() {
-  if (openTriPopup) {
-    openTriPopup.remove();
-    openTriPopup = null;
+function closeFloatingPopup() {
+  if (openFloatingPopup) {
+    openFloatingPopup.remove();
+    openFloatingPopup = null;
   }
 }
 
-function toggleTriPopup(anchorEl, perf) {
-  if (openTriPopup) {
-    closeTriPopup();
-    return;
-  }
+function showFloatingPopup(anchorEl, innerHTML) {
+  const wasOpenOnSameAnchor = openFloatingPopup && openFloatingPopup.dataset.anchor === anchorEl.dataset.popupId;
+  closeFloatingPopup();
+  if (wasOpenOnSameAnchor) return;
+
   const popup = document.createElement("div");
   popup.className = "tri-popup";
-  popup.innerHTML =
-    triLegRowHTML(ICON_SWIMMING, perf.swim) + triLegRowHTML(ICON_CYCLING, perf.bike) + triLegRowHTML(ICON_RUNNING, perf.run);
+  popup.dataset.anchor = anchorEl.dataset.popupId;
+  popup.innerHTML = innerHTML;
   document.body.appendChild(popup);
 
   const rect = anchorEl.getBoundingClientRect();
@@ -619,15 +629,31 @@ function toggleTriPopup(anchorEl, perf) {
   popup.style.position = "fixed";
   popup.style.top = `${rect.bottom + 6}px`;
   popup.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - popupWidth - 8))}px`;
-  openTriPopup = popup;
+  openFloatingPopup = popup;
+}
+
+function toggleTriPopup(anchorEl, perf) {
+  anchorEl.dataset.popupId = anchorEl.dataset.popupId || `tri-${perf.id}`;
+  showFloatingPopup(
+    anchorEl,
+    triLegRowHTML(ICON_SWIMMING, perf.swim) + triLegRowHTML(ICON_CYCLING, perf.bike) + triLegRowHTML(ICON_RUNNING, perf.run)
+  );
+}
+
+function toggleInfoPopup(anchorEl, perf) {
+  anchorEl.dataset.popupId = anchorEl.dataset.popupId || `info-${perf.id}`;
+  const label = perf.date
+    ? new Date(`${perf.date}T00:00:00`).toLocaleDateString(getLang(), { day: "numeric", month: "long", year: "numeric" })
+    : t("sport.dateUnknown");
+  showFloatingPopup(anchorEl, `<div class="tri-popup-row"><span class="tri-popup-time">${label}</span></div>`);
 }
 
 document.addEventListener("click", (e) => {
-  if (openTriPopup && !openTriPopup.contains(e.target)) closeTriPopup();
+  if (openFloatingPopup && !openFloatingPopup.contains(e.target)) closeFloatingPopup();
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && openTriPopup) closeTriPopup();
+  if (e.key === "Escape" && openFloatingPopup) closeFloatingPopup();
 });
 
 function updateDistancePlaceholders() {
