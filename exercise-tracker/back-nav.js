@@ -19,6 +19,7 @@
     "friends-view",
     "units-view",
     "themes-view",
+    "language-view",
     "backup-view",
     "support-view",
   ];

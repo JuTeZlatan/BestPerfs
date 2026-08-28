@@ -142,6 +142,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Une erreur est survenue. Réessaie.",
     "profile.unitsRow": "Unités",
     "profile.themesRow": "Thèmes",
+    "profile.languageRow": "Langue",
     "nav.classementLabel": "Classement",
     "app.title.classement": "Classement",
     "app.subtitle.classement": "Compare tes chronos avec tes amis sur les mêmes épreuves.",
@@ -298,6 +299,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Something went wrong. Please try again.",
     "profile.unitsRow": "Units",
     "profile.themesRow": "Themes",
+    "profile.languageRow": "Language",
     "nav.classementLabel": "Leaderboard",
     "app.title.classement": "Leaderboard",
     "app.subtitle.classement": "Compare your times with your friends on the same events.",
@@ -454,6 +456,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
     "profile.unitsRow": "Unidades",
     "profile.themesRow": "Temas",
+    "profile.languageRow": "Idioma",
     "nav.classementLabel": "Clasificación",
     "app.title.classement": "Clasificación",
     "app.subtitle.classement": "Compara tus tiempos con tus amigos en las mismas pruebas.",
@@ -610,6 +613,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Algo correu mal. Tenta novamente.",
     "profile.unitsRow": "Unidades",
     "profile.themesRow": "Temas",
+    "profile.languageRow": "Idioma",
     "nav.classementLabel": "Classificação",
     "app.title.classement": "Classificação",
     "app.subtitle.classement": "Compara os teus tempos com os teus amigos nas mesmas provas.",
@@ -766,6 +770,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "出了点问题，请重试。",
     "profile.unitsRow": "单位",
     "profile.themesRow": "主题",
+    "profile.languageRow": "语言",
     "nav.classementLabel": "排行榜",
     "app.title.classement": "排行榜",
     "app.subtitle.classement": "与好友比较相同项目的成绩。",
@@ -922,6 +927,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "حدث خطأ ما. حاول مرة أخرى.",
     "profile.unitsRow": "الوحدات",
     "profile.themesRow": "السمات",
+    "profile.languageRow": "اللغة",
     "nav.classementLabel": "الترتيب",
     "app.title.classement": "الترتيب",
     "app.subtitle.classement": "قارن أوقاتك مع أصدقائك في نفس الفعاليات.",
@@ -1078,6 +1084,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Etwas ist schiefgelaufen. Versuch es erneut.",
     "profile.unitsRow": "Einheiten",
     "profile.themesRow": "Designs",
+    "profile.languageRow": "Sprache",
     "nav.classementLabel": "Rangliste",
     "app.title.classement": "Rangliste",
     "app.subtitle.classement": "Vergleiche deine Zeiten mit deinen Freunden bei denselben Wettbewerben.",
@@ -1234,6 +1241,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Qualcosa è andato storto. Riprova.",
     "profile.unitsRow": "Unità",
     "profile.themesRow": "Temi",
+    "profile.languageRow": "Lingua",
     "nav.classementLabel": "Classifica",
     "app.title.classement": "Classifica",
     "app.subtitle.classement": "Confronta i tuoi tempi con quelli dei tuoi amici sulle stesse prove.",
@@ -1390,6 +1398,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Er is iets misgegaan. Probeer het opnieuw.",
     "profile.unitsRow": "Eenheden",
     "profile.themesRow": "Thema's",
+    "profile.languageRow": "Taal",
     "nav.classementLabel": "Klassement",
     "app.title.classement": "Klassement",
     "app.subtitle.classement": "Vergelijk je tijden met je vrienden op dezelfde onderdelen.",
@@ -1546,6 +1555,7 @@ const TRANSLATIONS = {
     "friends.errorGeneric": "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
     "profile.unitsRow": "Μονάδες",
     "profile.themesRow": "Θέματα",
+    "profile.languageRow": "Γλώσσα",
     "nav.classementLabel": "Κατάταξη",
     "app.title.classement": "Κατάταξη",
     "app.subtitle.classement": "Σύγκρινε τους χρόνους σου με τους φίλους σου στις ίδιες διοργανώσεις.",
@@ -1615,7 +1625,10 @@ function updateLangButton() {
   const langBtn = document.getElementById("lang-btn");
   if (langBtn) langBtn.innerHTML = FLAG_SVGS[getLang()];
   document.querySelectorAll(".lang-option").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.lang === getLang());
+    const active = btn.dataset.lang === getLang();
+    btn.classList.toggle("active", active);
+    const check = btn.querySelector(".lang-option-check");
+    if (check) check.textContent = active ? "✓" : "";
   });
 }
 
@@ -1656,6 +1669,34 @@ langMenu.querySelectorAll(".lang-option").forEach((btn) => {
   btn.addEventListener("click", () => {
     setLang(btn.dataset.lang);
     langMenu.hidden = true;
+  });
+});
+
+// ---- Preferences UI (Profil > Langue) ----
+const profileLanguageRow = document.getElementById("profile-language-row");
+const profileViewForLanguage = document.getElementById("profile-view");
+const languageViewEl = document.getElementById("language-view");
+const languageBackBtn = document.getElementById("language-back-btn");
+
+profileLanguageRow.addEventListener("click", () => {
+  profileViewForLanguage.hidden = true;
+  languageViewEl.hidden = false;
+});
+
+languageBackBtn.addEventListener("click", () => {
+  languageViewEl.hidden = true;
+  profileViewForLanguage.hidden = false;
+});
+
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    languageViewEl.hidden = true;
+  });
+});
+
+languageViewEl.querySelectorAll(".lang-option").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setLang(btn.dataset.lang);
   });
 });
 

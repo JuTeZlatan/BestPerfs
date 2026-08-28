@@ -215,6 +215,11 @@ body {
   top: 16px;
   right: 16px;
   z-index: 600;
+  display: none;
+}
+
+body:has(#app-root[hidden]) .lang-switcher.lang-switcher-fixed {
+  display: block;
 }
 
 .notif-switcher.notif-switcher-fixed {
