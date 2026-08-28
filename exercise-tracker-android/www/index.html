@@ -398,13 +398,19 @@
       <div id="triathlon-panel" class="triathlon-panel" hidden>
         <div class="triathlon-setup-row">
           <input type="text" id="triathlon-location-input" data-i18n-placeholder="sport.locationPlaceholder" placeholder="Lieu (ex: Nice)" maxlength="40">
-          <select id="triathlon-size-input" class="triathlon-size-select">
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M" selected>M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-          </select>
+          <div id="triathlon-size-input" class="triathlon-size-dropdown" data-value="M">
+            <button type="button" class="triathlon-size-btn">
+              <span class="triathlon-size-label">M</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="sport-menu triathlon-size-menu" hidden>
+              <button type="button" class="sport-option" data-value="XS">XS</button>
+              <button type="button" class="sport-option" data-value="S">S</button>
+              <button type="button" class="sport-option active" data-value="M">M</button>
+              <button type="button" class="sport-option" data-value="L">L</button>
+              <button type="button" class="sport-option" data-value="XL">XL</button>
+            </div>
+          </div>
         </div>
 
         <div class="triathlon-step" id="triathlon-step-swim">

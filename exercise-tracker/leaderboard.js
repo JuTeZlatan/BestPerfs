@@ -144,7 +144,9 @@ function selectClassementSport(sport) {
 
 classementSportBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  classementSportMenu.hidden = !classementSportMenu.hidden;
+  const opening = classementSportMenu.hidden;
+  window.closeAllDropdowns();
+  classementSportMenu.hidden = !opening;
 });
 
 classementSportMenu.querySelectorAll(".sport-option").forEach((btn) => {
@@ -171,7 +173,9 @@ Object.values(classementPresetSelects).forEach((dropdown) => {
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
-    menu.hidden = !menu.hidden;
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
   });
 
   menu.querySelectorAll(".sport-option").forEach((option) => {

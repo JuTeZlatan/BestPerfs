@@ -89,7 +89,8 @@ function openNotification(notif) {
 notifIconBtn.addEventListener("click", async (e) => {
   e.stopPropagation();
   const opening = notifMenu.hidden;
-  notifMenu.hidden = !notifMenu.hidden;
+  window.closeAllDropdowns();
+  notifMenu.hidden = !opening;
   if (opening) {
     await fetchNotifications();
     updateBadge();

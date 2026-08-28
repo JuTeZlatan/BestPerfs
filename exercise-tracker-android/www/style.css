@@ -237,7 +237,7 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
   display: none;
 }
 
-body:has(#sports-view:not([hidden])) .classement-switcher.classement-switcher-fixed {
+body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switcher.classement-switcher-fixed {
   display: block;
 }
 
@@ -1272,6 +1272,31 @@ h1 {
   font-size: 0.9rem;
   outline: none;
   text-align: center;
+}
+
+.triathlon-size-dropdown {
+  flex: 0 0 68px;
+  position: relative;
+}
+
+.triathlon-size-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.triathlon-size-menu {
+  min-width: 68px;
 }
 
 .triathlon-step {

@@ -25,7 +25,7 @@ function closeAllRowMenus() {
 
 function toggleRowMenu(dropdown) {
   const wasHidden = dropdown.hidden;
-  closeAllRowMenus();
+  window.closeAllDropdowns();
   dropdown.hidden = !wasHidden;
 }
 

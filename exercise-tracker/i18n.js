@@ -1634,13 +1634,22 @@ function setLang(lang) {
 }
 window.setLang = setLang;
 
+// ---- Shared: only one dropdown/menu open at a time across the whole app ----
+window.closeAllDropdowns = function (except) {
+  document.querySelectorAll(".sport-menu, .lang-menu, .notif-menu, .row-menu-dropdown").forEach((el) => {
+    if (el !== except) el.hidden = true;
+  });
+};
+
 // ---- Language switcher UI ----
 const langBtn = document.getElementById("lang-btn");
 const langMenu = document.getElementById("lang-menu");
 
 langBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  langMenu.hidden = !langMenu.hidden;
+  const opening = langMenu.hidden;
+  window.closeAllDropdowns();
+  langMenu.hidden = !opening;
 });
 
 langMenu.querySelectorAll(".lang-option").forEach((btn) => {

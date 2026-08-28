@@ -115,7 +115,9 @@ function bindDistanceSelect(dropdownEl, manualInputEl) {
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
-    menu.hidden = !menu.hidden;
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
   });
 
   menu.querySelectorAll(".sport-option").forEach((option) => {
@@ -308,7 +310,9 @@ function selectSport(sport) {
 
 sportSelectBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  sportMenuEl.hidden = !sportMenuEl.hidden;
+  const opening = sportMenuEl.hidden;
+  window.closeAllDropdowns();
+  sportMenuEl.hidden = !opening;
 });
 
 sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
@@ -498,7 +502,10 @@ let triathlonDraft = { swim: null, bike: null, run: null };
 
 function resetTriathlonWizard() {
   triLocationInput.value = "";
-  triSizeInput.value = "M";
+  const sizeMenu = triSizeInput.querySelector(".triathlon-size-menu");
+  sizeMenu.querySelectorAll(".sport-option").forEach((o) => o.classList.toggle("active", o.dataset.value === "M"));
+  triSizeInput.dataset.value = "M";
+  triSizeInput.querySelector(".triathlon-size-label").textContent = "M";
   Object.values(triFields).forEach(({ hours, minutes, seconds, hundredths }) => {
     hours.value = "";
     minutes.value = "";
@@ -543,7 +550,7 @@ triFields.run.validate.addEventListener("click", () => {
   sportPerfs.triathlon.push({
     id: crypto.randomUUID(),
     text,
-    size: triSizeInput.value,
+    size: triSizeInput.dataset.value,
     swim: triathlonDraft.swim,
     bike: triathlonDraft.bike,
     run: triathlonDraft.run,
@@ -611,6 +618,33 @@ document.addEventListener("unitschange", () => {
 
 bindDistanceSelect(swimDistanceSelect, swimDistanceManualInput);
 bindDistanceSelect(runningDistanceSelect, runningDistanceManualInput);
+
+(function bindSizeDropdown(dropdownEl) {
+  const btn = dropdownEl.querySelector(".triathlon-size-btn");
+  const label = dropdownEl.querySelector(".triathlon-size-label");
+  const menu = dropdownEl.querySelector(".triathlon-size-menu");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
+  });
+
+  menu.querySelectorAll(".sport-option").forEach((option) => {
+    option.addEventListener("click", () => {
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+      option.classList.add("active");
+      dropdownEl.dataset.value = option.dataset.value;
+      label.textContent = option.textContent;
+      menu.hidden = true;
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !dropdownEl.contains(e.target)) menu.hidden = true;
+  });
+})(triSizeInput);
 
 sortSportMenu();
 updateDistancePlaceholders();
