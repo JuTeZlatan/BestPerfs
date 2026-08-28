@@ -1824,6 +1824,16 @@ h1 {
   display: none;
 }
 
+.perf-date {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 4px;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
 .perf-best-badge {
   flex-shrink: 0;
   font-size: 0.95rem;

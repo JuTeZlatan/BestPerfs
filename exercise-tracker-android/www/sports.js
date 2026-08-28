@@ -1,5 +1,17 @@
 const SPORTS_STORAGE_KEY = "exercise-tracker-sports";
 
+function todayISO() {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  return new Date(now - offset).toISOString().slice(0, 10);
+}
+
+function formatPerfDate(dateStr) {
+  if (!dateStr) return "";
+  const [, m, d] = dateStr.split("-");
+  return `${d}/${m}`;
+}
+
 const sportSelectBtn = document.getElementById("sport-select-btn");
 const sportSelectLabel = document.getElementById("sport-select-label");
 const sportSelectIcon = document.getElementById("sport-select-icon");
@@ -396,6 +408,9 @@ function renderSportList() {
     const sizeDisplay = node.querySelector(".perf-size-display");
     if (sizeDisplay) sizeDisplay.innerHTML = sizeChipHTML(perf);
 
+    const dateDisplay = node.querySelector(".perf-date");
+    if (dateDisplay) dateDisplay.textContent = formatPerfDate(perf.date);
+
     const bestBadge = node.querySelector(".perf-best-badge");
     if (bestBadge) {
       const isBest = bestIds.has(perf.id);
@@ -443,6 +458,7 @@ addSwimForm.addEventListener("submit", (e) => {
   if (!text) return;
   sportPerfs.natation.push({
     id: crypto.randomUUID(),
+    date: todayISO(),
     text,
     distance: resolveSelectDistance(swimDistanceSelect, swimDistanceManualInput, "natation"),
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
@@ -463,6 +479,7 @@ addCyclingForm.addEventListener("submit", (e) => {
   if (!text || cyclingDistanceInput.value === "") return;
   sportPerfs.velo.push({
     id: crypto.randomUUID(),
+    date: todayISO(),
     text,
     distance: distanceFromDisplay(Number(cyclingDistanceInput.value), "velo"),
     hours: cyclingHoursInput.value === "" ? null : Number(cyclingHoursInput.value),
@@ -482,6 +499,7 @@ addRunningForm.addEventListener("submit", (e) => {
   if (!text) return;
   sportPerfs.course.push({
     id: crypto.randomUUID(),
+    date: todayISO(),
     text,
     distance: resolveSelectDistance(runningDistanceSelect, runningDistanceManualInput, "course"),
     hours: runningHoursInput.value === "" ? null : Number(runningHoursInput.value),
@@ -549,6 +567,7 @@ triFields.run.validate.addEventListener("click", () => {
   triathlonDraft.run = readTriLeg("run");
   sportPerfs.triathlon.push({
     id: crypto.randomUUID(),
+    date: todayISO(),
     text,
     size: triSizeInput.dataset.value,
     swim: triathlonDraft.swim,
