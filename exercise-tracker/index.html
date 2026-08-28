@@ -511,6 +511,7 @@
           <button class="sport-option" data-sport="natation"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></button>
           <button class="sport-option" data-sport="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
           <button class="sport-option" data-sport="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
+          <button class="sport-option" data-sport="fitness"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg></span><span data-i18n="sport.fitness">Fitness</span></button>
         </div>
       </div>
 
@@ -580,6 +581,19 @@
           <button class="sport-option" type="button" data-value="100-150">100-150 km</button>
           <button class="sport-option" type="button" data-value="150-200">150-200 km</button>
           <button class="sport-option" type="button" data-value="200-300">200-300 km</button>
+        </div>
+      </div>
+      <div id="classement-preset-fitness" class="sport-dropdown classement-preset-dropdown" hidden>
+        <button class="sport-select-btn classement-preset-btn" type="button">
+          <span class="classement-preset-label" data-i18n="classement.chooseExercise">Choisis un exercice</span>
+          <span class="dropdown-arrow">▾</span>
+        </button>
+        <div class="sport-menu classement-preset-menu" hidden>
+          <button class="sport-option" type="button" data-value="pushups" data-i18n="exercise.pushups">Pompes</button>
+          <button class="sport-option" type="button" data-value="situps" data-i18n="exercise.situps">Abdos</button>
+          <button class="sport-option" type="button" data-value="pullups" data-i18n="exercise.pullups">Tractions</button>
+          <button class="sport-option" type="button" data-value="dips" data-i18n="exercise.dips">Dips</button>
+          <button class="sport-option" type="button" data-value="benchpress" data-i18n="exercise.benchpress">Développé couché</button>
         </div>
       </div>
 

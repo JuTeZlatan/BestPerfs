@@ -24,6 +24,16 @@ const PRESET_KEYS = {
   natation: ["50", "100", "200", "400", "800", "1500", "5000", "10000"],
   triathlon: ["XS", "S", "M", "L", "XL"],
   velo: VELO_BRACKETS.map(([lo, hi]) => `${lo}-${hi}`),
+  fitness: ["pushups", "situps", "pullups", "dips", "benchpress"],
+};
+// Fitness ranks the opposite way from every other sport here: more reps or
+// more weight is better, not a lower time.
+const FITNESS_METRIC = {
+  pushups: "reps",
+  situps: "reps",
+  pullups: "reps",
+  dips: "reps",
+  benchpress: "weight",
 };
 const RUNNING_DISTANCE_TO_KEY = {
   "0.1": "0.1",
@@ -106,6 +116,43 @@ async function syncLeaderboardEntries(sportPerfs) {
 }
 window.syncLeaderboardEntries = syncLeaderboardEntries;
 
+// ---- Sync Fitness preset-exercise bests to Firestore, called from
+// script.js's saveExercises(). Manual (non-preset) exercises aren't
+// comparable across users, so they're skipped. ----
+async function syncFitnessLeaderboardEntries(exercises) {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return;
+  const username = myUsername();
+  if (!username) return;
+
+  const bestByKey = {};
+  exercises.forEach((exercise) => {
+    const key = exercise.exerciseKey;
+    if (!key || !PRESET_KEYS.fitness.includes(key)) return;
+    const metric = FITNESS_METRIC[key];
+    const value = metric === "reps" ? exercise.maxReps : exercise.maxWeight;
+    if (value == null) return;
+    if (!(key in bestByKey) || value > bestByKey[key]) bestByKey[key] = value;
+  });
+
+  PRESET_KEYS.fitness.forEach((presetKey) => {
+    const ref = doc(db, "leaderboardEntries", `${uid}_fitness_${presetKey}`);
+    if (presetKey in bestByKey) {
+      setDoc(ref, {
+        uid,
+        username,
+        sport: "fitness",
+        presetKey,
+        totalSeconds: bestByKey[presetKey],
+        updatedAt: serverTimestamp(),
+      }).catch(() => {});
+    } else {
+      deleteDoc(ref).catch(() => {});
+    }
+  });
+}
+window.syncFitnessLeaderboardEntries = syncFitnessLeaderboardEntries;
+
 // ---- UI: sport/preset pickers + ranking ----
 const classementSportBtn = document.getElementById("classement-sport-select-btn");
 const classementSportLabel = document.getElementById("classement-sport-select-label");
@@ -118,15 +165,17 @@ const classementPresetSelects = {
   natation: document.getElementById("classement-preset-natation"),
   triathlon: document.getElementById("classement-preset-triathlon"),
   velo: document.getElementById("classement-preset-velo"),
+  fitness: document.getElementById("classement-preset-fitness"),
 };
 const classementRowTemplate = document.getElementById("classement-row-template");
 
-const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon", velo: "sport.cycling" };
+const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon", velo: "sport.cycling", fitness: "sport.fitness" };
 const CLASSEMENT_SPORT_ICONS = {
   course: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg>',
   natation: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg>',
   triathlon: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>',
   velo: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg>',
+  fitness: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg>',
 };
 
 let classementSport = "course";
@@ -139,8 +188,9 @@ function updateClassementSportLabel() {
 
 function resetPresetDropdown(dropdown) {
   const label = dropdown.querySelector(".classement-preset-label");
-  label.textContent = t("classement.choosePreset");
-  label.dataset.i18n = "classement.choosePreset";
+  const defaultKey = label.dataset.defaultI18n || "classement.choosePreset";
+  label.textContent = t(defaultKey);
+  label.dataset.i18n = defaultKey;
   dropdown.querySelectorAll(".sport-option").forEach((btn) => btn.classList.remove("active"));
   dropdown.querySelector(".classement-preset-menu").hidden = true;
 }
@@ -187,6 +237,7 @@ Object.values(classementPresetSelects).forEach((dropdown) => {
   const btn = dropdown.querySelector(".classement-preset-btn");
   const menu = dropdown.querySelector(".classement-preset-menu");
   const label = dropdown.querySelector(".classement-preset-label");
+  label.dataset.defaultI18n = label.dataset.i18n;
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -207,6 +258,13 @@ Object.values(classementPresetSelects).forEach((dropdown) => {
     });
   });
 });
+
+function formatFitnessValue(value, presetKey) {
+  if (FITNESS_METRIC[presetKey] === "weight") {
+    return `${window.weightToDisplay(value)} ${window.weightUnitLabel()}`;
+  }
+  return `${value} ${t("field.reps")}`;
+}
 
 function formatSeconds(totalSeconds) {
   const centis = Math.round(totalSeconds * 100);
@@ -246,7 +304,7 @@ async function renderClassementList() {
   const rows = snaps
     .filter((snap) => snap && snap.exists())
     .map((snap) => snap.data())
-    .sort((a, b) => a.totalSeconds - b.totalSeconds);
+    .sort((a, b) => (classementSport === "fitness" ? b.totalSeconds - a.totalSeconds : a.totalSeconds - b.totalSeconds));
 
   classementEmptyEl.classList.toggle("visible", rows.length === 0);
 
@@ -261,7 +319,8 @@ async function renderClassementList() {
     const nameEl = node.querySelector(".classement-name");
     nameEl.textContent = row.uid === myUid ? `${row.username} ${t("classement.you")}` : row.username;
     if (row.uid === myUid) card.classList.add("classement-row-you");
-    node.querySelector(".classement-time").textContent = formatSeconds(row.totalSeconds);
+    node.querySelector(".classement-time").textContent =
+      row.sport === "fitness" ? formatFitnessValue(row.totalSeconds, row.presetKey) : formatSeconds(row.totalSeconds);
     classementListEl.appendChild(node);
   });
 }

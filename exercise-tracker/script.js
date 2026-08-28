@@ -68,6 +68,7 @@ function loadExercises() {
 
 function saveExercises() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(exercises));
+  window.syncFitnessLeaderboardEntries && window.syncFitnessLeaderboardEntries(exercises);
 }
 
 function getSortedExercises() {
