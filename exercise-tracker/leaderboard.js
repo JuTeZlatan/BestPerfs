@@ -14,11 +14,16 @@ import {
 
 // ---- Preset definitions (mirror the existing add-form preset dropdowns in
 // sports.js/index.html) - only these are comparable across users. ----
-const LEADERBOARD_SPORTS = ["course", "natation", "triathlon"];
+const LEADERBOARD_SPORTS = ["course", "natation", "triathlon", "velo"];
+const VELO_BRACKETS = [
+  [0, 10], [10, 20], [20, 30], [30, 40], [40, 50], [50, 60], [60, 70], [70, 80], [80, 90], [90, 100],
+  [100, 150], [150, 200], [200, 300],
+];
 const PRESET_KEYS = {
   course: ["0.1", "0.2", "0.4", "0.8", "1.5", "3", "5", "10", "half", "marathon"],
   natation: ["50", "100", "200", "400", "800", "1500", "5000", "10000"],
   triathlon: ["XS", "S", "M", "L", "XL"],
+  velo: VELO_BRACKETS.map(([lo, hi]) => `${lo}-${hi}`),
 };
 const RUNNING_DISTANCE_TO_KEY = {
   "0.1": "0.1",
@@ -32,6 +37,12 @@ const RUNNING_DISTANCE_TO_KEY = {
   "21.0975": "half",
   "42.195": "marathon",
 };
+
+function veloBracketKey(distanceKm) {
+  if (distanceKm == null) return null;
+  const bracket = VELO_BRACKETS.find(([lo, hi]) => distanceKm <= hi && (lo === 0 ? distanceKm >= 0 : distanceKm > lo));
+  return bracket ? `${bracket[0]}-${bracket[1]}` : null;
+}
 
 function perfSeconds(perf) {
   return (perf.hours ?? 0) * 3600 + (perf.minutes ?? 0) * 60 + (perf.seconds ?? 0) + (perf.hundredths ?? 0) / 100;
@@ -49,6 +60,7 @@ function presetKeyForEntry(sport, perf) {
     const key = String(perf.distance);
     return PRESET_KEYS.natation.includes(key) ? key : null;
   }
+  if (sport === "velo") return veloBracketKey(perf.distance);
   return RUNNING_DISTANCE_TO_KEY[String(perf.distance)] || null;
 }
 
@@ -105,14 +117,16 @@ const classementPresetSelects = {
   course: document.getElementById("classement-preset-course"),
   natation: document.getElementById("classement-preset-natation"),
   triathlon: document.getElementById("classement-preset-triathlon"),
+  velo: document.getElementById("classement-preset-velo"),
 };
 const classementRowTemplate = document.getElementById("classement-row-template");
 
-const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon" };
+const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon", velo: "sport.cycling" };
 const CLASSEMENT_SPORT_ICONS = {
   course: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg>',
   natation: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg>',
   triathlon: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>',
+  velo: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg>',
 };
 
 let classementSport = "course";

@@ -67,7 +67,7 @@ service cloud.firestore {
 
       allow create, update: if request.auth != null
         && request.auth.uid == request.resource.data.uid
-        && request.resource.data.sport in ['course', 'natation', 'triathlon']
+        && request.resource.data.sport in ['course', 'natation', 'triathlon', 'velo']
         && request.resource.data.presetKey is string
         && request.resource.data.totalSeconds is number
         && request.resource.data.totalSeconds > 0
