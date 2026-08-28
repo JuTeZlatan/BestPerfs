@@ -1,9 +1,12 @@
-// Makes the Android hardware/gesture back button step back through whatever
-// screens were actually visited, in the exact order they were visited -
-// no hardcoded "subpage X belongs to parent Y" rules. It works by watching
-// every top-level view element's `hidden` attribute and recording each
-// distinct combination as a browser history entry; the back button just
-// replays that history one step at a time, same as a normal back button.
+// Web/browser back: replays whatever screens were actually visited, in the
+// exact order they were visited. It works by watching every top-level view
+// element's `hidden` attribute and recording each distinct combination as a
+// browser history entry; the back button just replays that history one step
+// at a time, same as a normal back button.
+//
+// Android hardware/gesture back button: uses a fixed parent hierarchy
+// instead (see PARENT below) so it always steps up the same menu tree no
+// matter how the current screen was reached.
 (function () {
   const TRACKED_IDS = [
     "auth-gate",
@@ -80,10 +83,49 @@
   const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
   if (!isNativePlatform) return;
 
-  Capacitor.Plugins.App.addListener("backButton", () => {
-    if (historyDepth > 0) {
-      window.history.back();
+  // The hardware/gesture back button doesn't replay raw navigation history
+  // (that could bounce sideways between sibling subpages depending on how
+  // the user got there) - it always steps up a fixed parent chain, like a
+  // menu tree: Langue -> Profil -> Sports (home) -> exit app, regardless of
+  // the exact path taken to reach the current screen.
+  const PARENT = {
+    "account-view": "profile-view",
+    "friends-view": "profile-view",
+    "units-view": "profile-view",
+    "themes-view": "profile-view",
+    "language-view": "profile-view",
+    "backup-view": "profile-view",
+    "support-view": "profile-view",
+    "profile-view": "sports-view",
+    "timer-view": "sports-view",
+    "classement-view": "sports-view",
+    "forgot-password-view": "auth-gate",
+    "signup-view": "auth-gate",
+    "username-view": "auth-gate",
+  };
+
+  function currentLeaf() {
+    return Object.keys(PARENT).find((id) => {
+      const el = document.getElementById(id);
+      return el && !el.hidden;
+    });
+  }
+
+  function goBackOneLevel() {
+    const leaf = currentLeaf();
+    if (!leaf) return false; // already on Sports (home) or the login gate
+    document.getElementById(leaf).hidden = true;
+    const parent = PARENT[leaf];
+    if (parent === "sports-view") {
+      window.showView("sports");
     } else {
+      document.getElementById(parent).hidden = false;
+    }
+    return true;
+  }
+
+  Capacitor.Plugins.App.addListener("backButton", () => {
+    if (!goBackOneLevel()) {
       Capacitor.Plugins.App.exitApp();
     }
   });

@@ -1824,14 +1824,18 @@ h1 {
   display: none;
 }
 
-.perf-date {
-  flex-shrink: 0;
-  margin-left: auto;
-  padding-left: 4px;
-  font-size: 0.68rem;
-  font-variant-numeric: tabular-nums;
+.sport-month-separator {
+  margin: 12px 2px 2px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-dim);
-  white-space: nowrap;
+  opacity: 0.75;
+}
+
+.sport-month-separator:first-child {
+  margin-top: 0;
 }
 
 .perf-best-badge {

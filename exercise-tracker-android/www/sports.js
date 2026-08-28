@@ -6,10 +6,10 @@ function todayISO() {
   return new Date(now - offset).toISOString().slice(0, 10);
 }
 
-function formatPerfDate(dateStr) {
-  if (!dateStr) return "";
-  const [, m, d] = dateStr.split("-");
-  return `${d}/${m}`;
+function monthLabel(monthKey) {
+  const [y, m] = monthKey.split("-").map(Number);
+  const label = new Date(y, m - 1, 1).toLocaleDateString(getLang(), { month: "long", year: "numeric" });
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 const sportSelectBtn = document.getElementById("sport-select-btn");
@@ -176,6 +176,13 @@ function timeChipHTML(perf, sport) {
 
 function distanceChipHTML(perf, sport) {
   if (perf.distance == null || perf.distance === "") return "";
+  // Sub-1km road/track distances (100m, 200m, 400m, 800m...) are always
+  // referred to in meters, never as a "0.1 km"-style decimal - regardless
+  // of the user's km/mi preference, which only makes sense past 1km.
+  if (sport !== "natation" && perf.distance < 1) {
+    const meters = Math.round(perf.distance * 1000);
+    return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${meters}</span><span class="chip-unit">m</span>`;
+  }
   const displayValue = distanceToDisplay(perf.distance, sport);
   return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${displayValue}</span><span class="chip-unit">${distanceUnitFor(sport)}</span>`;
 }
@@ -363,7 +370,17 @@ function renderSportList() {
   const template = SPORT_TEMPLATES[currentSport];
   const bestIds = computeBestIds(entries, currentSport);
 
+  let lastMonthKey = null;
   entries.forEach((perf) => {
+    const monthKey = perf.date ? perf.date.slice(0, 7) : null;
+    if (monthKey && monthKey !== lastMonthKey) {
+      const separator = document.createElement("div");
+      separator.className = "sport-month-separator";
+      separator.textContent = monthLabel(monthKey);
+      sportListEl.appendChild(separator);
+      lastMonthKey = monthKey;
+    }
+
     const node = template.content.cloneNode(true);
 
     const textInput = node.querySelector(".perf-text");
@@ -407,9 +424,6 @@ function renderSportList() {
 
     const sizeDisplay = node.querySelector(".perf-size-display");
     if (sizeDisplay) sizeDisplay.innerHTML = sizeChipHTML(perf);
-
-    const dateDisplay = node.querySelector(".perf-date");
-    if (dateDisplay) dateDisplay.textContent = formatPerfDate(perf.date);
 
     const bestBadge = node.querySelector(".perf-best-badge");
     if (bestBadge) {
