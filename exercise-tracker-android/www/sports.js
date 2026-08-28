@@ -27,7 +27,7 @@ const cyclingTemplate = document.getElementById("cycling-perf-template");
 const runningTemplate = document.getElementById("running-perf-template");
 
 const addSwimForm = document.getElementById("add-swim-form");
-const swimStyleInput = document.getElementById("swim-style-input");
+const swimStyleSelect = document.getElementById("swim-style-select");
 const swimDistanceSelect = document.getElementById("swim-distance-select");
 const swimDistanceManualInput = document.getElementById("swim-distance-manual-input");
 const swimMinutesInput = document.getElementById("swim-minutes-input");
@@ -160,6 +160,13 @@ const ICON_TRIATHLON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="
 const ICON_FITNESS = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg>';
 const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
 const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
+const SWIM_STROKE_LABEL_KEYS = {
+  freestyle: "swimStroke.freestyle",
+  backstroke: "swimStroke.backstroke",
+  breaststroke: "swimStroke.breaststroke",
+  butterfly: "swimStroke.butterfly",
+  medley: "swimStroke.medley",
+};
 const TEXT_PLACEHOLDER_KEYS = {
   natation: "sport.swim.stylePlaceholder",
   velo: "sport.locationPlaceholder",
@@ -385,7 +392,9 @@ function renderSportList() {
 
     const textInput = node.querySelector(".perf-text");
     if (textInput) {
-      textInput.value = perf.text;
+      const strokeKey = currentSport === "natation" ? SWIM_STROKE_LABEL_KEYS[perf.text] : null;
+      const displayText = strokeKey ? t(strokeKey) : perf.text;
+      textInput.value = displayText;
       textInput.placeholder = t(TEXT_PLACEHOLDER_KEYS[currentSport]);
 
       textInput.addEventListener("keydown", (e) => {
@@ -396,10 +405,10 @@ function renderSportList() {
         textInput.readOnly = true;
         const newText = textInput.value.trim();
         if (!newText) {
-          textInput.value = perf.text;
+          textInput.value = displayText;
           return;
         }
-        if (newText === perf.text) return;
+        if (newText === displayText) return;
         perf.text = newText;
         saveSportPerfs();
         renderSportList();
@@ -478,12 +487,10 @@ function renderSportList() {
 
 addSwimForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const text = swimStyleInput.value.trim();
-  if (!text) return;
   sportPerfs.natation.push({
     id: crypto.randomUUID(),
     date: todayISO(),
-    text,
+    text: swimStyleSelect.dataset.value,
     distance: resolveSelectDistance(swimDistanceSelect, swimDistanceManualInput, "natation"),
     minutes: swimMinutesInput.value === "" ? null : Number(swimMinutesInput.value),
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
@@ -492,9 +499,9 @@ addSwimForm.addEventListener("submit", (e) => {
   saveSportPerfs();
   renderSportList();
   addSwimForm.reset();
+  resetDistanceDropdown(swimStyleSelect);
   resetDistanceDropdown(swimDistanceSelect);
   swimDistanceManualInput.hidden = true;
-  swimStyleInput.focus();
 });
 
 addCyclingForm.addEventListener("submit", (e) => {
@@ -675,6 +682,39 @@ document.addEventListener("unitschange", () => {
   renderSportList();
 });
 
+function bindSimpleDropdown(dropdownEl) {
+  const btn = dropdownEl.querySelector(".distance-dropdown-btn");
+  const label = dropdownEl.querySelector(".distance-dropdown-label");
+  const menu = dropdownEl.querySelector(".distance-dropdown-menu");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
+  });
+
+  menu.querySelectorAll(".sport-option").forEach((option) => {
+    option.addEventListener("click", () => {
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+      option.classList.add("active");
+      dropdownEl.dataset.value = option.dataset.value;
+      label.textContent = option.textContent;
+      menu.hidden = true;
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !dropdownEl.contains(e.target)) menu.hidden = true;
+  });
+
+  document.addEventListener("languagechange", () => {
+    const active = menu.querySelector(".sport-option.active");
+    if (active) label.textContent = active.textContent;
+  });
+}
+
+bindSimpleDropdown(swimStyleSelect);
 bindDistanceSelect(swimDistanceSelect, swimDistanceManualInput);
 bindDistanceSelect(runningDistanceSelect, runningDistanceManualInput);
 

@@ -1896,6 +1896,10 @@ h1 {
   flex-shrink: 0;
 }
 
+.inline-field[hidden] {
+  display: none;
+}
+
 .preset-time-display {
   display: inline-flex;
   align-items: baseline;

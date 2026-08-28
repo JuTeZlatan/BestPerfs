@@ -3,7 +3,31 @@ const STORAGE_KEY = "exercise-tracker-data";
 const listEl = document.getElementById("exercise-list");
 const formEl = document.getElementById("add-form");
 const inputEl = document.getElementById("exercise-input");
+const exerciseSelectEl = document.getElementById("exercise-select");
 const emptyStateEl = document.getElementById("empty-state");
+
+const PRESET_EXERCISE_LABEL_KEYS = {
+  pushups: "exercise.pushups",
+  situps: "exercise.situps",
+  pullups: "exercise.pullups",
+  dips: "exercise.dips",
+  benchpress: "exercise.benchpress",
+};
+const PRESET_EXERCISE_HAS_WEIGHT = {
+  pushups: false,
+  situps: false,
+  pullups: false,
+  dips: false,
+  benchpress: true,
+};
+
+function exerciseDisplayName(exercise) {
+  return exercise.exerciseKey ? t(PRESET_EXERCISE_LABEL_KEYS[exercise.exerciseKey]) : exercise.name;
+}
+
+function exerciseHasWeight(exercise) {
+  return exercise.exerciseKey ? PRESET_EXERCISE_HAS_WEIGHT[exercise.exerciseKey] : true;
+}
 const templateEl = document.getElementById("exercise-template");
 const sortAscBtn = document.getElementById("sort-asc-btn");
 const sortDescBtn = document.getElementById("sort-desc-btn");
@@ -65,7 +89,8 @@ function render() {
   getSortedExercises().forEach((exercise) => {
     const node = templateEl.content.cloneNode(true);
     const nameInput = node.querySelector(".exercise-name");
-    nameInput.value = exercise.name;
+    const displayName = exerciseDisplayName(exercise);
+    nameInput.value = displayName;
     nameInput.placeholder = t("exercise.namePlaceholder");
 
     nameInput.addEventListener("keydown", (e) => {
@@ -76,14 +101,18 @@ function render() {
       nameInput.readOnly = true;
       const newName = nameInput.value.trim();
       if (!newName) {
-        nameInput.value = exercise.name;
+        nameInput.value = displayName;
         return;
       }
-      if (newName === exercise.name) return;
+      if (newName === displayName) return;
+      exercise.exerciseKey = null;
       exercise.name = newName;
       saveExercises();
       render();
     });
+
+    const weightField = node.querySelector(".weight-field");
+    weightField.hidden = !exerciseHasWeight(exercise);
 
     const fieldLabels = node.querySelectorAll(".inline-field-label");
     fieldLabels[0].textContent = t("field.reps");
@@ -173,9 +202,10 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !confirmModal.hidden) closeConfirmModal();
 });
 
-function addExercise(name) {
+function addExercise(exerciseKey, name) {
   exercises.push({
     id: crypto.randomUUID(),
+    exerciseKey,
     name,
     maxReps: null,
     maxWeight: null,
@@ -184,13 +214,66 @@ function addExercise(name) {
   render();
 }
 
+function resetExerciseSelect() {
+  const menu = exerciseSelectEl.querySelector(".distance-dropdown-menu");
+  const label = exerciseSelectEl.querySelector(".distance-dropdown-label");
+  const options = menu.querySelectorAll(".sport-option");
+  const first = options[0];
+  options.forEach((o) => o.classList.toggle("active", o === first));
+  exerciseSelectEl.dataset.value = first.dataset.value;
+  label.textContent = first.textContent;
+  inputEl.hidden = true;
+  inputEl.required = false;
+}
+
+(function bindExerciseSelect() {
+  const btn = exerciseSelectEl.querySelector(".distance-dropdown-btn");
+  const label = exerciseSelectEl.querySelector(".distance-dropdown-label");
+  const menu = exerciseSelectEl.querySelector(".distance-dropdown-menu");
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
+  });
+
+  menu.querySelectorAll(".sport-option").forEach((option) => {
+    option.addEventListener("click", () => {
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+      option.classList.add("active");
+      exerciseSelectEl.dataset.value = option.dataset.value;
+      label.textContent = option.textContent;
+      menu.hidden = true;
+      const isManual = option.dataset.value === "manual";
+      inputEl.hidden = !isManual;
+      inputEl.required = isManual;
+      if (isManual) inputEl.focus();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !exerciseSelectEl.contains(e.target)) menu.hidden = true;
+  });
+
+  document.addEventListener("languagechange", () => {
+    const active = menu.querySelector(".sport-option.active");
+    if (active) label.textContent = active.textContent;
+  });
+})();
+
 formEl.addEventListener("submit", (e) => {
   e.preventDefault();
-  const name = inputEl.value.trim();
-  if (!name) return;
-  addExercise(name);
+  const key = exerciseSelectEl.dataset.value;
+  if (key === "manual") {
+    const name = inputEl.value.trim();
+    if (!name) return;
+    addExercise(null, name);
+  } else {
+    addExercise(key, null);
+  }
   inputEl.value = "";
-  inputEl.focus();
+  resetExerciseSelect();
 });
 
 sortAscBtn.addEventListener("click", () => {

@@ -320,7 +320,21 @@
 
       <div id="fitness-panel" class="sport-panel" hidden>
         <form id="add-form" class="add-form">
-          <input type="text" id="exercise-input" data-i18n-placeholder="exercise.inputPlaceholder" placeholder="Nom de l'appareil ou exercice (ex: Développé couché)" maxlength="40" required>
+          <div id="exercise-select" class="distance-dropdown" data-value="pushups">
+            <button type="button" class="distance-dropdown-btn">
+              <span class="distance-dropdown-label" data-i18n="exercise.pushups">Pompes</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="sport-menu distance-dropdown-menu" hidden>
+              <button type="button" class="sport-option active" data-value="pushups" data-i18n="exercise.pushups">Pompes</button>
+              <button type="button" class="sport-option" data-value="situps" data-i18n="exercise.situps">Abdos</button>
+              <button type="button" class="sport-option" data-value="pullups" data-i18n="exercise.pullups">Tractions</button>
+              <button type="button" class="sport-option" data-value="dips" data-i18n="exercise.dips">Dips</button>
+              <button type="button" class="sport-option" data-value="benchpress" data-i18n="exercise.benchpress">Développé couché</button>
+              <button type="button" class="sport-option" data-value="manual" data-i18n="sport.distanceManual">Manuel</button>
+            </div>
+          </div>
+          <input type="text" id="exercise-input" data-i18n-placeholder="exercise.inputPlaceholder" placeholder="Nom de l'appareil ou exercice (ex: Développé couché)" maxlength="40" hidden>
           <button type="submit" data-i18n="common.add">Ajouter</button>
         </form>
 
@@ -336,7 +350,19 @@
       </div>
 
       <form id="add-swim-form" class="add-form" hidden>
-        <input type="text" id="swim-style-input" data-i18n-placeholder="sport.swim.stylePlaceholder" placeholder="Style de nage (ex: Brasse)" maxlength="30" required>
+        <div id="swim-style-select" class="distance-dropdown" data-value="freestyle">
+          <button type="button" class="distance-dropdown-btn">
+            <span class="distance-dropdown-label" data-i18n="swimStroke.freestyle">Nage libre</span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu distance-dropdown-menu" hidden>
+            <button type="button" class="sport-option active" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
+            <button type="button" class="sport-option" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
+            <button type="button" class="sport-option" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
+            <button type="button" class="sport-option" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
+            <button type="button" class="sport-option" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+          </div>
+        </div>
         <div id="swim-distance-select" class="distance-dropdown" data-value="50">
           <button type="button" class="distance-dropdown-btn">
             <span class="distance-dropdown-label">50 m</span>
@@ -870,7 +896,7 @@
             <span class="inline-field-label">Reps</span>
             <input type="number" class="reps-input" min="0" step="1" placeholder="0" readonly>
           </label>
-          <label class="inline-field">
+          <label class="inline-field weight-field">
             <span class="inline-field-label">kg</span>
             <input type="number" class="weight-input" min="0" step="0.5" placeholder="0" readonly>
           </label>
