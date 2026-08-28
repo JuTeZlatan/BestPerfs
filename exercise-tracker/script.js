@@ -4,6 +4,8 @@ const listEl = document.getElementById("exercise-list");
 const formEl = document.getElementById("add-form");
 const inputEl = document.getElementById("exercise-input");
 const exerciseSelectEl = document.getElementById("exercise-select");
+const repsInputEl = document.getElementById("exercise-reps-input");
+const weightInputEl = document.getElementById("exercise-weight-input");
 const emptyStateEl = document.getElementById("empty-state");
 
 const PRESET_EXERCISE_LABEL_KEYS = {
@@ -203,16 +205,25 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !confirmModal.hidden) closeConfirmModal();
 });
 
-function addExercise(exerciseKey, name) {
+function addExercise(exerciseKey, name, reps, weight) {
   exercises.push({
     id: crypto.randomUUID(),
     exerciseKey,
     name,
-    maxReps: null,
-    maxWeight: null,
+    maxReps: reps,
+    maxWeight: weight,
   });
   saveExercises();
   render();
+}
+
+function hasWeightForSelectValue(value) {
+  return value === "manual" ? true : PRESET_EXERCISE_HAS_WEIGHT[value];
+}
+
+function updateWeightInputVisibility(value) {
+  weightInputEl.hidden = !hasWeightForSelectValue(value);
+  weightInputEl.placeholder = weightUnitLabel();
 }
 
 function resetExerciseSelect() {
@@ -225,12 +236,18 @@ function resetExerciseSelect() {
   label.textContent = first.textContent;
   inputEl.hidden = true;
   inputEl.required = false;
+  inputEl.value = "";
+  repsInputEl.value = "";
+  weightInputEl.value = "";
+  updateWeightInputVisibility(first.dataset.value);
 }
 
 (function bindExerciseSelect() {
   const btn = exerciseSelectEl.querySelector(".distance-dropdown-btn");
   const label = exerciseSelectEl.querySelector(".distance-dropdown-label");
   const menu = exerciseSelectEl.querySelector(".distance-dropdown-menu");
+
+  updateWeightInputVisibility(exerciseSelectEl.dataset.value);
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -249,6 +266,7 @@ function resetExerciseSelect() {
       const isManual = option.dataset.value === "manual";
       inputEl.hidden = !isManual;
       inputEl.required = isManual;
+      updateWeightInputVisibility(option.dataset.value);
       if (isManual) inputEl.focus();
     });
   });
@@ -260,20 +278,22 @@ function resetExerciseSelect() {
   document.addEventListener("languagechange", () => {
     const active = menu.querySelector(".sport-option.active");
     if (active) label.textContent = active.textContent;
+    weightInputEl.placeholder = weightUnitLabel();
   });
 })();
 
 formEl.addEventListener("submit", (e) => {
   e.preventDefault();
   const key = exerciseSelectEl.dataset.value;
+  const reps = repsInputEl.value === "" ? null : Number(repsInputEl.value);
+  const weight = weightInputEl.hidden || weightInputEl.value === "" ? null : weightFromDisplay(Number(weightInputEl.value));
   if (key === "manual") {
     const name = inputEl.value.trim();
     if (!name) return;
-    addExercise(null, name);
+    addExercise(null, name, reps, weight);
   } else {
-    addExercise(key, null);
+    addExercise(key, null, reps, weight);
   }
-  inputEl.value = "";
   resetExerciseSelect();
 });
 

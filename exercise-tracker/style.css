@@ -1086,6 +1086,7 @@ h1 {
 }
 
 .add-form button[type="submit"] {
+  margin-left: auto;
   padding: 12px 20px;
   border-radius: var(--cut-sm);
   border: none;
@@ -2345,6 +2346,12 @@ input[type="number"]::-webkit-inner-spin-button {
   #exercise-select {
     flex: 0 0 152px;
     width: 152px;
+  }
+
+  #exercise-reps-input,
+  #exercise-weight-input {
+    flex: 0 0 44px;
+    width: 44px;
   }
 
   .distance-dropdown-btn {
