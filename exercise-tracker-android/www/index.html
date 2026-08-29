@@ -988,6 +988,20 @@
     </div>
   </div>
 
+  <div id="date-prompt-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="datePrompt.message">À quelle date as-tu réalisé cette performance ?</p>
+      <div class="date-prompt-fields">
+        <input type="number" id="date-prompt-day" class="preset-time-field" data-i18n-placeholder="datePrompt.day" placeholder="JJ" min="1" max="31" step="1">
+        <input type="number" id="date-prompt-month" class="preset-time-field" data-i18n-placeholder="datePrompt.month" placeholder="MM" min="1" max="12" step="1">
+        <input type="number" id="date-prompt-year" class="preset-time-field" data-i18n-placeholder="datePrompt.year" placeholder="AAAA" min="1950" max="2100" step="1">
+      </div>
+      <div class="modal-actions">
+        <button id="date-prompt-confirm-btn" class="modal-btn primary" data-i18n="common.validate">Valider</button>
+      </div>
+    </div>
+  </div>
+
   <div id="proof-prompt-modal" class="modal-overlay" hidden>
     <div class="modal-box">
       <p class="modal-message" data-i18n="proofs.promptMessage">Ajouter des preuves (photos) à cette stat ?</p>

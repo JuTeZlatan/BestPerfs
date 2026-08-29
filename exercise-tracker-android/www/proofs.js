@@ -173,6 +173,53 @@ function deleteProofPhotos(photos) {
 }
 window.deleteProofPhotos = deleteProofPhotos;
 
+// ---- "What date was this?" prompt, shown right after a stat is added,
+// before the proof-photos prompt. Three plain day/month/year fields (not a
+// native <input type="date">, per request) - field order swaps for
+// month-first languages the same way the native picker already did for
+// birthdate at signup. ----
+const datePromptModal = document.getElementById("date-prompt-modal");
+const datePromptFieldsEl = document.querySelector(".date-prompt-fields");
+const datePromptDayInput = document.getElementById("date-prompt-day");
+const datePromptMonthInput = document.getElementById("date-prompt-month");
+const datePromptYearInput = document.getElementById("date-prompt-year");
+const datePromptConfirmBtn = document.getElementById("date-prompt-confirm-btn");
+const MONTH_FIRST_LANGS = ["en"];
+
+function showDatePromptModal(initialDate) {
+  return new Promise((resolve) => {
+    const [year, month, day] = initialDate.split("-");
+    datePromptDayInput.value = Number(day);
+    datePromptMonthInput.value = Number(month);
+    datePromptYearInput.value = Number(year);
+    datePromptFieldsEl.classList.toggle("month-first", MONTH_FIRST_LANGS.includes(getLang()));
+    datePromptModal.hidden = false;
+    function onConfirm() {
+      datePromptModal.hidden = true;
+      datePromptConfirmBtn.removeEventListener("click", onConfirm);
+      const d = Number(datePromptDayInput.value);
+      const m = Number(datePromptMonthInput.value);
+      const y = Number(datePromptYearInput.value);
+      if (!d || !m || !y || d > 31 || m > 12 || y < 1950) {
+        resolve(initialDate);
+        return;
+      }
+      resolve(`${String(y).padStart(4, "0")}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`);
+    }
+    datePromptConfirmBtn.addEventListener("click", onConfirm);
+  });
+}
+
+async function promptForPerfDate(perf, onSaved) {
+  const initialDate = perf.date || (window.todayISO ? window.todayISO() : new Date().toISOString().slice(0, 10));
+  const chosenDate = await showDatePromptModal(initialDate);
+  if (chosenDate !== perf.date) {
+    perf.date = chosenDate;
+    onSaved();
+  }
+}
+window.promptForPerfDate = promptForPerfDate;
+
 // ---- "Add proofs to this stat?" prompt, shown right after a stat is added ----
 const proofPromptModal = document.getElementById("proof-prompt-modal");
 const proofPromptYesBtn = document.getElementById("proof-prompt-yes-btn");

@@ -549,7 +549,7 @@ function renderSportList() {
   });
 }
 
-addSwimForm.addEventListener("submit", (e) => {
+addSwimForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const perf = {
     id: crypto.randomUUID(),
@@ -567,13 +567,15 @@ addSwimForm.addEventListener("submit", (e) => {
   resetDistanceDropdown(swimStyleSelect);
   resetDistanceDropdown(swimDistanceSelect);
   swimDistanceManualInput.hidden = true;
-  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+  const saveAndRender = () => {
     saveSportPerfs();
     renderSportList();
-  });
+  };
+  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
-addCyclingForm.addEventListener("submit", (e) => {
+addCyclingForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = cyclingLocationInput.value.trim();
   if (!text || cyclingDistanceInput.value === "") return;
@@ -592,13 +594,15 @@ addCyclingForm.addEventListener("submit", (e) => {
   renderSportList();
   addCyclingForm.reset();
   cyclingLocationInput.focus();
-  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+  const saveAndRender = () => {
     saveSportPerfs();
     renderSportList();
-  });
+  };
+  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
-addRunningForm.addEventListener("submit", (e) => {
+addRunningForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = runningDescInput.value.trim();
   if (!text) return;
@@ -619,10 +623,12 @@ addRunningForm.addEventListener("submit", (e) => {
   resetDistanceDropdown(runningDistanceSelect);
   runningDistanceManualInput.hidden = true;
   runningDescInput.focus();
-  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+  const saveAndRender = () => {
     saveSportPerfs();
     renderSportList();
-  });
+  };
+  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
 // ---- Triathlon step wizard ----
@@ -668,7 +674,7 @@ triFields.bike.validate.addEventListener("click", () => {
   triSteps.run.hidden = false;
 });
 
-triFields.run.validate.addEventListener("click", () => {
+triFields.run.validate.addEventListener("click", async () => {
   const text = triLocationInput.value.trim();
   if (!text) {
     triLocationInput.focus();
@@ -688,10 +694,12 @@ triFields.run.validate.addEventListener("click", () => {
   saveSportPerfs();
   renderSportList();
   resetTriathlonWizard();
-  window.promptForProofPhotos && window.promptForProofPhotos(perf, () => {
+  const saveAndRender = () => {
     saveSportPerfs();
     renderSportList();
-  });
+  };
+  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
 // ---- Small floating popups anchored to a row (triathlon breakdown, date info) ----

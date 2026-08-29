@@ -2389,6 +2389,41 @@ input[type="number"]::-webkit-inner-spin-button {
   color: var(--on-accent);
 }
 
+.date-prompt-fields {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.date-prompt-fields input {
+  text-align: center;
+}
+
+#date-prompt-year {
+  flex: 0 0 68px;
+  width: 68px;
+  order: 3;
+}
+
+/* Most supported languages read day-before-month (matches the native date
+   picker used for birthdate at signup); English is the one exception. */
+#date-prompt-day {
+  order: 1;
+}
+
+#date-prompt-month {
+  order: 2;
+}
+
+.date-prompt-fields.month-first #date-prompt-day {
+  order: 2;
+}
+
+.date-prompt-fields.month-first #date-prompt-month {
+  order: 1;
+}
+
 .modal-input {
   width: 100%;
   margin-bottom: 16px;

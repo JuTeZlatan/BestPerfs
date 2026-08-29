@@ -279,6 +279,7 @@ function addExercise(exerciseKey, name, reps, weight) {
     name,
     maxReps: reps,
     maxWeight: weight,
+    date: window.todayISO ? window.todayISO() : new Date().toISOString().slice(0, 10),
   };
   exercises.push(exercise);
   saveExercises();
@@ -351,7 +352,7 @@ function resetExerciseSelect() {
   });
 })();
 
-formEl.addEventListener("submit", (e) => {
+formEl.addEventListener("submit", async (e) => {
   e.preventDefault();
   const key = exerciseSelectEl.dataset.value;
   const reps = repsInputEl.value === "" ? null : Number(repsInputEl.value);
@@ -365,10 +366,12 @@ formEl.addEventListener("submit", (e) => {
     exercise = addExercise(key, null, reps, weight);
   }
   resetExerciseSelect();
-  window.promptForProofPhotos && window.promptForProofPhotos(exercise, () => {
+  const saveAndRender = () => {
     saveExercises();
     render();
-  });
+  };
+  if (window.promptForPerfDate) await window.promptForPerfDate(exercise, saveAndRender);
+  if (window.promptForProofPhotos) await window.promptForProofPhotos(exercise, saveAndRender);
 });
 
 sortAscBtn.addEventListener("click", () => {
