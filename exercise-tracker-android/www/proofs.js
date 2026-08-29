@@ -184,6 +184,7 @@ const datePromptDayInput = document.getElementById("date-prompt-day");
 const datePromptMonthInput = document.getElementById("date-prompt-month");
 const datePromptYearInput = document.getElementById("date-prompt-year");
 const datePromptConfirmBtn = document.getElementById("date-prompt-confirm-btn");
+const datePromptCancelBtn = document.getElementById("date-prompt-cancel-btn");
 const datePromptErrorEl = document.getElementById("date-prompt-error");
 const MONTH_FIRST_LANGS = ["en"];
 
@@ -206,6 +207,11 @@ function showDatePromptModal(initialDate) {
     datePromptFieldsEl.classList.toggle("month-first", MONTH_FIRST_LANGS.includes(getLang()));
     datePromptErrorEl.hidden = true;
     datePromptModal.hidden = false;
+    function cleanup() {
+      datePromptModal.hidden = true;
+      datePromptConfirmBtn.removeEventListener("click", onConfirm);
+      datePromptCancelBtn.removeEventListener("click", onCancel);
+    }
     function onConfirm() {
       const d = Number(datePromptDayInput.value);
       const m = Number(datePromptMonthInput.value);
@@ -214,21 +220,31 @@ function showDatePromptModal(initialDate) {
         datePromptErrorEl.hidden = false;
         return;
       }
-      datePromptModal.hidden = true;
-      datePromptConfirmBtn.removeEventListener("click", onConfirm);
+      cleanup();
       resolve(`${String(y).padStart(4, "0")}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`);
     }
+    function onCancel() {
+      cleanup();
+      resolve(null);
+    }
     datePromptConfirmBtn.addEventListener("click", onConfirm);
+    datePromptCancelBtn.addEventListener("click", onCancel);
   });
 }
 
+// Returns false when the user cancelled (X button) - the caller should then
+// undo the stat it just created instead of continuing to the photo prompt,
+// since up to now there was no way to back out short of adding it then
+// deleting it again by hand.
 async function promptForPerfDate(perf, onSaved) {
   const initialDate = perf.date || (window.todayISO ? window.todayISO() : new Date().toISOString().slice(0, 10));
   const chosenDate = await showDatePromptModal(initialDate);
+  if (chosenDate === null) return false;
   if (chosenDate !== perf.date) {
     perf.date = chosenDate;
     onSaved();
   }
+  return true;
 }
 window.promptForPerfDate = promptForPerfDate;
 

@@ -370,7 +370,12 @@ formEl.addEventListener("submit", async (e) => {
     saveExercises();
     render();
   };
-  if (window.promptForPerfDate) await window.promptForPerfDate(exercise, saveAndRender);
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(exercise, saveAndRender);
+  if (!keepGoing) {
+    deleteExercise(exercise.id);
+    return;
+  }
   if (window.promptForProofPhotos) await window.promptForProofPhotos(exercise, saveAndRender);
 });
 

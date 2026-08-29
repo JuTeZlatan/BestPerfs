@@ -576,7 +576,13 @@ addSwimForm.addEventListener("submit", async (e) => {
     saveSportPerfs();
     renderSportList();
   };
-  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
+  if (!keepGoing) {
+    sportPerfs.natation = sportPerfs.natation.filter((p) => p.id !== perf.id);
+    saveAndRender();
+    return;
+  }
   if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
@@ -603,7 +609,13 @@ addCyclingForm.addEventListener("submit", async (e) => {
     saveSportPerfs();
     renderSportList();
   };
-  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
+  if (!keepGoing) {
+    sportPerfs.velo = sportPerfs.velo.filter((p) => p.id !== perf.id);
+    saveAndRender();
+    return;
+  }
   if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
@@ -632,7 +644,13 @@ addRunningForm.addEventListener("submit", async (e) => {
     saveSportPerfs();
     renderSportList();
   };
-  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
+  if (!keepGoing) {
+    sportPerfs.course = sportPerfs.course.filter((p) => p.id !== perf.id);
+    saveAndRender();
+    return;
+  }
   if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
@@ -703,7 +721,13 @@ triFields.run.validate.addEventListener("click", async () => {
     saveSportPerfs();
     renderSportList();
   };
-  if (window.promptForPerfDate) await window.promptForPerfDate(perf, saveAndRender);
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
+  if (!keepGoing) {
+    sportPerfs.triathlon = sportPerfs.triathlon.filter((p) => p.id !== perf.id);
+    saveAndRender();
+    return;
+  }
   if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
