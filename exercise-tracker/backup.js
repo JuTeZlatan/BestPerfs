@@ -34,23 +34,46 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   });
 });
 
-function exportBackupData() {
+async function exportBackupData() {
   const data = {};
   BACKUP_KEYS.forEach((key) => {
     const raw = localStorage.getItem(key);
     if (raw !== null) data[key] = raw;
   });
   const payload = { app: "best-perfs", version: 1, exportedAt: new Date().toISOString(), data };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const json = JSON.stringify(payload, null, 2);
+  const filename = `best-perfs-backup-${new Date().toISOString().slice(0, 10)}.json`;
+
+  const isNativePlatform = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
+  if (isNativePlatform) {
+    // A blob <a download> click does nothing in the Android WebView (no
+    // download manager is wired up to intercept it) - write the file to the
+    // app's cache dir instead and hand it to the native share sheet, so the
+    // user can save it to Files/Drive or send it wherever they want.
+    try {
+      const written = await Capacitor.Plugins.Filesystem.writeFile({
+        path: filename,
+        data: json,
+        directory: "CACHE",
+        encoding: "utf8",
+      });
+      await Capacitor.Plugins.Share.share({ title: filename, url: written.uri });
+    } catch (error) {
+      console.error("export failed", error);
+      alert(t("backup.exportError"));
+    }
+    return;
+  }
+
+  const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `best-perfs-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  closeBackupPanel();
 }
 
 function importBackupData(file) {

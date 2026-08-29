@@ -204,6 +204,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Gérer les preuves",
     "proofs.addTitle": "Ajouter des preuves",
     "proofs.deleteConfirm": "Supprimer cette preuve ?",
+    "backup.exportError": "L'export a échoué.",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -395,6 +396,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Manage proofs",
     "proofs.addTitle": "Add proofs",
     "proofs.deleteConfirm": "Delete this proof?",
+    "backup.exportError": "Export failed.",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -586,6 +588,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Gestionar pruebas",
     "proofs.addTitle": "Añadir pruebas",
     "proofs.deleteConfirm": "¿Eliminar esta prueba?",
+    "backup.exportError": "La exportación falló.",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -777,6 +780,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Gerir provas",
     "proofs.addTitle": "Adicionar provas",
     "proofs.deleteConfirm": "Eliminar esta prova?",
+    "backup.exportError": "A exportação falhou.",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -968,6 +972,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "管理证明",
     "proofs.addTitle": "添加证明",
     "proofs.deleteConfirm": "删除这张证明？",
+    "backup.exportError": "导出失败。",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -1159,6 +1164,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "إدارة الإثباتات",
     "proofs.addTitle": "إضافة إثباتات",
     "proofs.deleteConfirm": "هل تريد حذف هذا الإثبات؟",
+    "backup.exportError": "فشل التصدير.",
   },
   de: {
     "doc.title": "Trainingstracker",
@@ -1350,6 +1356,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Beweise verwalten",
     "proofs.addTitle": "Beweise hinzufügen",
     "proofs.deleteConfirm": "Diesen Beweis löschen?",
+    "backup.exportError": "Export fehlgeschlagen.",
   },
   it: {
     "doc.title": "Monitoraggio allenamenti",
@@ -1541,6 +1548,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Gestisci prove",
     "proofs.addTitle": "Aggiungi prove",
     "proofs.deleteConfirm": "Eliminare questa prova?",
+    "backup.exportError": "Esportazione non riuscita.",
   },
   nl: {
     "doc.title": "Trainingstracker",
@@ -1732,6 +1740,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Bewijzen beheren",
     "proofs.addTitle": "Bewijzen toevoegen",
     "proofs.deleteConfirm": "Dit bewijs verwijderen?",
+    "backup.exportError": "Exporteren mislukt.",
   },
   el: {
     "doc.title": "Καταγραφή Ασκήσεων",
@@ -1923,6 +1932,7 @@ const TRANSLATIONS = {
     "proofs.manageTitle": "Διαχείριση αποδείξεων",
     "proofs.addTitle": "Προσθήκη αποδείξεων",
     "proofs.deleteConfirm": "Διαγραφή αυτής της απόδειξης;",
+    "backup.exportError": "Η εξαγωγή απέτυχε.",
   },
 };
 
