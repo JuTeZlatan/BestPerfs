@@ -1005,11 +1005,25 @@
     <div id="proof-viewer-track" class="proof-viewer-track"></div>
   </div>
 
+  <div id="proof-manager-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="proofs.manageTitle">Gérer les preuves</p>
+      <div id="proof-manager-thumbs" class="proof-manager-thumbs"></div>
+      <div class="modal-actions">
+        <button id="proof-manager-close-btn" class="modal-btn" data-i18n="common.close">Fermer</button>
+      </div>
+    </div>
+  </div>
+
   <template id="exercise-template">
     <div class="exercise-row">
       <div class="exercise-card">
         <input type="text" class="exercise-name" maxlength="40" placeholder="Nom de l'exercice" readonly>
-        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
         <div class="reps-kg-stack">
           <label class="inline-field">
             <span class="inline-field-label">Reps</span>
@@ -1070,7 +1084,11 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="30" placeholder="Style de nage" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
-        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1090,7 +1108,11 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
-        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1110,7 +1132,11 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Description" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
-        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
         <span class="perf-distance-display"></span>
         <span class="perf-time-display"></span>
       </div>
@@ -1130,7 +1156,11 @@
       <div class="exercise-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Lieu" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
-        <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
         <span class="perf-size-display"></span>
         <span class="perf-time-display perf-time-tappable"></span>
       </div>

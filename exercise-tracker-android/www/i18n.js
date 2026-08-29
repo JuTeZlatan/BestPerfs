@@ -201,6 +201,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Stockage",
     "proofs.privacySubtitle": "Choisis qui peut voir tes preuves photo.",
     "classement.chooseStroke": "Choisis un style de nage",
+    "proofs.manageTitle": "Gérer les preuves",
+    "proofs.addTitle": "Ajouter des preuves",
+    "proofs.deleteConfirm": "Supprimer cette preuve ?",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -389,6 +392,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Storage",
     "proofs.privacySubtitle": "Choose who can see your photo proofs.",
     "classement.chooseStroke": "Choose a swim style",
+    "proofs.manageTitle": "Manage proofs",
+    "proofs.addTitle": "Add proofs",
+    "proofs.deleteConfirm": "Delete this proof?",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -577,6 +583,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Almacenamiento",
     "proofs.privacySubtitle": "Elige quién puede ver tus pruebas fotográficas.",
     "classement.chooseStroke": "Elige un estilo de natación",
+    "proofs.manageTitle": "Gestionar pruebas",
+    "proofs.addTitle": "Añadir pruebas",
+    "proofs.deleteConfirm": "¿Eliminar esta prueba?",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -765,6 +774,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Armazenamento",
     "proofs.privacySubtitle": "Escolhe quem pode ver as tuas provas fotográficas.",
     "classement.chooseStroke": "Escolhe um estilo de nado",
+    "proofs.manageTitle": "Gerir provas",
+    "proofs.addTitle": "Adicionar provas",
+    "proofs.deleteConfirm": "Eliminar esta prova?",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -953,6 +965,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "存储",
     "proofs.privacySubtitle": "选择谁可以查看你的照片证明。",
     "classement.chooseStroke": "选择泳姿",
+    "proofs.manageTitle": "管理证明",
+    "proofs.addTitle": "添加证明",
+    "proofs.deleteConfirm": "删除这张证明？",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -1141,6 +1156,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "التخزين",
     "proofs.privacySubtitle": "اختر من يمكنه رؤية صور الإثبات الخاصة بك.",
     "classement.chooseStroke": "اختر أسلوب السباحة",
+    "proofs.manageTitle": "إدارة الإثباتات",
+    "proofs.addTitle": "إضافة إثباتات",
+    "proofs.deleteConfirm": "هل تريد حذف هذا الإثبات؟",
   },
   de: {
     "doc.title": "Trainingstracker",
@@ -1329,6 +1347,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Speicher",
     "proofs.privacySubtitle": "Wähle, wer deine Foto-Beweise sehen kann.",
     "classement.chooseStroke": "Wähle einen Schwimmstil",
+    "proofs.manageTitle": "Beweise verwalten",
+    "proofs.addTitle": "Beweise hinzufügen",
+    "proofs.deleteConfirm": "Diesen Beweis löschen?",
   },
   it: {
     "doc.title": "Monitoraggio allenamenti",
@@ -1517,6 +1538,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Archiviazione",
     "proofs.privacySubtitle": "Scegli chi può vedere le tue foto prova.",
     "classement.chooseStroke": "Scegli uno stile di nuoto",
+    "proofs.manageTitle": "Gestisci prove",
+    "proofs.addTitle": "Aggiungi prove",
+    "proofs.deleteConfirm": "Eliminare questa prova?",
   },
   nl: {
     "doc.title": "Trainingstracker",
@@ -1705,6 +1729,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Opslag",
     "proofs.privacySubtitle": "Kies wie je foto-bewijzen kan zien.",
     "classement.chooseStroke": "Kies een zwemstijl",
+    "proofs.manageTitle": "Bewijzen beheren",
+    "proofs.addTitle": "Bewijzen toevoegen",
+    "proofs.deleteConfirm": "Dit bewijs verwijderen?",
   },
   el: {
     "doc.title": "Καταγραφή Ασκήσεων",
@@ -1893,6 +1920,9 @@ const TRANSLATIONS = {
     "profile.storageRow": "Αποθήκευση",
     "proofs.privacySubtitle": "Επίλεξε ποιος μπορεί να δει τις φωτογραφικές σου αποδείξεις.",
     "classement.chooseStroke": "Επίλεξε στυλ κολύμβησης",
+    "proofs.manageTitle": "Διαχείριση αποδείξεων",
+    "proofs.addTitle": "Προσθήκη αποδείξεων",
+    "proofs.deleteConfirm": "Διαγραφή αυτής της απόδειξης;",
   },
 };
 

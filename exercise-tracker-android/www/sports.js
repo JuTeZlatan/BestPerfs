@@ -421,6 +421,8 @@ function renderSportList() {
         textInput.readOnly = false;
         textInput.focus();
         textInput.select();
+        proofControlsEditing = true;
+        updateProofControls();
       });
     }
 
@@ -442,11 +444,42 @@ function renderSportList() {
     }
 
     const proofBtn = node.querySelector(".perf-proof-btn");
+    const proofDeleteBadge = node.querySelector(".perf-proof-delete-badge");
+    const proofAddBtn = node.querySelector(".perf-proof-add-btn");
+    let proofControlsEditing = false;
+
+    function updateProofControls() {
+      const hasPhotos = !!(perf.photos && perf.photos.length);
+      if (proofBtn) proofBtn.hidden = !hasPhotos;
+      if (proofDeleteBadge) proofDeleteBadge.hidden = !(proofControlsEditing && hasPhotos);
+      if (proofAddBtn) proofAddBtn.hidden = !(proofControlsEditing && !hasPhotos);
+    }
+    updateProofControls();
+
     if (proofBtn) {
-      proofBtn.hidden = !(perf.photos && perf.photos.length);
       proofBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         window.openProofViewer && window.openProofViewer(perf.photos);
+      });
+    }
+    if (proofDeleteBadge) {
+      proofDeleteBadge.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.openProofManager &&
+          window.openProofManager(perf, () => {
+            saveSportPerfs();
+            updateProofControls();
+          });
+      });
+    }
+    if (proofAddBtn) {
+      proofAddBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.addPhotosNow &&
+          window.addPhotosNow(perf, () => {
+            saveSportPerfs();
+            updateProofControls();
+          });
       });
     }
 

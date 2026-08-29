@@ -143,11 +143,42 @@ function render() {
     });
 
     const proofBtn = node.querySelector(".perf-proof-btn");
+    const proofDeleteBadge = node.querySelector(".perf-proof-delete-badge");
+    const proofAddBtn = node.querySelector(".perf-proof-add-btn");
+    let proofControlsEditing = false;
+
+    function updateProofControls() {
+      const hasPhotos = !!(exercise.photos && exercise.photos.length);
+      if (proofBtn) proofBtn.hidden = !hasPhotos;
+      if (proofDeleteBadge) proofDeleteBadge.hidden = !(proofControlsEditing && hasPhotos);
+      if (proofAddBtn) proofAddBtn.hidden = !(proofControlsEditing && !hasPhotos);
+    }
+    updateProofControls();
+
     if (proofBtn) {
-      proofBtn.hidden = !(exercise.photos && exercise.photos.length);
       proofBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         window.openProofViewer && window.openProofViewer(exercise.photos);
+      });
+    }
+    if (proofDeleteBadge) {
+      proofDeleteBadge.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.openProofManager &&
+          window.openProofManager(exercise, () => {
+            saveExercises();
+            updateProofControls();
+          });
+      });
+    }
+    if (proofAddBtn) {
+      proofAddBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        window.addPhotosNow &&
+          window.addPhotosNow(exercise, () => {
+            saveExercises();
+            updateProofControls();
+          });
       });
     }
 
@@ -168,6 +199,8 @@ function render() {
       weightInput.readOnly = false;
       nameInput.focus();
       nameInput.select();
+      proofControlsEditing = true;
+      updateProofControls();
     });
 
     const rowMenuDeleteBtn = node.querySelector(".row-menu-delete");

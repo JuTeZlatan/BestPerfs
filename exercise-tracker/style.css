@@ -1896,6 +1896,98 @@ h1 {
   display: none;
 }
 
+.perf-proof-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.perf-proof-delete-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #e2433b;
+  color: #fff;
+  font-size: 0.7rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.perf-proof-delete-badge[hidden] {
+  display: none;
+}
+
+.perf-proof-add-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--accent-2);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.perf-proof-add-btn[hidden] {
+  display: none;
+}
+
+.proof-manager-thumbs {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.proof-thumb {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.proof-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.proof-thumb-delete {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 .proof-viewer {
   position: fixed;
   inset: 0;

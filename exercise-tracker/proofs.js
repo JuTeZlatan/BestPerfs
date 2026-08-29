@@ -208,6 +208,19 @@ async function promptForProofPhotos(perf, onSaved) {
 }
 window.promptForProofPhotos = promptForProofPhotos;
 
+// ---- Adding photos to a stat that already exists (from edit mode) - no
+// yes/no prompt here, the user already asked for it by tapping "+" ----
+async function addPhotosNow(perf, onSaved) {
+  const remaining = 2 - (perf.photos ? perf.photos.length : 0);
+  if (remaining <= 0) return;
+  const rawBlobs = await pickPhotos(remaining);
+  if (!rawBlobs.length) return;
+  const newPhotos = await storePhotosForPerf(rawBlobs, perf.id);
+  perf.photos = [...(perf.photos || []), ...newPhotos];
+  onSaved();
+}
+window.addPhotosNow = addPhotosNow;
+
 // ---- Fullscreen swipeable viewer ----
 const proofViewerEl = document.getElementById("proof-viewer");
 const proofViewerTrack = document.getElementById("proof-viewer-track");
@@ -246,6 +259,58 @@ proofViewerEl.addEventListener("click", (e) => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !proofViewerEl.hidden) closeProofViewer();
+});
+
+// ---- Photo manager (edit mode): thumbnails with a delete button on each ----
+const proofManagerModal = document.getElementById("proof-manager-modal");
+const proofManagerThumbs = document.getElementById("proof-manager-thumbs");
+const proofManagerCloseBtn = document.getElementById("proof-manager-close-btn");
+
+async function renderProofManagerThumbs(perf, onChange) {
+  proofManagerThumbs.innerHTML = "";
+  for (const item of perf.photos || []) {
+    const src = await resolvePhotoSrc(item);
+    if (!src) continue;
+    const thumb = document.createElement("div");
+    thumb.className = "proof-thumb";
+    const img = document.createElement("img");
+    img.src = src;
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "proof-thumb-delete";
+    delBtn.textContent = "×";
+    delBtn.addEventListener("click", () => {
+      window.openConfirmModal(t("proofs.deleteConfirm"), () => {
+        deleteProofPhotos([item]);
+        perf.photos = (perf.photos || []).filter((p) => p.id !== item.id);
+        onChange();
+        if (perf.photos.length) {
+          renderProofManagerThumbs(perf, onChange);
+        } else {
+          closeProofManager();
+        }
+      });
+    });
+    thumb.appendChild(img);
+    thumb.appendChild(delBtn);
+    proofManagerThumbs.appendChild(thumb);
+  }
+}
+
+function openProofManager(perf, onChange) {
+  if (!perf.photos || !perf.photos.length) return;
+  renderProofManagerThumbs(perf, onChange);
+  proofManagerModal.hidden = false;
+}
+window.openProofManager = openProofManager;
+
+function closeProofManager() {
+  proofManagerModal.hidden = true;
+  proofManagerThumbs.innerHTML = "";
+}
+proofManagerCloseBtn.addEventListener("click", closeProofManager);
+proofManagerModal.addEventListener("click", (e) => {
+  if (e.target === proofManagerModal) closeProofManager();
 });
 
 // ---- Profile > Confidentialité (share toggle) + Stockage (cloud/local) ----
