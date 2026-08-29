@@ -184,7 +184,18 @@ const datePromptDayInput = document.getElementById("date-prompt-day");
 const datePromptMonthInput = document.getElementById("date-prompt-month");
 const datePromptYearInput = document.getElementById("date-prompt-year");
 const datePromptConfirmBtn = document.getElementById("date-prompt-confirm-btn");
+const datePromptErrorEl = document.getElementById("date-prompt-error");
 const MONTH_FIRST_LANGS = ["en"];
+
+// Real calendar check (catches Feb 30, Apr 31, non-leap Feb 29, etc.) - a
+// bare day<=31/month<=12 range check isn't enough, it lets through dates
+// that don't actually exist. Constructing the Date and reading the parts
+// back out is the standard way to detect JS's own day/month roll-over.
+function isValidCalendarDate(d, m, y) {
+  if (!d || !m || !y) return false;
+  const date = new Date(y, m - 1, d);
+  return date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
+}
 
 function showDatePromptModal(initialDate) {
   return new Promise((resolve) => {
@@ -193,17 +204,18 @@ function showDatePromptModal(initialDate) {
     datePromptMonthInput.value = Number(month);
     datePromptYearInput.value = Number(year);
     datePromptFieldsEl.classList.toggle("month-first", MONTH_FIRST_LANGS.includes(getLang()));
+    datePromptErrorEl.hidden = true;
     datePromptModal.hidden = false;
     function onConfirm() {
-      datePromptModal.hidden = true;
-      datePromptConfirmBtn.removeEventListener("click", onConfirm);
       const d = Number(datePromptDayInput.value);
       const m = Number(datePromptMonthInput.value);
       const y = Number(datePromptYearInput.value);
-      if (!d || !m || !y || d > 31 || m > 12 || y < 1950) {
-        resolve(initialDate);
+      if (!isValidCalendarDate(d, m, y) || y < 1950) {
+        datePromptErrorEl.hidden = false;
         return;
       }
+      datePromptModal.hidden = true;
+      datePromptConfirmBtn.removeEventListener("click", onConfirm);
       resolve(`${String(y).padStart(4, "0")}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`);
     }
     datePromptConfirmBtn.addEventListener("click", onConfirm);

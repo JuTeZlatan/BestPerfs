@@ -209,6 +209,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "JJ",
     "datePrompt.month": "MM",
     "datePrompt.year": "AAAA",
+    "datePrompt.invalid": "Cette date n'existe pas.",
   },
   en: {
     "doc.title": "Workout Tracker",
@@ -405,6 +406,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "DD",
     "datePrompt.month": "MM",
     "datePrompt.year": "YYYY",
+    "datePrompt.invalid": "This date doesn't exist.",
   },
   es: {
     "doc.title": "Seguimiento de ejercicios",
@@ -601,6 +603,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "DD",
     "datePrompt.month": "MM",
     "datePrompt.year": "AAAA",
+    "datePrompt.invalid": "Esta fecha no existe.",
   },
   pt: {
     "doc.title": "Registo de Exercícios",
@@ -797,6 +800,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "DD",
     "datePrompt.month": "MM",
     "datePrompt.year": "AAAA",
+    "datePrompt.invalid": "Esta data não existe.",
   },
   zh: {
     "doc.title": "锻炼记录",
@@ -993,6 +997,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "日",
     "datePrompt.month": "月",
     "datePrompt.year": "年",
+    "datePrompt.invalid": "这个日期不存在。",
   },
   ar: {
     "doc.title": "سجل التمارين",
@@ -1189,6 +1194,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "يوم",
     "datePrompt.month": "شهر",
     "datePrompt.year": "سنة",
+    "datePrompt.invalid": "هذا التاريخ غير موجود.",
   },
   de: {
     "doc.title": "Trainingstracker",
@@ -1385,6 +1391,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "TT",
     "datePrompt.month": "MM",
     "datePrompt.year": "JJJJ",
+    "datePrompt.invalid": "Dieses Datum existiert nicht.",
   },
   it: {
     "doc.title": "Monitoraggio allenamenti",
@@ -1581,6 +1588,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "GG",
     "datePrompt.month": "MM",
     "datePrompt.year": "AAAA",
+    "datePrompt.invalid": "Questa data non esiste.",
   },
   nl: {
     "doc.title": "Trainingstracker",
@@ -1777,6 +1785,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "DD",
     "datePrompt.month": "MM",
     "datePrompt.year": "JJJJ",
+    "datePrompt.invalid": "Deze datum bestaat niet.",
   },
   el: {
     "doc.title": "Καταγραφή Ασκήσεων",
@@ -1973,6 +1982,7 @@ const TRANSLATIONS = {
     "datePrompt.day": "ΗΗ",
     "datePrompt.month": "ΜΜ",
     "datePrompt.year": "ΕΕΕΕ",
+    "datePrompt.invalid": "Αυτή η ημερομηνία δεν υπάρχει.",
   },
 };
 
