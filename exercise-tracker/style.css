@@ -262,11 +262,11 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   width: 100%;
   max-width: 480px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-around;
   gap: 8px;
-  padding: 10px 16px;
-  border-radius: 28px;
+  padding: 6px 16px;
+  border-radius: 26px;
   background: linear-gradient(180deg, rgba(var(--card-rgb), 0.85), rgba(var(--bg-rgb), 0.95));
   backdrop-filter: blur(16px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -285,7 +285,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   border: none;
   color: var(--text-dim);
   cursor: pointer;
-  padding: 4px 4px;
+  padding: 2px 4px;
   border-radius: 12px;
   font-family: "Oswald", sans-serif;
   transition: color 0.15s ease;
@@ -314,9 +314,8 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 
 .bottom-nav-center {
   flex: 0 0 auto;
-  width: 64px;
-  height: 64px;
-  margin-top: -28px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--card-gradient), var(--card-glass);
   color: var(--text-dim);
@@ -337,7 +336,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 }
 
 .bottom-nav-center .bottom-nav-icon {
-  font-size: 1.7rem;
+  font-size: 1.4rem;
 }
 
 .bottom-nav-center:hover {
