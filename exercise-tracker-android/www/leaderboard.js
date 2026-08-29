@@ -19,9 +19,13 @@ const VELO_BRACKETS = [
   [0, 10], [10, 20], [20, 30], [30, 40], [40, 50], [50, 60], [60, 70], [70, 80], [80, 90], [90, 100],
   [100, 150], [150, 200], [200, 300],
 ];
+const NATATION_DISTANCES = ["50", "100", "200", "400", "800", "1500", "5000", "10000"];
+const SWIM_STROKES = ["freestyle", "backstroke", "breaststroke", "butterfly", "medley"];
 const PRESET_KEYS = {
   course: ["0.1", "0.2", "0.4", "0.8", "1.5", "3", "5", "10", "half", "marathon"],
-  natation: ["50", "100", "200", "400", "800", "1500", "5000", "10000"],
+  // Natation is ranked per distance+style (a 100m freestyle isn't comparable
+  // to a 100m breaststroke), so each preset key combines both.
+  natation: NATATION_DISTANCES.flatMap((distance) => SWIM_STROKES.map((stroke) => `${distance}-${stroke}`)),
   triathlon: ["XS", "S", "M", "L", "XL"],
   velo: VELO_BRACKETS.map(([lo, hi]) => `${lo}-${hi}`),
   fitness: ["pushups", "situps", "pullups", "dips", "benchpress"],
@@ -67,8 +71,9 @@ function triathlonSeconds(perf) {
 function presetKeyForEntry(sport, perf) {
   if (sport === "triathlon") return PRESET_KEYS.triathlon.includes(perf.size) ? perf.size : null;
   if (sport === "natation") {
-    const key = String(perf.distance);
-    return PRESET_KEYS.natation.includes(key) ? key : null;
+    const distance = String(perf.distance);
+    if (!NATATION_DISTANCES.includes(distance) || !SWIM_STROKES.includes(perf.text)) return null;
+    return `${distance}-${perf.text}`;
   }
   if (sport === "velo") return veloBracketKey(perf.distance);
   return RUNNING_DISTANCE_TO_KEY[String(perf.distance)] || null;
@@ -192,6 +197,7 @@ const classementPresetSelects = {
   velo: document.getElementById("classement-preset-velo"),
   fitness: document.getElementById("classement-preset-fitness"),
 };
+const classementNatationStrokeSelect = document.getElementById("classement-preset-natation-stroke");
 const classementRowTemplate = document.getElementById("classement-row-template");
 
 const CLASSEMENT_SPORT_LABEL_KEYS = { course: "sport.running", natation: "sport.swimming", triathlon: "sport.triathlon", velo: "sport.cycling", fitness: "sport.fitness" };
@@ -205,6 +211,11 @@ const CLASSEMENT_SPORT_ICONS = {
 
 let classementSport = "course";
 let classementPreset = null;
+// Natation is the only sport ranked by two combined pickers (distance +
+// swim style) instead of one, so its final presetKey is only known once
+// both are chosen.
+let classementNatationDistance = null;
+let classementNatationStroke = null;
 
 function updateClassementSportLabel() {
   classementSportLabel.textContent = t(CLASSEMENT_SPORT_LABEL_KEYS[classementSport]);
@@ -223,6 +234,8 @@ function resetPresetDropdown(dropdown) {
 function selectClassementSport(sport) {
   classementSport = sport;
   classementPreset = null;
+  classementNatationDistance = null;
+  classementNatationStroke = null;
   classementSportMenu.querySelectorAll(".sport-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.sport === sport);
   });
@@ -230,6 +243,8 @@ function selectClassementSport(sport) {
     classementPresetSelects[key].hidden = key !== sport;
     resetPresetDropdown(classementPresetSelects[key]);
   });
+  classementNatationStrokeSelect.hidden = sport !== "natation";
+  resetPresetDropdown(classementNatationStrokeSelect);
   updateClassementSportLabel();
   renderClassementList();
 }
@@ -252,13 +267,19 @@ document.addEventListener("click", (e) => {
   if (!classementSportMenu.hidden && !classementSportMenu.contains(e.target) && e.target !== classementSportBtn) {
     classementSportMenu.hidden = true;
   }
-  Object.values(classementPresetSelects).forEach((dropdown) => {
+  [...Object.values(classementPresetSelects), classementNatationStrokeSelect].forEach((dropdown) => {
     const menu = dropdown.querySelector(".classement-preset-menu");
     if (!menu.hidden && !dropdown.contains(e.target)) menu.hidden = true;
   });
 });
 
-Object.values(classementPresetSelects).forEach((dropdown) => {
+function updateClassementNatationPreset() {
+  classementPreset =
+    classementNatationDistance && classementNatationStroke ? `${classementNatationDistance}-${classementNatationStroke}` : null;
+  renderClassementList();
+}
+
+function bindPresetDropdown(dropdown, onSelect) {
   const btn = dropdown.querySelector(".classement-preset-btn");
   const menu = dropdown.querySelector(".classement-preset-menu");
   const label = dropdown.querySelector(".classement-preset-label");
@@ -278,10 +299,28 @@ Object.values(classementPresetSelects).forEach((dropdown) => {
       delete label.dataset.i18n;
       label.textContent = option.textContent;
       menu.hidden = true;
-      classementPreset = option.dataset.value || null;
-      renderClassementList();
+      onSelect(option.dataset.value || null);
     });
   });
+}
+
+Object.entries(classementPresetSelects).forEach(([sport, dropdown]) => {
+  if (sport === "natation") {
+    bindPresetDropdown(dropdown, (value) => {
+      classementNatationDistance = value;
+      updateClassementNatationPreset();
+    });
+  } else {
+    bindPresetDropdown(dropdown, (value) => {
+      classementPreset = value;
+      renderClassementList();
+    });
+  }
+});
+
+bindPresetDropdown(classementNatationStrokeSelect, (value) => {
+  classementNatationStroke = value;
+  updateClassementNatationPreset();
 });
 
 function formatFitnessValue(value, presetKey) {

@@ -1918,13 +1918,46 @@ h1 {
   cursor: pointer;
 }
 
-.proofs-section-label {
-  margin-top: 20px;
-}
-
 .proofs-note {
   font-size: 0.8rem;
   opacity: 0.75;
+}
+
+.settings-toggle-row {
+  cursor: default;
+}
+
+.toggle-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--field);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toggle-switch.active {
+  background: var(--accent-gradient);
+}
+
+.toggle-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--float-shadow);
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch.active .toggle-switch-thumb {
+  transform: translateX(20px);
 }
 
 .perf-distance-display .chip-icon,

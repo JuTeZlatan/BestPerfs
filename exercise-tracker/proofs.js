@@ -248,20 +248,23 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !proofViewerEl.hidden) closeProofViewer();
 });
 
-// ---- Profile > Preuves settings view ----
-const profileProofsRow = document.getElementById("profile-proofs-row");
-const profileViewForProofs = document.getElementById("profile-view");
-const proofsViewEl = document.getElementById("proofs-view");
-const proofsBackBtn = document.getElementById("proofs-back-btn");
-const proofsShareRow = document.getElementById("proofs-share-row");
+// ---- Profile > Confidentialité (share toggle) + Stockage (cloud/local) ----
+const profileViewForSettings = document.getElementById("profile-view");
+const profilePrivacyRow = document.getElementById("profile-privacy-row");
+const privacyViewEl = document.getElementById("privacy-view");
+const privacyBackBtn = document.getElementById("privacy-back-btn");
+const proofsShareToggle = document.getElementById("proofs-share-toggle");
+
+const profileStorageRow = document.getElementById("profile-storage-row");
+const storageViewEl = document.getElementById("storage-view");
+const storageBackBtn = document.getElementById("storage-back-btn");
 const proofsStorageRows = document.querySelectorAll(".proofs-storage-row");
 const proofsStorageNoteEl = document.getElementById("proofs-storage-note");
 
 function updateProofsRows() {
   const sharing = getShareProofs();
-  proofsShareRow.classList.toggle("active", sharing);
-  const shareCheck = proofsShareRow.querySelector(".theme-row-check");
-  if (shareCheck) shareCheck.textContent = sharing ? "✓" : "";
+  proofsShareToggle.classList.toggle("active", sharing);
+  proofsShareToggle.setAttribute("aria-checked", String(sharing));
 
   const mode = getPhotoStorageMode();
   proofsStorageRows.forEach((row) => {
@@ -273,20 +276,29 @@ function updateProofsRows() {
   proofsStorageNoteEl.textContent = t(mode === "local" ? "proofs.storageLocalNote" : "proofs.storageCloudNote");
 }
 
-profileProofsRow.addEventListener("click", () => {
-  profileViewForProofs.hidden = true;
-  proofsViewEl.hidden = false;
+profilePrivacyRow.addEventListener("click", () => {
+  profileViewForSettings.hidden = true;
+  privacyViewEl.hidden = false;
 });
-proofsBackBtn.addEventListener("click", () => {
-  proofsViewEl.hidden = true;
-  profileViewForProofs.hidden = false;
+privacyBackBtn.addEventListener("click", () => {
+  privacyViewEl.hidden = true;
+  profileViewForSettings.hidden = false;
+});
+profileStorageRow.addEventListener("click", () => {
+  profileViewForSettings.hidden = true;
+  storageViewEl.hidden = false;
+});
+storageBackBtn.addEventListener("click", () => {
+  storageViewEl.hidden = true;
+  profileViewForSettings.hidden = false;
 });
 document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    proofsViewEl.hidden = true;
+    privacyViewEl.hidden = true;
+    storageViewEl.hidden = true;
   });
 });
-proofsShareRow.addEventListener("click", () => {
+proofsShareToggle.addEventListener("click", () => {
   setShareProofs(!getShareProofs());
   updateProofsRows();
 });

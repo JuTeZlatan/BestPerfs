@@ -192,7 +192,7 @@
     <div class="auth-gate-grid"></div>
     <div class="auth-gate-content">
       <div class="auth-gate-back-row">
-        <button id="forgot-password-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="forgot-password-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
       </div>
 
       <div class="auth-gate-brand">
@@ -215,7 +215,7 @@
     <div class="auth-gate-grid"></div>
     <div class="auth-gate-content">
       <div class="auth-gate-back-row">
-        <button id="signup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="signup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
       </div>
 
       <div class="auth-gate-brand">
@@ -551,6 +551,19 @@
           <button class="sport-option" type="button" data-value="10000">10 km</button>
         </div>
       </div>
+      <div id="classement-preset-natation-stroke" class="sport-dropdown classement-preset-dropdown" hidden>
+        <button class="sport-select-btn classement-preset-btn" type="button">
+          <span class="classement-preset-label" data-i18n="classement.chooseStroke">Choisis un style de nage</span>
+          <span class="dropdown-arrow">▾</span>
+        </button>
+        <div class="sport-menu classement-preset-menu" hidden>
+          <button class="sport-option" type="button" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
+          <button class="sport-option" type="button" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
+          <button class="sport-option" type="button" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
+          <button class="sport-option" type="button" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
+          <button class="sport-option" type="button" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+        </div>
+      </div>
       <div id="classement-preset-triathlon" class="sport-dropdown classement-preset-dropdown" hidden>
         <button class="sport-select-btn classement-preset-btn" type="button">
           <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
@@ -651,9 +664,14 @@
           <span class="profile-menu-label" data-i18n="profile.backupRow">Importer/Exporter les données</span>
           <span class="profile-menu-chevron">›</span>
         </button>
-        <button id="profile-proofs-row" class="profile-menu-row" type="button">
+        <button id="profile-privacy-row" class="profile-menu-row" type="button">
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/></svg></span>
+          <span class="profile-menu-label" data-i18n="profile.privacyRow">Confidentialité</span>
+          <span class="profile-menu-chevron">›</span>
+        </button>
+        <button id="profile-storage-row" class="profile-menu-row" type="button">
           <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></span>
-          <span class="profile-menu-label" data-i18n="profile.proofsRow">Preuves</span>
+          <span class="profile-menu-label" data-i18n="profile.storageRow">Stockage</span>
           <span class="profile-menu-chevron">›</span>
         </button>
         <button id="profile-support-row" class="profile-menu-row" type="button">
@@ -666,7 +684,7 @@
 
     <section id="account-view" hidden>
       <div class="subpage-header">
-        <button id="account-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="account-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.accountRow">Compte</h1>
       </div>
 
@@ -699,7 +717,7 @@
 
     <section id="friends-view" hidden>
       <div class="subpage-header">
-        <button id="friends-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="friends-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.friendsRow">Amis</h1>
       </div>
 
@@ -730,7 +748,7 @@
 
     <section id="units-view" hidden>
       <div class="subpage-header">
-        <button id="units-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="units-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.unitsRow">Unités</h1>
       </div>
 
@@ -753,7 +771,7 @@
 
     <section id="themes-view" hidden>
       <div class="subpage-header">
-        <button id="themes-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="themes-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.themesRow">Thèmes</h1>
       </div>
 
@@ -813,7 +831,7 @@
 
     <section id="language-view" hidden>
       <div class="subpage-header">
-        <button id="language-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="language-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.languageRow">Langue</h1>
       </div>
 
@@ -873,7 +891,7 @@
 
     <section id="backup-view" hidden>
       <div class="subpage-header">
-        <button id="backup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="backup-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.backupRow">Importer/Exporter les données</h1>
       </div>
 
@@ -890,22 +908,31 @@
       </div>
     </section>
 
-    <section id="proofs-view" hidden>
+    <section id="privacy-view" hidden>
       <div class="subpage-header">
-        <button id="proofs-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
-        <h1 data-i18n="profile.proofsRow">Preuves</h1>
+        <button id="privacy-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
+        <h1 data-i18n="profile.privacyRow">Confidentialité</h1>
       </div>
 
-      <p class="subtitle" data-i18n="proofs.subtitle">Gère le partage et le stockage de tes preuves photo.</p>
+      <p class="subtitle" data-i18n="proofs.privacySubtitle">Choisis qui peut voir tes preuves photo.</p>
 
       <div class="profile-menu">
-        <button id="proofs-share-row" class="profile-menu-row theme-row" type="button">
+        <div class="profile-menu-row settings-toggle-row">
           <span class="profile-menu-label" data-i18n="proofs.shareLabel">Partager mes preuves avec mes amis</span>
-          <span class="profile-menu-chevron theme-row-check"></span>
-        </button>
+          <button id="proofs-share-toggle" class="toggle-switch" type="button" role="switch" aria-checked="false">
+            <span class="toggle-switch-thumb"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="storage-view" hidden>
+      <div class="subpage-header">
+        <button id="storage-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
+        <h1 data-i18n="profile.storageRow">Stockage</h1>
       </div>
 
-      <p class="subtitle proofs-section-label" data-i18n="proofs.storageSectionLabel">Stockage des preuves</p>
+      <p class="subtitle" data-i18n="proofs.subtitle">Choisis où sont conservées tes preuves photo.</p>
 
       <div class="profile-menu">
         <button class="profile-menu-row proofs-storage-row theme-row" type="button" data-storage-mode="cloud">
@@ -922,7 +949,7 @@
 
     <section id="support-view" hidden>
       <div class="subpage-header">
-        <button id="support-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back">←</button>
+        <button id="support-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
         <h1 data-i18n="profile.supportRow">Support</h1>
       </div>
 
