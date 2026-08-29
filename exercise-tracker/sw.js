@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v139";
+const CACHE_NAME = "exercise-tracker-v140";
 const APP_SHELL = [
   "./",
   "./index.html",
