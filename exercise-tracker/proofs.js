@@ -5,7 +5,7 @@ const SHARE_PROOFS_KEY = "exercise-tracker-share-proofs";
 const PHOTO_STORAGE_MODE_KEY = "exercise-tracker-photo-storage-mode";
 
 function getShareProofs() {
-  return localStorage.getItem(SHARE_PROOFS_KEY) !== "false";
+  return localStorage.getItem(SHARE_PROOFS_KEY) === "true";
 }
 function setShareProofs(value) {
   localStorage.setItem(SHARE_PROOFS_KEY, value ? "true" : "false");
