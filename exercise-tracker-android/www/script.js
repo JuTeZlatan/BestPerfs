@@ -100,8 +100,19 @@ function render() {
       if (e.key === "Enter") nameInput.blur();
     });
 
+    function checkStillEditingProofs() {
+      requestAnimationFrame(() => {
+        const stillEditing = [nameInput, repsInput, weightInput].includes(document.activeElement);
+        if (!stillEditing) {
+          proofControlsEditing = false;
+          updateProofControls();
+        }
+      });
+    }
+
     nameInput.addEventListener("blur", () => {
       nameInput.readOnly = true;
+      checkStillEditingProofs();
       const newName = nameInput.value.trim();
       if (!newName) {
         nameInput.value = displayName;
@@ -132,6 +143,7 @@ function render() {
     });
     repsInput.addEventListener("blur", () => {
       repsInput.readOnly = true;
+      checkStillEditingProofs();
     });
 
     weightInput.addEventListener("input", () => {
@@ -140,6 +152,7 @@ function render() {
     });
     weightInput.addEventListener("blur", () => {
       weightInput.readOnly = true;
+      checkStillEditingProofs();
     });
 
     const proofBtn = node.querySelector(".perf-proof-btn");

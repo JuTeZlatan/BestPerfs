@@ -340,6 +340,16 @@ function formatSeconds(totalSeconds) {
   return h > 0 ? `${pad(h)}h${pad(m)}mn${pad(s)}s${pad(cs)}` : `${pad(m)}mn${pad(s)}s${pad(cs)}`;
 }
 
+function toggleClassementInfoPopup(anchorEl, row) {
+  anchorEl.dataset.popupId = anchorEl.dataset.popupId || `classement-info-${row.uid}-${row.presetKey}`;
+  const label =
+    row.updatedAt && typeof row.updatedAt.toDate === "function"
+      ? row.updatedAt.toDate().toLocaleDateString(getLang(), { day: "numeric", month: "long", year: "numeric" })
+      : t("sport.dateUnknown");
+  window.showFloatingPopup &&
+    window.showFloatingPopup(anchorEl, `<div class="tri-popup-row"><span class="tri-popup-time">${label}</span></div>`);
+}
+
 async function renderClassementList() {
   classementListEl.innerHTML = "";
   classementEmptyEl.classList.remove("visible");
@@ -385,6 +395,13 @@ async function renderClassementList() {
     if (row.uid === myUid) card.classList.add("classement-row-you");
     node.querySelector(".classement-time").textContent =
       row.sport === "fitness" ? formatFitnessValue(row.totalSeconds, row.presetKey) : formatSeconds(row.totalSeconds);
+    const timeDisplay = node.querySelector(".perf-time-display");
+    if (timeDisplay) {
+      timeDisplay.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleClassementInfoPopup(timeDisplay, row);
+      });
+    }
     const proofBtn = node.querySelector(".perf-proof-btn");
     if (proofBtn) {
       proofBtn.hidden = !(row.photoUrls && row.photoUrls.length);

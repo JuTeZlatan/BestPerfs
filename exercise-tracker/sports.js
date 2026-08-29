@@ -403,6 +403,8 @@ function renderSportList() {
 
       textInput.addEventListener("blur", () => {
         textInput.readOnly = true;
+        proofControlsEditing = false;
+        updateProofControls();
         const newText = textInput.value.trim();
         if (!newText) {
           textInput.value = displayText;
@@ -709,6 +711,8 @@ function toggleTriPopup(anchorEl, perf) {
     triLegRowHTML(ICON_SWIMMING, perf.swim) + triLegRowHTML(ICON_CYCLING, perf.bike) + triLegRowHTML(ICON_RUNNING, perf.run)
   );
 }
+
+window.showFloatingPopup = showFloatingPopup;
 
 function toggleInfoPopup(anchorEl, perf) {
   anchorEl.dataset.popupId = anchorEl.dataset.popupId || `info-${perf.id}`;
