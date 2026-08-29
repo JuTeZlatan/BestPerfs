@@ -254,20 +254,22 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   z-index: 20;
   display: flex;
   justify-content: center;
+  padding: 0 16px calc(14px + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
 }
 
 .bottom-nav-inner {
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
   gap: 8px;
-  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, rgba(var(--card-rgb), 0.7), rgba(var(--bg-rgb), 0.92));
-  backdrop-filter: blur(12px);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+  padding: 10px 16px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(var(--card-rgb), 0.85), rgba(var(--bg-rgb), 0.95));
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
   pointer-events: auto;
 }
 
