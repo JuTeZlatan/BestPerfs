@@ -140,12 +140,17 @@ async function refreshFriendsData() {
 
   if (!incomingSnap) return;
 
-  renderIncoming(incomingSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
-  renderOutgoing(outgoingSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  const incoming = incomingSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const outgoing = outgoingSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  incoming.sort((a, b) => a.fromUsername.localeCompare(b.fromUsername));
+  outgoing.sort((a, b) => a.toUsername.localeCompare(b.toUsername));
+  renderIncoming(incoming);
+  renderOutgoing(outgoing);
   const friends = [
     ...friendsAsFromSnap.docs.map((d) => ({ id: d.id, username: d.data().toUsername })),
     ...friendsAsToSnap.docs.map((d) => ({ id: d.id, username: d.data().fromUsername })),
   ];
+  friends.sort((a, b) => a.username.localeCompare(b.username));
   renderFriends(friends);
 }
 

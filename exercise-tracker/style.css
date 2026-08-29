@@ -1562,6 +1562,35 @@ h1 {
   max-width: 220px;
 }
 
+.classement-natation-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.classement-natation-row .classement-preset-dropdown-half {
+  margin-bottom: 0;
+}
+
+.classement-preset-dropdown-half {
+  flex: 1;
+  min-width: 0;
+  max-width: none;
+}
+
+.classement-preset-dropdown-half .classement-preset-btn {
+  padding: 10px 10px;
+  font-size: 0.75rem;
+}
+
+.classement-preset-dropdown-half .classement-preset-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .classement-preset-menu {
   max-height: 148px;
   overflow-y: auto;

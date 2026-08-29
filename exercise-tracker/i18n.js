@@ -1929,6 +1929,33 @@ function applyStaticTranslations() {
   });
 
   updateLangButton();
+  sortAlphabeticalMenus();
+}
+
+// Option lists with no inherent order (sports, exercises, swim strokes) read
+// better alphabetized - unlike distance/size pickers (50m/100m/.../XS/S/M),
+// which stay in their meaningful progression and are deliberately excluded.
+// Re-sorted on every language change since the alphabetical order differs
+// per language. A "manual"-value option (free-text entry) always stays last.
+const ALPHABETICAL_MENU_SELECTORS = [
+  "#sport-menu",
+  "#classement-sport-menu",
+  "#exercise-select .distance-dropdown-menu",
+  "#classement-preset-fitness .classement-preset-menu",
+  "#swim-style-select .distance-dropdown-menu",
+];
+
+function sortAlphabeticalMenus() {
+  const lang = getLang();
+  ALPHABETICAL_MENU_SELECTORS.forEach((selector) => {
+    const menu = document.querySelector(selector);
+    if (!menu) return;
+    const options = [...menu.children];
+    const manual = options.filter((o) => o.dataset.value === "manual");
+    const sortable = options.filter((o) => o.dataset.value !== "manual");
+    sortable.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim(), lang));
+    [...sortable, ...manual].forEach((o) => menu.appendChild(o));
+  });
 }
 
 function updateLangButton() {

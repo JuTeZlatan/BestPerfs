@@ -535,33 +535,35 @@
           <button class="sport-option" type="button" data-value="marathon" data-i18n="sport.marathon">Marathon</button>
         </div>
       </div>
-      <div id="classement-preset-natation" class="sport-dropdown classement-preset-dropdown" hidden>
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="50">50 m</button>
-          <button class="sport-option" type="button" data-value="100">100 m</button>
-          <button class="sport-option" type="button" data-value="200">200 m</button>
-          <button class="sport-option" type="button" data-value="400">400 m</button>
-          <button class="sport-option" type="button" data-value="800">800 m</button>
-          <button class="sport-option" type="button" data-value="1500">1500 m</button>
-          <button class="sport-option" type="button" data-value="5000">5 km</button>
-          <button class="sport-option" type="button" data-value="10000">10 km</button>
+      <div class="classement-natation-row">
+        <div id="classement-preset-natation" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
+          <button class="sport-select-btn classement-preset-btn" type="button">
+            <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu classement-preset-menu" hidden>
+            <button class="sport-option" type="button" data-value="50">50 m</button>
+            <button class="sport-option" type="button" data-value="100">100 m</button>
+            <button class="sport-option" type="button" data-value="200">200 m</button>
+            <button class="sport-option" type="button" data-value="400">400 m</button>
+            <button class="sport-option" type="button" data-value="800">800 m</button>
+            <button class="sport-option" type="button" data-value="1500">1500 m</button>
+            <button class="sport-option" type="button" data-value="5000">5 km</button>
+            <button class="sport-option" type="button" data-value="10000">10 km</button>
+          </div>
         </div>
-      </div>
-      <div id="classement-preset-natation-stroke" class="sport-dropdown classement-preset-dropdown" hidden>
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.chooseStroke">Choisis un style de nage</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
-          <button class="sport-option" type="button" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
-          <button class="sport-option" type="button" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
-          <button class="sport-option" type="button" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
-          <button class="sport-option" type="button" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+        <div id="classement-preset-natation-stroke" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
+          <button class="sport-select-btn classement-preset-btn" type="button">
+            <span class="classement-preset-label" data-i18n="classement.chooseStroke">Choisis un style de nage</span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu classement-preset-menu" hidden>
+            <button class="sport-option" type="button" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
+            <button class="sport-option" type="button" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
+            <button class="sport-option" type="button" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
+            <button class="sport-option" type="button" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
+            <button class="sport-option" type="button" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+          </div>
         </div>
       </div>
       <div id="classement-preset-triathlon" class="sport-dropdown classement-preset-dropdown" hidden>
@@ -670,7 +672,7 @@
           <span class="profile-menu-chevron">›</span>
         </button>
         <button id="profile-storage-row" class="profile-menu-row" type="button">
-          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></span>
+          <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
           <span class="profile-menu-label" data-i18n="profile.storageRow">Stockage</span>
           <span class="profile-menu-chevron">›</span>
         </button>
