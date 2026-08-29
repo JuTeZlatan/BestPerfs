@@ -389,6 +389,7 @@ function renderSportList() {
     }
 
     const node = template.content.cloneNode(true);
+    const rowRootEl = node.querySelector(".exercise-row");
 
     const textInput = node.querySelector(".perf-text");
     if (textInput) {
@@ -403,8 +404,6 @@ function renderSportList() {
 
       textInput.addEventListener("blur", () => {
         textInput.readOnly = true;
-        proofControlsEditing = false;
-        updateProofControls();
         const newText = textInput.value.trim();
         if (!newText) {
           textInput.value = displayText;
@@ -421,10 +420,7 @@ function renderSportList() {
       rowMenuEditBtn.addEventListener("click", () => {
         closeAllRowMenus();
         textInput.readOnly = false;
-        textInput.focus();
-        textInput.select();
-        proofControlsEditing = true;
-        updateProofControls();
+        enterProofEditMode();
       });
     }
 
@@ -457,6 +453,26 @@ function renderSportList() {
       if (proofAddBtn) proofAddBtn.hidden = !(proofControlsEditing && !hasPhotos);
     }
     updateProofControls();
+
+    // Edit mode stays on until a tap lands outside this row - not on blur,
+    // since focusing the delete-badge/add-button (or a photo picker/modal
+    // triggered from them) would otherwise blur the text field and
+    // immediately kick us back out before the click could even register.
+    function handleOutsideProofClick(e) {
+      if (rowRootEl.contains(e.target)) return;
+      if (e.target.closest(".modal-overlay, .proof-viewer")) return;
+      exitProofEditMode();
+    }
+    function exitProofEditMode() {
+      proofControlsEditing = false;
+      updateProofControls();
+      document.removeEventListener("click", handleOutsideProofClick, true);
+    }
+    function enterProofEditMode() {
+      proofControlsEditing = true;
+      updateProofControls();
+      document.addEventListener("click", handleOutsideProofClick, true);
+    }
 
     if (proofBtn) {
       proofBtn.addEventListener("click", (e) => {

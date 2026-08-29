@@ -91,6 +91,7 @@ function render() {
 
   getSortedExercises().forEach((exercise) => {
     const node = templateEl.content.cloneNode(true);
+    const rowRootEl = node.querySelector(".exercise-row");
     const nameInput = node.querySelector(".exercise-name");
     const displayName = exerciseDisplayName(exercise);
     nameInput.value = displayName;
@@ -100,19 +101,8 @@ function render() {
       if (e.key === "Enter") nameInput.blur();
     });
 
-    function checkStillEditingProofs() {
-      requestAnimationFrame(() => {
-        const stillEditing = [nameInput, repsInput, weightInput].includes(document.activeElement);
-        if (!stillEditing) {
-          proofControlsEditing = false;
-          updateProofControls();
-        }
-      });
-    }
-
     nameInput.addEventListener("blur", () => {
       nameInput.readOnly = true;
-      checkStillEditingProofs();
       const newName = nameInput.value.trim();
       if (!newName) {
         nameInput.value = displayName;
@@ -143,7 +133,6 @@ function render() {
     });
     repsInput.addEventListener("blur", () => {
       repsInput.readOnly = true;
-      checkStillEditingProofs();
     });
 
     weightInput.addEventListener("input", () => {
@@ -152,7 +141,6 @@ function render() {
     });
     weightInput.addEventListener("blur", () => {
       weightInput.readOnly = true;
-      checkStillEditingProofs();
     });
 
     const proofBtn = node.querySelector(".perf-proof-btn");
@@ -167,6 +155,26 @@ function render() {
       if (proofAddBtn) proofAddBtn.hidden = !(proofControlsEditing && !hasPhotos);
     }
     updateProofControls();
+
+    // Edit mode stays on until a tap lands outside this row - not on blur,
+    // since focusing the delete-badge/add-button (or a photo picker/modal
+    // triggered from them) would otherwise blur the field and immediately
+    // kick us back out before the click could even register.
+    function handleOutsideProofClick(e) {
+      if (rowRootEl.contains(e.target)) return;
+      if (e.target.closest(".modal-overlay, .proof-viewer")) return;
+      exitProofEditMode();
+    }
+    function exitProofEditMode() {
+      proofControlsEditing = false;
+      updateProofControls();
+      document.removeEventListener("click", handleOutsideProofClick, true);
+    }
+    function enterProofEditMode() {
+      proofControlsEditing = true;
+      updateProofControls();
+      document.addEventListener("click", handleOutsideProofClick, true);
+    }
 
     if (proofBtn) {
       proofBtn.addEventListener("click", (e) => {
@@ -210,10 +218,7 @@ function render() {
       nameInput.readOnly = false;
       repsInput.readOnly = false;
       weightInput.readOnly = false;
-      nameInput.focus();
-      nameInput.select();
-      proofControlsEditing = true;
-      updateProofControls();
+      enterProofEditMode();
     });
 
     const rowMenuDeleteBtn = node.querySelector(".row-menu-delete");
