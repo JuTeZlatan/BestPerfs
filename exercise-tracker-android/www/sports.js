@@ -228,7 +228,12 @@ function perfTimeCentiseconds(perf) {
 let sportSortMode = "";
 
 function getSortedSportEntries(entries, sport) {
-  if (!sportSortMode) return entries;
+  if (!sportSortMode) {
+    // Default order: most recent performance date first. Entries can now be
+    // logged for a past date, so insertion order no longer reliably matches
+    // chronological order.
+    return [...entries].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  }
   const sorted = [...entries];
   if (sportSortMode === "alpha-asc" || sportSortMode === "alpha-desc") {
     sorted.sort((a, b) => a.text.localeCompare(b.text, getLang()));
