@@ -466,6 +466,9 @@ function renderSportList() {
     function exitProofEditMode() {
       proofControlsEditing = false;
       updateProofControls();
+      // If the field was never actually tapped into, it never blurred, so
+      // its own blur handler (which normally resets this) never ran either.
+      if (textInput) textInput.readOnly = true;
       document.removeEventListener("click", handleOutsideProofClick, true);
     }
     function enterProofEditMode() {

@@ -168,6 +168,11 @@ function render() {
     function exitProofEditMode() {
       proofControlsEditing = false;
       updateProofControls();
+      // If a field was never actually tapped into, it never blurred, so its
+      // own blur handler (which normally resets this) never ran either.
+      nameInput.readOnly = true;
+      repsInput.readOnly = true;
+      weightInput.readOnly = true;
       document.removeEventListener("click", handleOutsideProofClick, true);
     }
     function enterProofEditMode() {
