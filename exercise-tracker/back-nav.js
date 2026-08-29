@@ -130,7 +130,12 @@
 
   Capacitor.Plugins.App.addListener("backButton", () => {
     if (!goBackOneLevel()) {
-      Capacitor.Plugins.App.exitApp();
+      // Minimize rather than exitApp(): exitApp() destroys the Activity/WebView,
+      // so coming back later replays the splash screens and loses whatever
+      // screen the user was on. minimizeApp() just backgrounds the app (like
+      // pressing Home), keeping everything in memory so returning to it is
+      // instant and resumes exactly where it left off.
+      Capacitor.Plugins.App.minimizeApp();
     }
   });
 })();

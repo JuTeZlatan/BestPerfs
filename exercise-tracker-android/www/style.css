@@ -2238,7 +2238,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .timer-display {
   font-family: "Oswald", sans-serif;
-  font-size: 3.2rem;
+  font-size: 3.6rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--accent);
