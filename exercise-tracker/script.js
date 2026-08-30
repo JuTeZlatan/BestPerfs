@@ -155,6 +155,8 @@ function render() {
     const weightInput = node.querySelector(".weight-input");
     repsInput.value = exercise.maxReps ?? "";
     weightInput.value = exercise.maxWeight == null ? "" : weightToDisplay(exercise.maxWeight);
+    let editStartReps = exercise.maxReps;
+    let editStartWeight = exercise.maxWeight;
 
     repsInput.addEventListener("input", () => {
       exercise.maxReps = repsInput.value === "" ? null : Number(repsInput.value);
@@ -203,6 +205,14 @@ function render() {
       repsInput.readOnly = true;
       weightInput.readOnly = true;
       document.removeEventListener("click", handleOutsideProofClick, true);
+      if (exercise.maxReps !== editStartReps || exercise.maxWeight !== editStartWeight) {
+        editStartReps = exercise.maxReps;
+        editStartWeight = exercise.maxWeight;
+        window.promptForPerfDate && window.promptForPerfDate(exercise, () => {
+          saveExercises();
+          render();
+        });
+      }
     }
     function enterProofEditMode() {
       proofControlsEditing = true;
