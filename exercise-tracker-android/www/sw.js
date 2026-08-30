@@ -1,4 +1,4 @@
-const CACHE_NAME = "exercise-tracker-v142";
+const CACHE_NAME = "exercise-tracker-v143";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,7 +9,6 @@ const APP_SHELL = [
   "./script.js",
   "./timer.js",
   "./sports.js",
-  "./backup.js",
   "./profile.js",
   "./back-nav.js",
   "./firebase-init.js",
