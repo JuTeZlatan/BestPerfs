@@ -392,7 +392,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   flex-direction: column;
   gap: 4px;
   width: 260px;
-  max-height: 70vh;
+  max-height: 168px;
   overflow-y: auto;
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
@@ -455,7 +455,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   flex-direction: column;
   gap: 4px;
   min-width: 150px;
-  max-height: 70vh;
+  max-height: 168px;
   overflow-y: auto;
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
@@ -1242,13 +1242,8 @@ h1 .view-icon {
 
 .distance-dropdown-menu {
   min-width: 140px;
-  max-height: 148px;
-  overflow-y: auto;
 }
 
-.exercise-select-menu {
-  max-height: none;
-}
 
 .add-form input.preset-time-field {
   flex: 0 0 60px;
@@ -1380,6 +1375,8 @@ h1 .view-icon {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-height: 148px;
+  overflow-y: auto;
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border-radius: 12px;
@@ -1764,11 +1761,6 @@ h1 .view-icon {
   white-space: nowrap;
 }
 
-.classement-preset-menu {
-  max-height: 148px;
-  overflow-y: auto;
-}
-
 .classement-preset-dropdown[hidden] {
   display: none;
 }
@@ -1943,6 +1935,8 @@ h1 .view-icon {
   flex-direction: column;
   gap: 4px;
   min-width: 130px;
+  max-height: 168px;
+  overflow-y: auto;
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(10px);
   border-radius: 12px;
