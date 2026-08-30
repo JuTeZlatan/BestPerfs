@@ -14,6 +14,8 @@ const PRESET_EXERCISE_LABEL_KEYS = {
   pullups: "exercise.pullups",
   dips: "exercise.dips",
   benchpress: "exercise.benchpress",
+  curls: "exercise.curls",
+  squats: "exercise.squats",
 };
 const PRESET_EXERCISE_HAS_WEIGHT = {
   pushups: false,
@@ -21,6 +23,8 @@ const PRESET_EXERCISE_HAS_WEIGHT = {
   pullups: false,
   dips: false,
   benchpress: true,
+  curls: true,
+  squats: true,
 };
 
 function exerciseDisplayName(exercise) {

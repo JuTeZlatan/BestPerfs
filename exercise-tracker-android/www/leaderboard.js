@@ -28,7 +28,7 @@ const PRESET_KEYS = {
   natation: NATATION_DISTANCES.flatMap((distance) => SWIM_STROKES.map((stroke) => `${distance}-${stroke}`)),
   triathlon: ["XS", "S", "M", "L", "XL"],
   velo: VELO_BRACKETS.map(([lo, hi]) => `${lo}-${hi}`),
-  fitness: ["pushups", "situps", "pullups", "dips", "benchpress"],
+  fitness: ["pushups", "situps", "pullups", "dips", "benchpress", "curls", "squats"],
 };
 // Fitness ranks the opposite way from every other sport here: more reps or
 // more weight is better, not a lower time.
@@ -38,6 +38,8 @@ const FITNESS_METRIC = {
   pullups: "reps",
   dips: "reps",
   benchpress: "weight",
+  curls: "weight",
+  squats: "weight",
 };
 const RUNNING_DISTANCE_TO_KEY = {
   "0.1": "0.1",
