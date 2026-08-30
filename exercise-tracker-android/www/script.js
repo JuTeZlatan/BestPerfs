@@ -1,5 +1,11 @@
 const STORAGE_KEY = "exercise-tracker-data";
 
+function monthLabel(monthKey) {
+  const [y, m] = monthKey.split("-").map(Number);
+  const label = new Date(y, m - 1, 1).toLocaleDateString(getLang(), { month: "long", year: "numeric" });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 const listEl = document.getElementById("exercise-list");
 const formEl = document.getElementById("add-form");
 const inputEl = document.getElementById("exercise-input");
@@ -102,7 +108,17 @@ function render() {
   sortDateDescBtn.classList.toggle("active", sortOrder === "date-desc");
   fitnessSortBtn.classList.toggle("active", sortOrder !== "date-desc");
 
+  let lastMonthKey = null;
   getSortedExercises().forEach((exercise) => {
+    const monthKey = exercise.date ? exercise.date.slice(0, 7) : null;
+    if (monthKey && monthKey !== lastMonthKey) {
+      const separator = document.createElement("div");
+      separator.className = "sport-month-separator";
+      separator.textContent = monthLabel(monthKey);
+      listEl.appendChild(separator);
+      lastMonthKey = monthKey;
+    }
+
     const node = templateEl.content.cloneNode(true);
     const rowRootEl = node.querySelector(".exercise-row");
     const nameInput = node.querySelector(".exercise-name");

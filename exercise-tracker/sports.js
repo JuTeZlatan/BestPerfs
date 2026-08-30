@@ -6,12 +6,6 @@ function todayISO() {
   return new Date(now - offset).toISOString().slice(0, 10);
 }
 
-function monthLabel(monthKey) {
-  const [y, m] = monthKey.split("-").map(Number);
-  const label = new Date(y, m - 1, 1).toLocaleDateString(getLang(), { month: "long", year: "numeric" });
-  return label.charAt(0).toUpperCase() + label.slice(1);
-}
-
 const sportSelectBtn = document.getElementById("sport-select-btn");
 const sportSelectLabel = document.getElementById("sport-select-label");
 const sportSelectIcon = document.getElementById("sport-select-icon");
