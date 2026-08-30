@@ -889,7 +889,6 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 .auth-landing-chip:nth-child(3) { animation-delay: 0.32s; }
 .auth-landing-chip:nth-child(4) { animation-delay: 0.36s; }
 .auth-landing-chip:nth-child(5) { animation-delay: 0.4s; }
-.auth-landing-chip:nth-child(6) { animation-delay: 0.44s; }
 
 .auth-landing-chip-icon {
   display: inline-flex;
