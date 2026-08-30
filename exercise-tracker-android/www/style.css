@@ -734,7 +734,54 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   pointer-events: none;
 }
 
+@keyframes auth-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes auth-orb-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-36px, 34px) scale(1.15); }
+}
+
+@keyframes auth-orb-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(32px, -26px) scale(1.12); }
+}
+
+@keyframes auth-wordmark-pulse {
+  0%, 100% { filter: drop-shadow(0 0 16px rgba(var(--accent-rgb), 0.35)); }
+  50% { filter: drop-shadow(0 0 34px rgba(var(--accent-rgb), 0.65)); }
+}
+
+.auth-landing-orb {
+  position: fixed;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.32;
+  filter: blur(100px);
+}
+
+.auth-landing-orb-a {
+  top: -140px;
+  right: -120px;
+  background: var(--accent);
+  animation: auth-orb-drift-a 15s ease-in-out infinite;
+}
+
+.auth-landing-orb-b {
+  bottom: -160px;
+  left: -120px;
+  background: var(--accent-2);
+  animation: auth-orb-drift-b 17s ease-in-out infinite;
+}
+
 .auth-landing {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 960px;
   margin: auto 0;
@@ -752,20 +799,59 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   text-align: center;
 }
 
-.auth-landing-tagline {
-  margin: 18px 0 10px;
+.auth-landing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
+  background: rgba(var(--accent-rgb), 0.12);
+  color: var(--accent-2);
   font-family: "Oswald", sans-serif;
-  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  font-size: 0.68rem;
   font-weight: 700;
-  color: var(--text);
-  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  animation: auth-fade-up 0.6s var(--ease) both;
+}
+
+.auth-landing-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--accent-2);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.9);
+}
+
+.auth-landing-hero .auth-gate-wordmark {
+  display: block;
+  animation: auth-fade-up 0.6s var(--ease) 0.06s both, auth-wordmark-pulse 3.4s ease-in-out 0.7s infinite;
+}
+
+.auth-landing-tagline {
+  margin: 20px 0 12px;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  background: linear-gradient(120deg, #ffffff 35%, var(--accent-2) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: auth-fade-up 0.6s var(--ease) 0.12s both;
 }
 
 .auth-landing-subtitle {
-  margin: 0 0 22px;
+  margin: 0 0 24px;
   color: var(--text-dim);
   font-size: 0.9rem;
   line-height: 1.55;
+  animation: auth-fade-up 0.6s var(--ease) 0.18s both;
 }
 
 .auth-landing-features {
@@ -778,8 +864,8 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 .auth-landing-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: 8px;
+  padding: 7px 14px 7px 7px;
   border-radius: 999px;
   background: var(--card-glass);
   border: 1px solid var(--card-border);
@@ -788,18 +874,64 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   font-size: 0.78rem;
   font-weight: 600;
   box-shadow: var(--float-shadow);
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  animation: auth-fade-up 0.5s var(--ease) both;
 }
+
+.auth-landing-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  box-shadow: var(--float-shadow), var(--glow-soft);
+}
+
+.auth-landing-chip:nth-child(1) { animation-delay: 0.24s; }
+.auth-landing-chip:nth-child(2) { animation-delay: 0.28s; }
+.auth-landing-chip:nth-child(3) { animation-delay: 0.32s; }
+.auth-landing-chip:nth-child(4) { animation-delay: 0.36s; }
+.auth-landing-chip:nth-child(5) { animation-delay: 0.4s; }
+.auth-landing-chip:nth-child(6) { animation-delay: 0.44s; }
 
 .auth-landing-chip-icon {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: rgba(var(--accent-rgb), 0.18);
   color: var(--accent-2);
-  font-size: 1rem;
+  font-size: 0.85rem;
+}
+
+.auth-landing-form-heading {
+  margin: 0 0 16px;
+  font-family: "Oswald", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  text-align: center;
 }
 
 .auth-landing .auth-gate-content {
   flex: 0 1 380px;
   width: auto;
   margin: 0;
+  animation: auth-fade-up 0.6s var(--ease) 0.3s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-landing-orb,
+  .auth-landing-badge,
+  .auth-landing-hero .auth-gate-wordmark,
+  .auth-landing-tagline,
+  .auth-landing-subtitle,
+  .auth-landing-chip,
+  .auth-landing .auth-gate-content {
+    animation: none;
+  }
 }
 
 .auth-gate-content {
