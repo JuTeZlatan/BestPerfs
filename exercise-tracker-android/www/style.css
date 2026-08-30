@@ -46,65 +46,119 @@ svg { vertical-align: -0.15em; flex-shrink: 0; }
 }
 
 :root[data-theme="ocean"] {
-  --accent: #1e8fec;
-  --accent-2: #42c7ff;
-  --accent-rgb: 30, 143, 236;
+  --bg: #060c10;
+  --bg-rgb: 6, 12, 16;
+  --card: #101c24;
+  --card-rgb: 16, 28, 36;
+  --card-border: rgba(15, 126, 168, 0.22);
+  --field: #0a151c;
+  --accent: #0f7ea8;
+  --accent-2: #38c2c9;
+  --accent-rgb: 15, 126, 168;
   --on-accent: #ffffff;
 }
 
 :root[data-theme="emerald"] {
-  --accent: #1eec7a;
-  --accent-2: #42ffb0;
-  --accent-rgb: 30, 236, 122;
+  --bg: #070d0a;
+  --bg-rgb: 7, 13, 10;
+  --card: #10201a;
+  --card-rgb: 16, 32, 26;
+  --card-border: rgba(14, 159, 110, 0.22);
+  --field: #0a1712;
+  --accent: #0e9f6e;
+  --accent-2: #34d399;
+  --accent-rgb: 14, 159, 110;
   --on-accent: #04140b;
 }
 
 :root[data-theme="violet"] {
-  --accent: #a12bec;
-  --accent-2: #d15fff;
-  --accent-rgb: 161, 43, 236;
+  --bg: #0a0813;
+  --bg-rgb: 10, 8, 19;
+  --card: #16101f;
+  --card-rgb: 22, 16, 31;
+  --card-border: rgba(124, 58, 237, 0.24);
+  --field: #0d0a17;
+  --accent: #7c3aed;
+  --accent-2: #c084fc;
+  --accent-rgb: 124, 58, 237;
   --on-accent: #ffffff;
 }
 
 :root[data-theme="gold"] {
-  --accent: #ecab1e;
-  --accent-2: #ffd042;
-  --accent-rgb: 236, 171, 30;
+  --bg: #0d0a05;
+  --bg-rgb: 13, 10, 5;
+  --card: #201a0e;
+  --card-rgb: 32, 26, 14;
+  --card-border: rgba(200, 147, 44, 0.24);
+  --field: #14100a;
+  --accent: #c8932c;
+  --accent-2: #f5d377;
+  --accent-rgb: 200, 147, 44;
   --on-accent: #1a1409;
 }
 
 :root[data-theme="pink"] {
-  --accent: #ec1e8f;
-  --accent-2: #ff42c7;
-  --accent-rgb: 236, 30, 143;
+  --bg: #0d0510;
+  --bg-rgb: 13, 5, 16;
+  --card: #1f0f1e;
+  --card-rgb: 31, 15, 30;
+  --card-border: rgba(224, 24, 144, 0.24);
+  --field: #140a13;
+  --accent: #e01890;
+  --accent-2: #5eead4;
+  --accent-rgb: 224, 24, 144;
   --on-accent: #ffffff;
 }
 
 :root[data-theme="charcoal"] {
-  --accent: #c9c9c9;
-  --accent-2: #ffffff;
-  --accent-rgb: 201, 201, 201;
+  --bg: #0a0a0a;
+  --bg-rgb: 10, 10, 10;
+  --card: #1c1c1c;
+  --card-rgb: 28, 28, 28;
+  --card-border: rgba(255, 255, 255, 0.12);
+  --field: #131313;
+  --accent: #d4d4d8;
+  --accent-2: #fafafa;
+  --accent-rgb: 212, 212, 216;
   --on-accent: #141414;
 }
 
 :root[data-theme="sunset"] {
-  --accent: #ec6a1e;
-  --accent-2: #ff9142;
-  --accent-rgb: 236, 106, 30;
+  --bg: #0e0805;
+  --bg-rgb: 14, 8, 5;
+  --card: #20130c;
+  --card-rgb: 32, 19, 12;
+  --card-border: rgba(232, 89, 12, 0.24);
+  --field: #150c07;
+  --accent: #e8590c;
+  --accent-2: #f5576c;
+  --accent-rgb: 232, 89, 12;
   --on-accent: #ffffff;
 }
 
 :root[data-theme="arctic"] {
-  --accent: #42d1ec;
-  --accent-2: #9df0ff;
-  --accent-rgb: 66, 209, 236;
+  --bg: #060d10;
+  --bg-rgb: 6, 13, 16;
+  --card: #0f1e23;
+  --card-rgb: 15, 30, 35;
+  --card-border: rgba(45, 212, 232, 0.24);
+  --field: #0a161a;
+  --accent: #2dd4e8;
+  --accent-2: #bae6fd;
+  --accent-rgb: 45, 212, 232;
   --on-accent: #04181c;
 }
 
 :root[data-theme="indigo"] {
-  --accent: #3d2bec;
-  --accent-2: #6f5fff;
-  --accent-rgb: 61, 43, 236;
+  --bg: #07080f;
+  --bg-rgb: 7, 8, 15;
+  --card: #12131f;
+  --card-rgb: 18, 19, 31;
+  --card-border: rgba(67, 56, 202, 0.24);
+  --field: #0a0b14;
+  --accent: #4338ca;
+  --accent-2: #818cf8;
+  --accent-rgb: 67, 56, 202;
   --on-accent: #ffffff;
 }
 
@@ -523,16 +577,16 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   color: var(--accent-2);
 }
 
-[data-theme-swatch="classic"] { background: #ec2b1e; }
-[data-theme-swatch="ocean"] { background: #1e8fec; }
-[data-theme-swatch="emerald"] { background: #1eec7a; }
-[data-theme-swatch="violet"] { background: #a12bec; }
-[data-theme-swatch="gold"] { background: #ecab1e; }
-[data-theme-swatch="pink"] { background: #ec1e8f; }
-[data-theme-swatch="charcoal"] { background: #c9c9c9; }
-[data-theme-swatch="sunset"] { background: #ec6a1e; }
-[data-theme-swatch="arctic"] { background: #42d1ec; }
-[data-theme-swatch="indigo"] { background: #3d2bec; }
+[data-theme-swatch="classic"] { background: linear-gradient(135deg, #ff5f42, #ec2b1e 70%); }
+[data-theme-swatch="ocean"] { background: linear-gradient(135deg, #38c2c9, #0f7ea8 70%); }
+[data-theme-swatch="emerald"] { background: linear-gradient(135deg, #34d399, #0e9f6e 70%); }
+[data-theme-swatch="violet"] { background: linear-gradient(135deg, #c084fc, #7c3aed 70%); }
+[data-theme-swatch="gold"] { background: linear-gradient(135deg, #f5d377, #c8932c 70%); }
+[data-theme-swatch="pink"] { background: linear-gradient(135deg, #5eead4, #e01890 70%); }
+[data-theme-swatch="charcoal"] { background: linear-gradient(135deg, #fafafa, #d4d4d8 70%); }
+[data-theme-swatch="sunset"] { background: linear-gradient(135deg, #f5576c, #e8590c 70%); }
+[data-theme-swatch="arctic"] { background: linear-gradient(135deg, #bae6fd, #2dd4e8 70%); }
+[data-theme-swatch="indigo"] { background: linear-gradient(135deg, #818cf8, #4338ca 70%); }
 
 .profile-menu {
   display: flex;
