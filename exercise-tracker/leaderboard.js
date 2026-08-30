@@ -39,7 +39,7 @@ const FITNESS_METRIC = {
   dips: "reps",
   benchpress: "weight",
   curls: "weight",
-  squats: "weight",
+  squats: "reps",
 };
 const RUNNING_DISTANCE_TO_KEY = {
   "0.1": "0.1",

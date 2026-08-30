@@ -30,7 +30,7 @@ const PRESET_EXERCISE_HAS_WEIGHT = {
   dips: false,
   benchpress: true,
   curls: true,
-  squats: true,
+  squats: false,
 };
 
 function exerciseDisplayName(exercise) {
