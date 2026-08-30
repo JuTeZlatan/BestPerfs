@@ -579,7 +579,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 16px 0;
+  margin: 10px 0;
   color: var(--text-dim);
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -648,7 +648,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 .auth-btn-row {
   display: flex;
   gap: 8px;
-  margin-top: 22px;
+  margin-top: 12px;
 }
 
 .auth-btn-row button {
@@ -695,7 +695,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 
 .auth-forgot-link {
   display: block;
-  margin: 12px auto 0;
+  margin: 8px auto 0;
   padding: 4px;
   border: none;
   background: none;
@@ -723,6 +723,10 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
     radial-gradient(circle at 4% 106%, rgba(var(--accent-rgb), 0.09) 0%, transparent 46%),
     var(--bg);
   padding: 40px 16px;
+}
+
+.auth-gate:has(.auth-landing) {
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
 }
 
 .auth-gate[hidden] {
@@ -784,33 +788,34 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   z-index: 1;
   width: 100%;
   max-width: 960px;
+  max-height: 100%;
   margin: auto 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 48px;
-  padding: 24px 0;
+  gap: 22px;
+  padding: 8px 0;
 }
 
 .auth-landing-hero {
-  flex: 1 1 340px;
-  max-width: 460px;
+  flex: 1 1 320px;
+  max-width: 420px;
   text-align: center;
 }
 
 .auth-landing-badge {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  margin-bottom: 16px;
+  gap: 6px;
+  padding: 4px 12px;
+  margin-bottom: 8px;
   border-radius: 999px;
   border: 1px solid rgba(var(--accent-rgb), 0.35);
   background: rgba(var(--accent-rgb), 0.12);
   color: var(--accent-2);
   font-family: "Oswald", sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -819,26 +824,42 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 
 .auth-landing-badge::before {
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--accent-2);
   box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.9);
 }
 
-.auth-landing-hero .auth-gate-wordmark {
-  display: block;
-  animation: auth-fade-up 0.6s var(--ease) 0.06s both, auth-wordmark-pulse 3.4s ease-in-out 0.7s infinite;
+.auth-landing-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: auth-fade-up 0.6s var(--ease) 0.06s both;
+}
+
+.auth-landing-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 22%;
+  flex-shrink: 0;
+  animation: auth-wordmark-pulse 3.4s ease-in-out 0.7s infinite;
+}
+
+.auth-landing-brand .auth-gate-wordmark {
+  font-size: clamp(1.7rem, 8vw, 2.3rem);
+  transform: skewX(-8deg) translateY(2px);
 }
 
 .auth-landing-tagline {
-  margin: 20px 0 12px;
+  margin: 10px 0 12px;
   font-family: "Oswald", sans-serif;
-  font-size: clamp(1.9rem, 5.5vw, 2.75rem);
+  font-size: clamp(1.15rem, 4.6vw, 1.5rem);
   font-weight: 800;
   letter-spacing: -0.01em;
-  line-height: 1.15;
+  line-height: 1.2;
   background: linear-gradient(120deg, #ffffff 35%, var(--accent-2) 92%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -846,32 +867,24 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   animation: auth-fade-up 0.6s var(--ease) 0.12s both;
 }
 
-.auth-landing-subtitle {
-  margin: 0 0 24px;
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  line-height: 1.55;
-  animation: auth-fade-up 0.6s var(--ease) 0.18s both;
-}
-
 .auth-landing-features {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .auth-landing-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px 7px 7px;
+  gap: 6px;
+  padding: 5px 11px 5px 5px;
   border-radius: 999px;
   background: var(--card-glass);
   border: 1px solid var(--card-border);
   backdrop-filter: blur(8px);
   color: var(--text);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 600;
   box-shadow: var(--float-shadow);
   transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -894,19 +907,19 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
   flex-shrink: 0;
   background: rgba(var(--accent-rgb), 0.18);
   color: var(--accent-2);
-  font-size: 0.85rem;
+  font-size: 0.68rem;
 }
 
 .auth-landing-form-heading {
-  margin: 0 0 16px;
+  margin: 0 0 8px;
   font-family: "Oswald", sans-serif;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -915,7 +928,7 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 }
 
 .auth-landing .auth-gate-content {
-  flex: 0 1 380px;
+  flex: 0 1 340px;
   width: auto;
   margin: 0;
   animation: auth-fade-up 0.6s var(--ease) 0.3s both;
@@ -924,9 +937,9 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 @media (prefers-reduced-motion: reduce) {
   .auth-landing-orb,
   .auth-landing-badge,
-  .auth-landing-hero .auth-gate-wordmark,
+  .auth-landing-brand,
+  .auth-landing-logo,
   .auth-landing-tagline,
-  .auth-landing-subtitle,
   .auth-landing-chip,
   .auth-landing .auth-gate-content {
     animation: none;
