@@ -113,6 +113,33 @@
     });
   }
 
+  // Fullscreen overlays and modals aren't part of the view tree above, so
+  // the back button has to check for them first and dismiss whichever is
+  // open (by clicking its own close/cancel button, so it resolves exactly
+  // like a real tap would) instead of falling through to view navigation
+  // or minimizing the app.
+  const DISMISSIBLE_OVERLAYS = [
+    ["proof-viewer", "proof-viewer-close-btn"],
+    ["proof-source-modal", "proof-source-cancel-btn"],
+    ["proof-prompt-modal", "proof-prompt-cancel-btn"],
+    ["date-prompt-modal", "date-prompt-cancel-btn"],
+    ["proof-manager-modal", "proof-manager-close-btn"],
+    ["friends-add-modal", "friends-add-cancel-btn"],
+    ["confirm-modal", "modal-cancel-btn"],
+  ];
+
+  function closeTopOverlay() {
+    for (const [overlayId, closeBtnId] of DISMISSIBLE_OVERLAYS) {
+      const overlay = document.getElementById(overlayId);
+      if (overlay && !overlay.hidden) {
+        const btn = document.getElementById(closeBtnId);
+        if (btn) btn.click();
+        return true;
+      }
+    }
+    return false;
+  }
+
   function goBackOneLevel() {
     const leaf = currentLeaf();
     if (!leaf) return false; // already on Sports (home) or the login gate
@@ -127,6 +154,7 @@
   }
 
   Capacitor.Plugins.App.addListener("backButton", () => {
+    if (closeTopOverlay()) return;
     if (!goBackOneLevel()) {
       // Minimize rather than exitApp(): exitApp() destroys the Activity/WebView,
       // so coming back later replays the splash screens and loses whatever

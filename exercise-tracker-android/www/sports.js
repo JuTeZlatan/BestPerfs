@@ -583,25 +583,20 @@ addSwimForm.addEventListener("submit", async (e) => {
     seconds: swimSecondsInput.value === "" ? null : Number(swimSecondsInput.value),
     hundredths: swimHundredthsInput.value === "" ? null : Number(swimHundredthsInput.value),
   };
-  sportPerfs.natation.push(perf);
-  saveSportPerfs();
-  renderSportList();
   addSwimForm.reset();
   resetDistanceDropdown(swimStyleSelect);
   resetDistanceDropdown(swimDistanceSelect);
   swimDistanceManualInput.hidden = true;
-  const saveAndRender = () => {
-    saveSportPerfs();
-    renderSportList();
-  };
+  // Not added to the list until the whole flow (date, then proof photos)
+  // is done - no premature row that might have to be undone if cancelled.
   let keepGoing = true;
-  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
-  if (!keepGoing) {
-    sportPerfs.natation = sportPerfs.natation.filter((p) => p.id !== perf.id);
-    saveAndRender();
-    return;
-  }
-  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
+  sportPerfs.natation.push(perf);
+  saveSportPerfs();
+  renderSportList();
 });
 
 addCyclingForm.addEventListener("submit", async (e) => {
@@ -618,23 +613,16 @@ addCyclingForm.addEventListener("submit", async (e) => {
     seconds: cyclingSecondsInput.value === "" ? null : Number(cyclingSecondsInput.value),
     hundredths: cyclingHundredthsInput.value === "" ? null : Number(cyclingHundredthsInput.value),
   };
+  addCyclingForm.reset();
+  cyclingLocationInput.focus();
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
   sportPerfs.velo.push(perf);
   saveSportPerfs();
   renderSportList();
-  addCyclingForm.reset();
-  cyclingLocationInput.focus();
-  const saveAndRender = () => {
-    saveSportPerfs();
-    renderSportList();
-  };
-  let keepGoing = true;
-  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
-  if (!keepGoing) {
-    sportPerfs.velo = sportPerfs.velo.filter((p) => p.id !== perf.id);
-    saveAndRender();
-    return;
-  }
-  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
 addRunningForm.addEventListener("submit", async (e) => {
@@ -651,25 +639,18 @@ addRunningForm.addEventListener("submit", async (e) => {
     seconds: runningSecondsInput.value === "" ? null : Number(runningSecondsInput.value),
     hundredths: runningHundredthsInput.value === "" ? null : Number(runningHundredthsInput.value),
   };
-  sportPerfs.course.push(perf);
-  saveSportPerfs();
-  renderSportList();
   addRunningForm.reset();
   resetDistanceDropdown(runningDistanceSelect);
   runningDistanceManualInput.hidden = true;
   runningDescInput.focus();
-  const saveAndRender = () => {
-    saveSportPerfs();
-    renderSportList();
-  };
   let keepGoing = true;
-  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
-  if (!keepGoing) {
-    sportPerfs.course = sportPerfs.course.filter((p) => p.id !== perf.id);
-    saveAndRender();
-    return;
-  }
-  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
+  sportPerfs.course.push(perf);
+  saveSportPerfs();
+  renderSportList();
 });
 
 // ---- Triathlon step wizard ----
@@ -731,22 +712,15 @@ triFields.run.validate.addEventListener("click", async () => {
     bike: triathlonDraft.bike,
     run: triathlonDraft.run,
   };
+  resetTriathlonWizard();
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
   sportPerfs.triathlon.push(perf);
   saveSportPerfs();
   renderSportList();
-  resetTriathlonWizard();
-  const saveAndRender = () => {
-    saveSportPerfs();
-    renderSportList();
-  };
-  let keepGoing = true;
-  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, saveAndRender);
-  if (!keepGoing) {
-    sportPerfs.triathlon = sportPerfs.triathlon.filter((p) => p.id !== perf.id);
-    saveAndRender();
-    return;
-  }
-  if (window.promptForProofPhotos) await window.promptForProofPhotos(perf, saveAndRender);
 });
 
 // ---- Small floating popups anchored to a row (triathlon breakdown, date info) ----

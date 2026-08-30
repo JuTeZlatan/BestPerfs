@@ -325,8 +325,8 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !confirmModal.hidden) closeConfirmModal();
 });
 
-function addExercise(exerciseKey, name, reps, weight) {
-  const exercise = {
+function buildExercise(exerciseKey, name, reps, weight) {
+  return {
     id: crypto.randomUUID(),
     exerciseKey,
     name,
@@ -334,10 +334,12 @@ function addExercise(exerciseKey, name, reps, weight) {
     maxWeight: weight,
     date: window.todayISO ? window.todayISO() : new Date().toISOString().slice(0, 10),
   };
+}
+
+function commitExercise(exercise) {
   exercises.push(exercise);
   saveExercises();
   render();
-  return exercise;
 }
 
 function hasWeightForSelectValue(value) {
@@ -414,22 +416,19 @@ formEl.addEventListener("submit", async (e) => {
   if (key === "manual") {
     const name = inputEl.value.trim();
     if (!name) return;
-    exercise = addExercise(null, name, reps, weight);
+    exercise = buildExercise(null, name, reps, weight);
   } else {
-    exercise = addExercise(key, null, reps, weight);
+    exercise = buildExercise(key, null, reps, weight);
   }
   resetExerciseSelect();
-  const saveAndRender = () => {
-    saveExercises();
-    render();
-  };
+  // Not added to the list until the whole flow (date, then proof photos)
+  // is done - no premature row that might have to be undone if cancelled.
   let keepGoing = true;
-  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(exercise, saveAndRender);
-  if (!keepGoing) {
-    deleteExercise(exercise.id);
-    return;
-  }
-  if (window.promptForProofPhotos) await window.promptForProofPhotos(exercise, saveAndRender);
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(exercise, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(exercise, () => {});
+  if (!keepGoing) return;
+  commitExercise(exercise);
 });
 
 sortAscBtn.addEventListener("click", () => {

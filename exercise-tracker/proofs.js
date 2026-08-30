@@ -159,7 +159,7 @@ function showProofSourceModal() {
 
 async function pickPhotosNative(max) {
   const source = await showProofSourceModal();
-  if (!source) return [];
+  if (!source) return null;
   if (source === "camera") {
     const photo = await Capacitor.Plugins.Camera.getPhoto({ source: "CAMERA", resultType: "uri", quality: 80 });
     const response = await fetch(photo.webPath);
@@ -294,34 +294,48 @@ window.promptForPerfDate = promptForPerfDate;
 const proofPromptModal = document.getElementById("proof-prompt-modal");
 const proofPromptYesBtn = document.getElementById("proof-prompt-yes-btn");
 const proofPromptNoBtn = document.getElementById("proof-prompt-no-btn");
+const proofPromptCancelBtn = document.getElementById("proof-prompt-cancel-btn");
 
+// Resolves "yes" / "no" / "cancel" - "cancel" (the X) is distinct from "no":
+// "no" declines photos but keeps the stat, "cancel" aborts the whole entry.
 function showProofPromptModal() {
   return new Promise((resolve) => {
     proofPromptModal.hidden = false;
     function onYes() {
-      cleanup(true);
+      cleanup("yes");
     }
     function onNo() {
-      cleanup(false);
+      cleanup("no");
+    }
+    function onCancel() {
+      cleanup("cancel");
     }
     function cleanup(result) {
       proofPromptModal.hidden = true;
       proofPromptYesBtn.removeEventListener("click", onYes);
       proofPromptNoBtn.removeEventListener("click", onNo);
+      proofPromptCancelBtn.removeEventListener("click", onCancel);
       resolve(result);
     }
     proofPromptYesBtn.addEventListener("click", onYes);
     proofPromptNoBtn.addEventListener("click", onNo);
+    proofPromptCancelBtn.addEventListener("click", onCancel);
   });
 }
 
+// Returns false when the user cancelled (an X, at the yes/no step or the
+// camera/library choice) - the caller should then abort the whole stat
+// entry rather than save it without photos.
 async function promptForProofPhotos(perf, onSaved) {
-  const wantsPhotos = await showProofPromptModal();
-  if (!wantsPhotos) return;
+  const choice = await showProofPromptModal();
+  if (choice === "cancel") return false;
+  if (choice === "no") return true;
   const rawBlobs = await pickPhotos(2);
-  if (!rawBlobs.length) return;
+  if (rawBlobs === null) return false;
+  if (!rawBlobs.length) return true;
   perf.photos = await storePhotosForPerf(rawBlobs, perf.id);
   onSaved();
+  return true;
 }
 window.promptForProofPhotos = promptForProofPhotos;
 
@@ -331,7 +345,7 @@ async function addPhotosNow(perf, onSaved) {
   const remaining = 2 - (perf.photos ? perf.photos.length : 0);
   if (remaining <= 0) return;
   const rawBlobs = await pickPhotos(remaining);
-  if (!rawBlobs.length) return;
+  if (!rawBlobs || !rawBlobs.length) return;
   const newPhotos = await storePhotosForPerf(rawBlobs, perf.id);
   perf.photos = [...(perf.photos || []), ...newPhotos];
   onSaved();
