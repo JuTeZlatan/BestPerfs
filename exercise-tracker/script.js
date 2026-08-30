@@ -158,6 +158,20 @@ function render() {
     let editStartReps = exercise.maxReps;
     let editStartWeight = exercise.maxWeight;
 
+    // readonly on <input type="number"> only blocks typing, not the
+    // scroll-wheel or up/down-arrow-key increment, so those need blocking
+    // by hand or the value can still change without going through "Modifier".
+    function blockNudgeWhileReadonly(input) {
+      input.addEventListener("wheel", (e) => {
+        if (input.readOnly) e.preventDefault();
+      }, { passive: false });
+      input.addEventListener("keydown", (e) => {
+        if (input.readOnly && (e.key === "ArrowUp" || e.key === "ArrowDown")) e.preventDefault();
+      });
+    }
+    blockNudgeWhileReadonly(repsInput);
+    blockNudgeWhileReadonly(weightInput);
+
     repsInput.addEventListener("input", () => {
       exercise.maxReps = repsInput.value === "" ? null : Number(repsInput.value);
       saveExercises();

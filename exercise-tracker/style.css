@@ -2367,6 +2367,13 @@ h1 .view-icon {
   border-color: var(--accent);
 }
 
+/* readonly on a number input only blocks typing, not the scroll-wheel /
+   spin-button increment, so it can still be nudged without ever going
+   through the "Modifier" flow unless pointer events are blocked too. */
+.inline-field input[readonly] {
+  pointer-events: none;
+}
+
 .inline-field .weight-input,
 .inline-field .distance-input {
   width: 70px;
