@@ -20,7 +20,8 @@ const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
 const fitnessPanelEl = document.getElementById("fitness-panel");
 const sportSortBarEl = document.getElementById("sport-sort-bar");
-const sportSortSelect = document.getElementById("sport-sort-select");
+const sportSortBtn = document.getElementById("sport-sort-btn");
+const sportSortMenu = document.getElementById("sport-sort-menu");
 
 const swimTemplate = document.getElementById("swim-perf-template");
 const cyclingTemplate = document.getElementById("cycling-perf-template");
@@ -330,11 +331,14 @@ function selectSport(sport) {
   });
   sportSortBarEl.hidden = sport === "fitness";
   const canSortByDistance = DISTANCE_SORT_SPORTS.includes(sport);
-  sportSortSelect.querySelectorAll(".sort-opt-dist").forEach((opt) => {
+  sportSortMenu.querySelectorAll(".sort-opt-dist").forEach((opt) => {
     opt.hidden = !canSortByDistance;
   });
   sportSortMode = "";
-  sportSortSelect.value = "";
+  sportSortMenu.querySelectorAll(".sport-option").forEach((opt) => {
+    opt.classList.toggle("active", opt.dataset.value === "");
+  });
+  sportSortBtn.classList.remove("active");
   updateSportSelectLabel();
   renderSportList();
 }
@@ -363,9 +367,28 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !sportMenuEl.hidden) sportMenuEl.hidden = true;
 });
 
-sportSortSelect.addEventListener("change", () => {
-  sportSortMode = sportSortSelect.value;
-  renderSportList();
+sportSortBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const opening = sportSortMenu.hidden;
+  window.closeAllDropdowns();
+  sportSortMenu.hidden = !opening;
+});
+
+sportSortMenu.querySelectorAll(".sport-option").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    sportSortMenu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
+    btn.classList.add("active");
+    sportSortMode = btn.dataset.value;
+    sportSortBtn.classList.toggle("active", !!sportSortMode);
+    sportSortMenu.hidden = true;
+    renderSportList();
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!sportSortMenu.hidden && !sportSortMenu.contains(e.target) && e.target !== sportSortBtn) {
+    sportSortMenu.hidden = true;
+  }
 });
 
 function renderSportList() {

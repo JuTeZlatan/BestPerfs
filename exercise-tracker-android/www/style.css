@@ -1295,48 +1295,43 @@ h1 .view-icon {
   display: none;
 }
 
-.sort-label {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+.sort-dropdown {
+  position: relative;
+  display: inline-flex;
 }
 
-.sport-sort-select {
-  padding: 6px 10px;
+.sort-icon-btn {
+  width: 36px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: rgba(var(--accent-rgb), 0.14);
-  color: var(--text);
-  font-family: "Oswald", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  outline: none;
-}
-
-.sport-sort-select:focus {
-  border-color: var(--accent);
-}
-
-.sort-btn {
-  padding: 6px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: rgba(var(--accent-rgb), 0.14);
+  border: none;
+  background: var(--card-gradient), var(--card-glass);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--float-shadow);
   color: var(--text-dim);
-  font-family: "Oswald", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-size: 1rem;
   cursor: pointer;
+  transition: color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.sort-btn.active {
-  color: var(--on-accent);
-  background: var(--accent-gradient);
-  border-color: transparent;
-  box-shadow: var(--glow-soft);
+.sort-icon-btn:hover {
+  color: var(--text);
+  box-shadow: var(--float-shadow), var(--glow-soft);
+}
+
+.sort-icon-btn.active {
+  color: var(--accent-2);
+  box-shadow: var(--float-shadow), var(--glow-soft);
+}
+
+.sort-menu-dropdown {
+  left: auto;
+  right: 0;
+  min-width: 170px;
 }
 
 .sport-dropdown {
