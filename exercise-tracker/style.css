@@ -641,6 +641,43 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   width: 100%;
 }
 
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  padding-right: 42px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--text-dim);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  color: var(--text);
+}
+
+.password-toggle-btn.active {
+  color: var(--accent-2);
+}
+
 .auth-form input[type="date"] {
   color-scheme: dark;
 }

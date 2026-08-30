@@ -381,6 +381,25 @@ usernameForm.addEventListener("submit", async (e) => {
   showApp();
 });
 
+// ---- Password visibility toggle (login + signup) ----
+const EYE_ICON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF_ICON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"/><path d="M9.9 4.24A10.4 10.4 0 0 1 12 4c6.5 0 10 7 10 7a13.16 13.16 0 0 1-2.16 3.19M6.1 6.1C3.4 7.9 2 10.9 2 11c0 0 3.5 7 10 7 1.06 0 2.06-.18 3-.5"/></svg>';
+
+document.querySelectorAll(".password-toggle-btn").forEach((btn) => {
+  const input = btn.previousElementSibling;
+  function updateToggleBtn() {
+    const showing = input.type === "text";
+    btn.classList.toggle("active", showing);
+    btn.innerHTML = showing ? EYE_OFF_ICON : EYE_ICON;
+    btn.title = t(showing ? "auth.hidePassword" : "auth.showPassword");
+  }
+  btn.addEventListener("click", () => {
+    input.type = input.type === "text" ? "password" : "text";
+    updateToggleBtn();
+  });
+  document.addEventListener("languagechange", updateToggleBtn);
+});
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     currentUid = null;
