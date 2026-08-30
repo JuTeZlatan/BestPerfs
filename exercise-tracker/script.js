@@ -87,7 +87,8 @@ function getSortedExercises() {
   if (sortOrder === "desc") {
     return [...exercises].sort((a, b) => b.name.localeCompare(a.name, "fr"));
   }
-  return exercises;
+  // Default order: most recent performance date first.
+  return [...exercises].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 }
 
 function render() {
