@@ -355,6 +355,12 @@ usernameForm.addEventListener("submit", async (e) => {
   const value = usernameInput.value.trim();
   const birthdate = usernameBirthdateInput.value;
   if (!value || !birthdate || !currentUid) return;
+  // First time finishing account setup: default proof photos to local
+  // storage rather than the app's normal cloud fallback, unless this device
+  // already had an explicit choice (e.g. used the app locally before signing up).
+  if (localStorage.getItem("exercise-tracker-photo-storage-mode") === null) {
+    localStorage.setItem("exercise-tracker-photo-storage-mode", "local");
+  }
   try {
     // Claiming the lowercased usernames/{lower} doc and setting users/{uid}.username
     // happen atomically: if the name is already taken, security rules reject the
