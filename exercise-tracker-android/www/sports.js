@@ -226,16 +226,17 @@ function perfTimeCentiseconds(perf) {
   return ((perf.hours ?? 0) * 3600 + (perf.minutes ?? 0) * 60 + (perf.seconds ?? 0)) * 100 + (perf.hundredths ?? 0);
 }
 
-let sportSortMode = "";
+let sportSortMode = "date-desc";
 
 function getSortedSportEntries(entries, sport) {
-  if (!sportSortMode) {
-    // Default order: most recent performance date first. Entries can now be
-    // logged for a past date, so insertion order no longer reliably matches
-    // chronological order.
-    return [...entries].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  }
   const sorted = [...entries];
+  if (sportSortMode === "date-asc" || sportSortMode === "date-desc") {
+    // Entries can be logged for a past date, so insertion order no longer
+    // reliably matches chronological order.
+    sorted.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    if (sportSortMode === "date-asc") sorted.reverse();
+    return sorted;
+  }
   if (sportSortMode === "alpha-asc" || sportSortMode === "alpha-desc") {
     sorted.sort((a, b) => a.text.localeCompare(b.text, getLang()));
     if (sportSortMode === "alpha-desc") sorted.reverse();
@@ -334,9 +335,9 @@ function selectSport(sport) {
   sportSortMenu.querySelectorAll(".sort-opt-dist").forEach((opt) => {
     opt.hidden = !canSortByDistance;
   });
-  sportSortMode = "";
+  sportSortMode = "date-desc";
   sportSortMenu.querySelectorAll(".sport-option").forEach((opt) => {
-    opt.classList.toggle("active", opt.dataset.value === "");
+    opt.classList.toggle("active", opt.dataset.value === "date-desc");
   });
   sportSortBtn.classList.remove("active");
   updateSportSelectLabel();
@@ -379,7 +380,7 @@ sportSortMenu.querySelectorAll(".sport-option").forEach((btn) => {
     sportSortMenu.querySelectorAll(".sport-option").forEach((o) => o.classList.remove("active"));
     btn.classList.add("active");
     sportSortMode = btn.dataset.value;
-    sportSortBtn.classList.toggle("active", !!sportSortMode);
+    sportSortBtn.classList.toggle("active", sportSortMode !== "date-desc");
     sportSortMenu.hidden = true;
     renderSportList();
   });

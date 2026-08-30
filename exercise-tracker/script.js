@@ -37,7 +37,8 @@ function exerciseHasWeight(exercise) {
 const templateEl = document.getElementById("exercise-template");
 const sortAscBtn = document.getElementById("sort-asc-btn");
 const sortDescBtn = document.getElementById("sort-desc-btn");
-const sortClearBtn = document.getElementById("sort-clear-btn");
+const sortDateAscBtn = document.getElementById("sort-date-asc-btn");
+const sortDateDescBtn = document.getElementById("sort-date-desc-btn");
 const fitnessSortBtn = document.getElementById("fitness-sort-btn");
 const fitnessSortMenu = document.getElementById("fitness-sort-menu");
 const confirmModal = document.getElementById("confirm-modal");
@@ -46,7 +47,7 @@ const modalCancelBtn = document.getElementById("modal-cancel-btn");
 const modalConfirmBtn = document.getElementById("modal-confirm-btn");
 
 let exercises = loadExercises();
-let sortOrder = null; // null | "asc" | "desc"
+let sortOrder = "date-desc"; // "date-asc" | "date-desc" | "asc" | "desc"
 let pendingConfirmAction = null;
 
 // ---- Row "..." menu (edit / delete), shared by script.js and sports.js ----
@@ -87,8 +88,9 @@ function getSortedExercises() {
   if (sortOrder === "desc") {
     return [...exercises].sort((a, b) => b.name.localeCompare(a.name, "fr"));
   }
-  // Default order: most recent performance date first.
-  return [...exercises].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const sorted = [...exercises].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  if (sortOrder === "date-asc") sorted.reverse();
+  return sorted;
 }
 
 function render() {
@@ -96,8 +98,9 @@ function render() {
   emptyStateEl.classList.toggle("visible", exercises.length === 0);
   sortAscBtn.classList.toggle("active", sortOrder === "asc");
   sortDescBtn.classList.toggle("active", sortOrder === "desc");
-  sortClearBtn.classList.toggle("active", !sortOrder);
-  fitnessSortBtn.classList.toggle("active", !!sortOrder);
+  sortDateAscBtn.classList.toggle("active", sortOrder === "date-asc");
+  sortDateDescBtn.classList.toggle("active", sortOrder === "date-desc");
+  fitnessSortBtn.classList.toggle("active", sortOrder !== "date-desc");
 
   getSortedExercises().forEach((exercise) => {
     const node = templateEl.content.cloneNode(true);
@@ -390,19 +393,25 @@ formEl.addEventListener("submit", async (e) => {
 });
 
 sortAscBtn.addEventListener("click", () => {
-  sortOrder = sortOrder === "asc" ? null : "asc";
+  sortOrder = "asc";
   render();
   fitnessSortMenu.hidden = true;
 });
 
 sortDescBtn.addEventListener("click", () => {
-  sortOrder = sortOrder === "desc" ? null : "desc";
+  sortOrder = "desc";
   render();
   fitnessSortMenu.hidden = true;
 });
 
-sortClearBtn.addEventListener("click", () => {
-  sortOrder = null;
+sortDateAscBtn.addEventListener("click", () => {
+  sortOrder = "date-asc";
+  render();
+  fitnessSortMenu.hidden = true;
+});
+
+sortDateDescBtn.addEventListener("click", () => {
+  sortOrder = "date-desc";
   render();
   fitnessSortMenu.hidden = true;
 });
