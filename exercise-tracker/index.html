@@ -1028,6 +1028,17 @@
     </div>
   </div>
 
+  <div id="proof-source-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <button id="proof-source-cancel-btn" class="modal-box-close-btn" type="button" data-i18n-title="common.close">×</button>
+      <p class="modal-message" data-i18n="proofs.sourcePrompt">Comment veux-tu ajouter ta preuve ?</p>
+      <div class="modal-actions">
+        <button id="proof-source-library-btn" class="modal-btn" type="button" data-i18n="proofs.chooseLibrary">Bibliothèque</button>
+        <button id="proof-source-camera-btn" class="modal-btn primary" type="button" data-i18n="proofs.takePhoto">Prendre une photo</button>
+      </div>
+    </div>
+  </div>
+
   <input type="file" id="proof-file-input" accept="image/*" multiple hidden data-i18n-title="proofs.maxReached" title="Maximum 2 photos par stat.">
 
   <div id="proof-viewer" class="proof-viewer" hidden>

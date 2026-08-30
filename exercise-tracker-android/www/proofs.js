@@ -122,7 +122,49 @@ function pickPhotosWeb() {
   });
 }
 
+// ---- "Take a photo or pick from the library?" prompt, shown before the
+// native picker opens - the camera can only capture one photo at a time,
+// the library can still multi-select up to whatever's left of the max ----
+const proofSourceModal = document.getElementById("proof-source-modal");
+const proofSourceCameraBtn = document.getElementById("proof-source-camera-btn");
+const proofSourceLibraryBtn = document.getElementById("proof-source-library-btn");
+const proofSourceCancelBtn = document.getElementById("proof-source-cancel-btn");
+
+function showProofSourceModal() {
+  return new Promise((resolve) => {
+    proofSourceModal.hidden = false;
+    function cleanup() {
+      proofSourceModal.hidden = true;
+      proofSourceCameraBtn.removeEventListener("click", onCamera);
+      proofSourceLibraryBtn.removeEventListener("click", onLibrary);
+      proofSourceCancelBtn.removeEventListener("click", onCancel);
+    }
+    function onCamera() {
+      cleanup();
+      resolve("camera");
+    }
+    function onLibrary() {
+      cleanup();
+      resolve("library");
+    }
+    function onCancel() {
+      cleanup();
+      resolve(null);
+    }
+    proofSourceCameraBtn.addEventListener("click", onCamera);
+    proofSourceLibraryBtn.addEventListener("click", onLibrary);
+    proofSourceCancelBtn.addEventListener("click", onCancel);
+  });
+}
+
 async function pickPhotosNative(max) {
+  const source = await showProofSourceModal();
+  if (!source) return [];
+  if (source === "camera") {
+    const photo = await Capacitor.Plugins.Camera.getPhoto({ source: "CAMERA", resultType: "uri", quality: 80 });
+    const response = await fetch(photo.webPath);
+    return [await response.blob()];
+  }
   const { photos } = await Capacitor.Plugins.Camera.pickImages({ limit: max, quality: 80 });
   const blobs = [];
   for (const photo of photos) {
