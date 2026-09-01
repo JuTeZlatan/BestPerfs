@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# @capacitor-firebase/authentication bundles optional provider handlers
+# (Facebook, GitHub, etc.) that this app doesn't use/depend on - R8 only
+# needs to know it's fine that those classes aren't present.
+-dontwarn com.facebook.**
