@@ -1,7 +1,9 @@
 const { onDocumentCreated, onDocumentUpdated } = require("firebase-functions/v2/firestore");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
+const { getAuth } = require("firebase-admin/auth");
 
 initializeApp();
 const db = getFirestore();
@@ -62,4 +64,43 @@ exports.onFriendRequestAccepted = onDocumentUpdated("friendRequests/{requestId}"
       createdAt: FieldValue.serverTimestamp(),
     }),
   ]);
+});
+
+// Deletes email/password signups that never clicked their confirmation link
+// within 10 minutes of finishing signup (username + birthdate submitted -
+// see account.js's usernameForm handler, which sets pendingEmailVerification
+// on users/{uid}). Only ever touches accounts that actually went through
+// that gate, never pre-existing accounts created before this feature shipped.
+const VERIFICATION_WINDOW_MS = 10 * 60 * 1000;
+
+exports.cleanupUnverifiedSignups = onSchedule({ schedule: "every 5 minutes", region: "europe-west9" }, async () => {
+  const authAdmin = getAuth();
+  const cutoff = Date.now() - VERIFICATION_WINDOW_MS;
+  let pageToken;
+
+  do {
+    const page = await authAdmin.listUsers(1000, pageToken);
+    const candidates = page.users.filter((user) => {
+      if (user.emailVerified) return false;
+      if (!user.providerData.some((p) => p.providerId === "password")) return false;
+      return new Date(user.metadata.creationTime).getTime() < cutoff;
+    });
+
+    await Promise.all(
+      candidates.map(async (user) => {
+        const userSnap = await db.doc(`users/${user.uid}`).get();
+        if (!userSnap.exists) return;
+        const data = userSnap.data();
+        if (data.pendingEmailVerification !== true) return;
+
+        const batch = db.batch();
+        batch.delete(db.doc(`users/${user.uid}`));
+        if (data.username) batch.delete(db.doc(`usernames/${data.username.toLowerCase()}`));
+        await batch.commit();
+        await authAdmin.deleteUser(user.uid).catch(() => {});
+      })
+    );
+
+    pageToken = page.pageToken;
+  } while (pageToken);
 });

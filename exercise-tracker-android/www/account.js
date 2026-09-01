@@ -9,11 +9,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   signOut,
   onAuthStateChanged,
   doc,
   getDoc,
   setDoc,
+  updateDoc,
   deleteDoc,
   writeBatch,
   serverTimestamp,
@@ -27,6 +29,14 @@ const usernameForm = document.getElementById("username-form");
 const usernameInput = document.getElementById("username-input");
 const usernameBirthdateInput = document.getElementById("username-birthdate-input");
 const usernameErrorEl = document.getElementById("username-error");
+
+const verifyEmailViewEl = document.getElementById("verify-email-view");
+const verifyEmailHintEl = document.getElementById("verify-email-hint");
+const verifyEmailContinueBtn = document.getElementById("verify-email-continue-btn");
+const verifyEmailResendBtn = document.getElementById("verify-email-resend-btn");
+const verifyEmailCancelBtn = document.getElementById("verify-email-cancel-btn");
+const verifyEmailErrorEl = document.getElementById("verify-email-error");
+const verifyEmailSuccessEl = document.getElementById("verify-email-success");
 
 const profileAccountRow = document.getElementById("profile-account-row");
 const profileViewForAccount = document.getElementById("profile-view");
@@ -86,6 +96,8 @@ const AUTH_ERROR_KEYS = {
   "auth/wrong-password": "auth.errorWrongCredentials",
   "auth/invalid-credential": "auth.errorWrongCredentials",
   "auth/requires-recent-login": "auth.errorRequiresRecentLogin",
+  "auth/too-many-requests": "auth.errorTooManyRequests",
+  "auth/expired-signup": "auth.verifyEmailExpired",
 };
 
 function showFieldError(el, error) {
@@ -321,11 +333,20 @@ localStorage.setItem = function (key, value) {
   }
 };
 
+function stopVerifyEmailPolling() {
+  if (verifyEmailPollInterval) {
+    clearInterval(verifyEmailPollInterval);
+    verifyEmailPollInterval = null;
+  }
+}
+
 function showApp() {
   authGateEl.hidden = true;
   signupViewEl.hidden = true;
   forgotPasswordViewEl.hidden = true;
   usernameViewEl.hidden = true;
+  verifyEmailViewEl.hidden = true;
+  stopVerifyEmailPolling();
   appRootEl.hidden = false;
 }
 
@@ -334,6 +355,8 @@ function showGate() {
   signupViewEl.hidden = true;
   forgotPasswordViewEl.hidden = true;
   usernameViewEl.hidden = true;
+  verifyEmailViewEl.hidden = true;
+  stopVerifyEmailPolling();
   authGateEl.hidden = false;
   gateAuthForm.reset();
   signupForm.reset();
@@ -345,9 +368,98 @@ function showUsernamePrompt() {
   authGateEl.hidden = true;
   signupViewEl.hidden = true;
   forgotPasswordViewEl.hidden = true;
+  verifyEmailViewEl.hidden = true;
+  stopVerifyEmailPolling();
   appRootEl.hidden = true;
   usernameViewEl.hidden = false;
 }
+
+// ---- Email verification gate: shown after signup (email/password only -
+// Google accounts are already verified by Google) until the user clicks the
+// link in their inbox. A scheduled Cloud Function deletes the account if
+// nothing is clicked within 10 minutes (functions/index.js). ----
+let pendingVerificationUsername = null;
+let verifyEmailPollInterval = null;
+
+function renderVerifyEmailHint() {
+  const email = auth.currentUser?.email || "";
+  verifyEmailHintEl.textContent = t("auth.verifyEmailBody", { email });
+}
+
+async function checkEmailVerified({ silent }) {
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    await user.reload();
+  } catch (error) {
+    stopVerifyEmailPolling();
+    showFieldError(verifyEmailErrorEl, { code: "auth/expired-signup" });
+    setTimeout(() => signOut(auth), 2500);
+    return;
+  }
+  if (!auth.currentUser.emailVerified) {
+    if (!silent) {
+      verifyEmailErrorEl.textContent = t("auth.verifyEmailNotYet");
+      verifyEmailErrorEl.hidden = false;
+    }
+    return;
+  }
+  clearFieldError(verifyEmailErrorEl);
+  updateDoc(doc(db, "users", user.uid), { pendingEmailVerification: false }).catch(() => {});
+  syncSignedInUser(auth.currentUser);
+}
+
+function showVerifyEmailPrompt(username) {
+  pendingVerificationUsername = username || null;
+  authGateEl.hidden = true;
+  signupViewEl.hidden = true;
+  forgotPasswordViewEl.hidden = true;
+  usernameViewEl.hidden = true;
+  appRootEl.hidden = true;
+  clearFieldError(verifyEmailErrorEl);
+  verifyEmailSuccessEl.hidden = true;
+  renderVerifyEmailHint();
+  verifyEmailViewEl.hidden = false;
+  stopVerifyEmailPolling();
+  verifyEmailPollInterval = setInterval(() => checkEmailVerified({ silent: true }), 5000);
+}
+
+document.addEventListener("languagechange", () => {
+  if (!verifyEmailViewEl.hidden) renderVerifyEmailHint();
+});
+
+verifyEmailContinueBtn.addEventListener("click", () => checkEmailVerified({ silent: false }));
+
+verifyEmailResendBtn.addEventListener("click", async () => {
+  clearFieldError(verifyEmailErrorEl);
+  verifyEmailSuccessEl.hidden = true;
+  try {
+    await sendEmailVerification(auth.currentUser);
+    verifyEmailSuccessEl.hidden = false;
+  } catch (error) {
+    showFieldError(verifyEmailErrorEl, error);
+  }
+});
+
+verifyEmailCancelBtn.addEventListener("click", () => {
+  openConfirmModal(t("auth.verifyEmailCancelConfirm"), async () => {
+    const user = auth.currentUser;
+    stopVerifyEmailPolling();
+    if (!user) return;
+    try {
+      const batch = writeBatch(db);
+      batch.delete(doc(db, "users", user.uid));
+      if (pendingVerificationUsername) {
+        batch.delete(doc(db, "usernames", pendingVerificationUsername.toLowerCase()));
+      }
+      await batch.commit();
+      await user.delete();
+    } catch (error) {
+      console.warn("cancelPendingSignup failed", error);
+      signOut(auth);
+    }
+  });
+});
 
 usernameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -366,8 +478,21 @@ usernameForm.addEventListener("submit", async (e) => {
     // happen atomically: if the name is already taken, security rules reject the
     // usernames write and the whole batch fails, so the user is never left with a
     // "set" username that was never actually claimed (there's no rename UI to fix that later).
+    // Email/password accounts need to confirm their address before they can
+    // use the app (see showVerifyEmailPrompt below); Google accounts are
+    // already verified by Google, so they skip straight into the app.
+    const requiresEmailVerification = !auth.currentUser?.emailVerified;
     const batch = writeBatch(db);
-    batch.set(doc(db, "users", currentUid), { username: value, birthdate }, { merge: true });
+    batch.set(
+      doc(db, "users", currentUid),
+      {
+        username: value,
+        birthdate,
+        pendingEmailVerification: requiresEmailVerification,
+        ...(requiresEmailVerification ? { verificationSentAt: serverTimestamp() } : {}),
+      },
+      { merge: true }
+    );
     batch.set(doc(db, "usernames", value.toLowerCase()), { uid: currentUid, username: value });
     await batch.commit();
   } catch (error) {
@@ -378,6 +503,11 @@ usernameForm.addEventListener("submit", async (e) => {
   accountUsernameDisplay.textContent = value;
   accountBirthdateDisplay.textContent = formatBirthdate(birthdate);
   usernameForm.reset();
+  if (!auth.currentUser.emailVerified) {
+    sendEmailVerification(auth.currentUser).catch((error) => console.warn("sendEmailVerification failed", error));
+    showVerifyEmailPrompt(value);
+    return;
+  }
   showApp();
 });
 
@@ -400,16 +530,7 @@ document.querySelectorAll(".password-toggle-btn").forEach((btn) => {
   document.addEventListener("languagechange", updateToggleBtn);
 });
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    currentUid = null;
-    accountUsernameDisplay.textContent = "";
-    accountEmailDisplay.textContent = "";
-    accountBirthdateDisplay.textContent = "";
-    showGate();
-    return;
-  }
-
+async function syncSignedInUser(user) {
   accountEmailDisplay.textContent = user.email || "";
 
   const userDocRef = doc(db, "users", user.uid);
@@ -430,6 +551,14 @@ onAuthStateChanged(auth, async (user) => {
     if (!data.username) {
       showUsernamePrompt();
       return;
+    }
+
+    if (data.pendingEmailVerification && !user.emailVerified) {
+      showVerifyEmailPrompt(data.username);
+      return;
+    }
+    if (data.pendingEmailVerification && user.emailVerified) {
+      updateDoc(userDocRef, { pendingEmailVerification: false }).catch(() => {});
     }
 
     accountUsernameDisplay.textContent = data.username;
@@ -462,4 +591,16 @@ onAuthStateChanged(auth, async (user) => {
     setDoc(userDocRef, payload, { merge: true }).catch(() => {});
     showUsernamePrompt();
   }
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    currentUid = null;
+    accountUsernameDisplay.textContent = "";
+    accountEmailDisplay.textContent = "";
+    accountBirthdateDisplay.textContent = "";
+    showGate();
+    return;
+  }
+  syncSignedInUser(user);
 });

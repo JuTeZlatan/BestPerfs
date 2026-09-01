@@ -2555,8 +2555,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 #confirm-modal {
   /* Always wins over the other modal-overlay dialogs (proof prompt/manager)
-     it can be opened on top of, regardless of DOM order. */
-  z-index: 150;
+     it can be opened on top of, regardless of DOM order - and over the
+     .auth-gate screens (z-index 500) too, since the email verification
+     gate opens this to confirm cancelling a pending signup. */
+  z-index: 700;
 }
 
 .modal-overlay[hidden] {

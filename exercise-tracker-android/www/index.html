@@ -274,6 +274,28 @@
     </div>
   </div>
 
+  <div id="verify-email-view" class="auth-gate" hidden>
+    <div class="auth-gate-grid"></div>
+    <div class="auth-gate-content">
+      <div class="auth-gate-brand">
+        <span class="auth-gate-wordmark"><span class="wordmark-best">Best</span><span class="wordmark-perfs">Perfs</span></span>
+      </div>
+
+      <p class="auth-gate-subtitle" data-i18n="auth.verifyEmailTitle">Confirme ton email</p>
+      <p class="auth-hint" id="verify-email-hint">Un lien de confirmation vient d'être envoyé.</p>
+
+      <div class="auth-btn-row">
+        <button type="button" id="verify-email-continue-btn" data-i18n="auth.verifyEmailContinueBtn">J'ai vérifié, continuer</button>
+        <button type="button" id="verify-email-resend-btn" data-i18n="auth.verifyEmailResendBtn">Renvoyer l'email</button>
+      </div>
+
+      <button type="button" id="verify-email-cancel-btn" class="auth-forgot-link" data-i18n="auth.verifyEmailCancelBtn">Annuler et se déconnecter</button>
+
+      <p id="verify-email-error" class="auth-error" hidden></p>
+      <p id="verify-email-success" class="auth-success" hidden data-i18n="auth.verifyEmailResent">Email renvoyé.</p>
+    </div>
+  </div>
+
   <div id="app-root" class="app" hidden>
     <nav id="bottom-nav" class="bottom-nav">
       <div class="bottom-nav-inner">
