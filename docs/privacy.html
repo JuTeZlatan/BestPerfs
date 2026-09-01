@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Best Perfs — Politique de confidentialité / Privacy Policy</title>
+<title>Best Perfs — Privacy Policy</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -25,33 +25,37 @@
   .wrap {
     max-width: 720px;
     margin: 0 auto;
-    padding: 40px 20px 80px;
+    padding: 28px 20px 80px;
+  }
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
   }
   h1 {
-    font-size: 1.6rem;
-    margin-bottom: 4px;
+    font-size: 1.5rem;
+    margin: 0;
   }
-  .lang-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    background: rgba(236,43,30,0.12);
-    border: 1px solid rgba(236,43,30,0.3);
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin: 24px 0 12px;
+  select#lang-select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
   }
   .updated {
     color: var(--text-dim);
     font-size: 0.85rem;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   h2 {
-    font-size: 1.15rem;
-    margin-top: 32px;
+    font-size: 1.1rem;
+    margin-top: 28px;
     color: var(--text);
   }
   p, li {
@@ -67,85 +71,318 @@
     margin: 20px 0;
   }
   .card p { color: var(--text); margin: 0; }
-  hr {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 48px 0;
-  }
+  [dir="rtl"] ul { padding-right: 20px; padding-left: 0; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Best Perfs</h1>
-    <p class="updated">Dernière mise à jour / Last updated: 1 septembre 2026 / September 1, 2026</p>
-
-    <span class="lang-tag">Français</span>
-
-    <div class="card">
-      <p>Ce document n'a pas été relu par un juriste. Il décrit de bonne foi et avec précision les données que Best Perfs collecte réellement et ce qu'elles deviennent — mais ne constitue pas un avis juridique.</p>
+    <div class="top-bar">
+      <h1>Best Perfs</h1>
+      <select id="lang-select" aria-label="Language / Langue">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+        <option value="nl">Nederlands</option>
+        <option value="pt">Português</option>
+        <option value="el">Ελληνικά</option>
+        <option value="ar">العربية</option>
+        <option value="zh">中文</option>
+      </select>
     </div>
 
-    <h2>Qui gère ces données ?</h2>
-    <p>Best Perfs est développée par un développeur indépendant. Pour toute question sur cette politique ou sur tes données, écris à <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+    <article data-lang-content="fr" hidden>
+      <p class="updated">Dernière mise à jour : 1 septembre 2026</p>
+      <div class="card"><p>Ce document n'a pas été relu par un juriste. Il décrit de bonne foi et avec précision les données que Best Perfs collecte réellement et ce qu'elles deviennent — mais ne constitue pas un avis juridique.</p></div>
+      <h2>Qui gère ces données ?</h2>
+      <p>Best Perfs est développée par un développeur indépendant. Pour toute question sur cette politique ou sur tes données, écris à <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Quelles données sont collectées ?</h2>
+      <ul>
+        <li><strong>Compte</strong> : adresse email, mot de passe (géré par Firebase Authentication, jamais vu ni stocké par nous en clair), pseudo, date de naissance.</li>
+        <li><strong>Performances sportives</strong> : les statistiques que tu enregistres toi-même (course, natation, vélo, triathlon, musculation) — type d'exercice, temps, distance, répétitions, poids, date.</li>
+        <li><strong>Photos "preuves"</strong> : si tu choisis d'en ajouter à une performance, elles sont stockées soit uniquement sur ton appareil, soit sur un espace cloud sécurisé, selon le réglage que tu choisis toi-même dans Profil → Stockage. En mode "Cet appareil", elles ne quittent jamais ton téléphone.</li>
+        <li><strong>Amis et classement</strong> : la liste de tes amis dans l'appli, et — uniquement si tu actives le partage — tes meilleures performances visibles par eux dans le classement.</li>
+        <li><strong>Notifications</strong> : un identifiant technique (token) permettant de t'envoyer des notifications liées à l'appli (ex: fin d'un chronomètre), si tu les as autorisées.</li>
+        <li><strong>Réglages</strong> : langue, unités, thème visuel — pour retrouver tes préférences sur tous tes appareils.</li>
+      </ul>
+      <p>Best Perfs ne collecte pas ta position géographique, tes contacts, ni aucune donnée publicitaire, et n'affiche aucune publicité.</p>
+      <h2>Pourquoi ces données sont-elles collectées ?</h2>
+      <p>Uniquement pour faire fonctionner l'appli : enregistrer et afficher tes performances, comparer tes résultats avec tes amis si tu le souhaites, synchroniser tes données entre tes appareils, et t'envoyer les notifications que tu as autorisées.</p>
+      <h2>Qui d'autre a accès à ces données ?</h2>
+      <p>Tes données sont hébergées par <strong>Firebase</strong> (Google Cloud) : Firebase Authentication (comptes), Cloud Firestore (statistiques, réglages, amis), Firebase Storage (photos si tu choisis le mode cloud), et Firebase Cloud Messaging (notifications). Google agit comme sous-traitant technique et n'utilise pas ces données à ses propres fins publicitaires. Aucune donnée n'est vendue ni partagée avec d'autres tiers.</p>
+      <p>Si tu te connectes avec Google, Google Sign-In nous transmet ton adresse email pour créer ton compte — selon les règles habituelles de Google.</p>
+      <h2>Combien de temps ces données sont-elles conservées ?</h2>
+      <p>Tant que ton compte existe. Tu peux supprimer ton compte à tout moment depuis Profil → Compte → Supprimer mon compte : cette action supprime immédiatement ton profil et tes données sur nos serveurs, ainsi que les données stockées localement sur l'appareil utilisé.</p>
+      <h2>Tes droits</h2>
+      <p>Tu peux à tout moment consulter, corriger ou supprimer tes données directement depuis l'appli, ou nous écrire à <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> pour toute demande (accès, rectification, suppression, export de tes données).</p>
+    </article>
 
-    <h2>Quelles données sont collectées ?</h2>
-    <ul>
-      <li><strong>Compte</strong> : adresse email, mot de passe (géré par Firebase Authentication, jamais vu ni stocké par nous en clair), pseudo, date de naissance.</li>
-      <li><strong>Performances sportives</strong> : les statistiques que tu enregistres toi-même (course, natation, vélo, triathlon, musculation) — type d'exercice, temps, distance, répétitions, poids, date.</li>
-      <li><strong>Photos "preuves"</strong> : si tu choisis d'en ajouter à une performance, elles sont stockées soit uniquement sur ton appareil, soit sur un espace cloud sécurisé, selon le réglage que tu choisis toi-même dans Profil → Stockage. En mode "Cet appareil", elles ne quittent jamais ton téléphone.</li>
-      <li><strong>Amis et classement</strong> : la liste de tes amis dans l'appli, et — uniquement si tu actives le partage — tes meilleures performances visibles par eux dans le classement.</li>
-      <li><strong>Notifications</strong> : un identifiant technique (token) permettant de t'envoyer des notifications liées à l'appli (ex: fin d'un chronomètre), si tu les as autorisées.</li>
-      <li><strong>Réglages</strong> : langue, unités, thème visuel — pour retrouver tes préférences sur tous tes appareils.</li>
-    </ul>
-    <p>Best Perfs ne collecte pas ta position géographique, tes contacts, ni aucune donnée publicitaire, et n'affiche aucune publicité.</p>
+    <article data-lang-content="en" hidden>
+      <p class="updated">Last updated: September 1, 2026</p>
+      <div class="card"><p>This document has not been reviewed by a lawyer. It describes in good faith, and as accurately as possible, what data Best Perfs actually collects and what happens to it — but it is not legal advice.</p></div>
+      <h2>Who manages this data?</h2>
+      <p>Best Perfs is developed by an independent developer. For any question about this policy or your data, write to <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>What data is collected?</h2>
+      <ul>
+        <li><strong>Account</strong>: email address, password (handled by Firebase Authentication, never seen or stored by us in plain text), username, date of birth.</li>
+        <li><strong>Sport performances</strong>: the stats you log yourself (running, swimming, cycling, triathlon, strength training) — exercise type, time, distance, reps, weight, date.</li>
+        <li><strong>"Proof" photos</strong>: if you choose to attach one to a performance, it's stored either only on your device or on secure cloud storage, depending on the setting you choose yourself under Profile → Storage. In "This device" mode, it never leaves your phone.</li>
+        <li><strong>Friends and leaderboard</strong>: your friends list within the app, and — only if you enable sharing — your best performances as seen by them on the leaderboard.</li>
+        <li><strong>Notifications</strong>: a technical token used to send you app-related notifications (e.g. a timer finishing), if you've allowed them.</li>
+        <li><strong>Settings</strong>: language, units, visual theme — so your preferences follow you across devices.</li>
+      </ul>
+      <p>Best Perfs does not collect your location, your contacts, or any advertising data, and displays no ads.</p>
+      <h2>Why is this data collected?</h2>
+      <p>Only to make the app work: recording and displaying your performances, comparing results with friends if you choose to, syncing your data across your devices, and sending the notifications you've allowed.</p>
+      <h2>Who else has access to this data?</h2>
+      <p>Your data is hosted by <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (stats, settings, friends), Firebase Storage (photos if you choose cloud mode), and Firebase Cloud Messaging (notifications). Google acts as a technical processor and does not use this data for its own advertising purposes. No data is sold or shared with any other third party.</p>
+      <p>If you sign in with Google, Google Sign-In shares your email address with us to create your account, under Google's usual rules.</p>
+      <h2>How long is this data kept?</h2>
+      <p>For as long as your account exists. You can delete your account at any time from Profile → Account → Delete my account: this immediately deletes your profile and data from our servers, as well as data stored locally on the device you're using.</p>
+      <h2>Your rights</h2>
+      <p>You can view, correct, or delete your data at any time directly from the app, or write to us at <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> for any request (access, correction, deletion, data export).</p>
+    </article>
 
-    <h2>Pourquoi ces données sont-elles collectées ?</h2>
-    <p>Uniquement pour faire fonctionner l'appli : enregistrer et afficher tes performances, comparer tes résultats avec tes amis si tu le souhaites, synchroniser tes données entre tes appareils, et t'envoyer les notifications que tu as autorisées.</p>
+    <article data-lang-content="es" hidden>
+      <p class="updated">Última actualización: 1 de septiembre de 2026</p>
+      <div class="card"><p>Este documento no ha sido revisado por un abogado. Describe de buena fe, y con la mayor precisión posible, qué datos recopila realmente Best Perfs y qué ocurre con ellos — pero no constituye asesoramiento legal.</p></div>
+      <h2>¿Quién gestiona estos datos?</h2>
+      <p>Best Perfs está desarrollada por un desarrollador independiente. Para cualquier pregunta sobre esta política o tus datos, escribe a <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>¿Qué datos se recopilan?</h2>
+      <ul>
+        <li><strong>Cuenta</strong>: dirección de correo electrónico, contraseña (gestionada por Firebase Authentication, nunca vista ni almacenada por nosotros en texto plano), nombre de usuario, fecha de nacimiento.</li>
+        <li><strong>Rendimientos deportivos</strong>: las estadísticas que registras tú mismo (running, natación, ciclismo, triatlón, musculación) — tipo de ejercicio, tiempo, distancia, repeticiones, peso, fecha.</li>
+        <li><strong>Fotos "prueba"</strong>: si eliges añadir una a un rendimiento, se almacena solo en tu dispositivo o en almacenamiento en la nube seguro, según el ajuste que elijas tú mismo en Perfil → Almacenamiento. En modo "Este dispositivo", nunca sale de tu teléfono.</li>
+        <li><strong>Amigos y clasificación</strong>: tu lista de amigos dentro de la app, y — solo si activas el compartir — tus mejores rendimientos visibles por ellos en la clasificación.</li>
+        <li><strong>Notificaciones</strong>: un token técnico usado para enviarte notificaciones relacionadas con la app (ej. un cronómetro que termina), si las has permitido.</li>
+        <li><strong>Ajustes</strong>: idioma, unidades, tema visual — para que tus preferencias te sigan en todos tus dispositivos.</li>
+      </ul>
+      <p>Best Perfs no recopila tu ubicación, tus contactos, ni ningún dato publicitario, y no muestra anuncios.</p>
+      <h2>¿Por qué se recopilan estos datos?</h2>
+      <p>Solo para hacer que la app funcione: registrar y mostrar tus rendimientos, comparar resultados con amigos si lo eliges, sincronizar tus datos entre tus dispositivos, y enviarte las notificaciones que hayas permitido.</p>
+      <h2>¿Quién más tiene acceso a estos datos?</h2>
+      <p>Tus datos están alojados por <strong>Firebase</strong> (Google Cloud): Firebase Authentication (cuentas), Cloud Firestore (estadísticas, ajustes, amigos), Firebase Storage (fotos si eliges el modo nube), y Firebase Cloud Messaging (notificaciones). Google actúa como procesador técnico y no usa estos datos para sus propios fines publicitarios. Ningún dato se vende ni se comparte con terceros.</p>
+      <p>Si inicias sesión con Google, Google Sign-In nos comparte tu dirección de correo electrónico para crear tu cuenta, según las reglas habituales de Google.</p>
+      <h2>¿Cuánto tiempo se conservan estos datos?</h2>
+      <p>Mientras tu cuenta exista. Puedes eliminar tu cuenta en cualquier momento desde Perfil → Cuenta → Eliminar mi cuenta: esto elimina inmediatamente tu perfil y tus datos de nuestros servidores, así como los datos almacenados localmente en el dispositivo que estés usando.</p>
+      <h2>Tus derechos</h2>
+      <p>Puedes consultar, corregir o eliminar tus datos en cualquier momento directamente desde la app, o escribirnos a <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> para cualquier solicitud (acceso, rectificación, eliminación, exportación de datos).</p>
+    </article>
 
-    <h2>Qui d'autre a accès à ces données ?</h2>
-    <p>Tes données sont hébergées par <strong>Firebase</strong> (Google Cloud) : Firebase Authentication (comptes), Cloud Firestore (statistiques, réglages, amis), Firebase Storage (photos si tu choisis le mode cloud), et Firebase Cloud Messaging (notifications). Google agit comme sous-traitant technique et n'utilise pas ces données à ses propres fins publicitaires. Aucune donnée n'est vendue ni partagée avec d'autres tiers.</p>
-    <p>Si tu te connectes avec Google, Google Sign-In nous transmet ton adresse email pour créer ton compte — selon les règles habituelles de Google.</p>
+    <article data-lang-content="pt" hidden>
+      <p class="updated">Última atualização: 1 de setembro de 2026</p>
+      <div class="card"><p>Este documento não foi revisto por um advogado. Descreve de boa fé, e com a maior precisão possível, que dados a Best Perfs realmente recolhe e o que lhes acontece — mas não constitui aconselhamento jurídico.</p></div>
+      <h2>Quem gere estes dados?</h2>
+      <p>A Best Perfs é desenvolvida por um programador independente. Para qualquer questão sobre esta política ou os teus dados, escreve para <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Que dados são recolhidos?</h2>
+      <ul>
+        <li><strong>Conta</strong>: endereço de email, palavra-passe (gerida pelo Firebase Authentication, nunca vista nem armazenada por nós em texto simples), nome de utilizador, data de nascimento.</li>
+        <li><strong>Desempenhos desportivos</strong>: as estatísticas que registas tu mesmo (corrida, natação, ciclismo, triatlo, musculação) — tipo de exercício, tempo, distância, repetições, peso, data.</li>
+        <li><strong>Fotos "prova"</strong>: se escolheres adicionar uma a um desempenho, é armazenada apenas no teu dispositivo ou num espaço cloud seguro, consoante a definição que escolheres tu mesmo em Perfil → Armazenamento. No modo "Este dispositivo", nunca sai do teu telemóvel.</li>
+        <li><strong>Amigos e classificação</strong>: a tua lista de amigos dentro da app, e — apenas se ativares a partilha — os teus melhores desempenhos visíveis por eles na classificação.</li>
+        <li><strong>Notificações</strong>: um token técnico usado para te enviar notificações relacionadas com a app (ex.: um cronómetro a terminar), se as tiveres permitido.</li>
+        <li><strong>Definições</strong>: idioma, unidades, tema visual — para que as tuas preferências te sigam em todos os teus dispositivos.</li>
+      </ul>
+      <p>A Best Perfs não recolhe a tua localização, os teus contactos, nem qualquer dado publicitário, e não apresenta anúncios.</p>
+      <h2>Porque são estes dados recolhidos?</h2>
+      <p>Apenas para fazer a app funcionar: registar e mostrar os teus desempenhos, comparar resultados com amigos se assim o escolheres, sincronizar os teus dados entre dispositivos, e enviar-te as notificações que tiveres permitido.</p>
+      <h2>Quem mais tem acesso a estes dados?</h2>
+      <p>Os teus dados são alojados pela <strong>Firebase</strong> (Google Cloud): Firebase Authentication (contas), Cloud Firestore (estatísticas, definições, amigos), Firebase Storage (fotos se escolheres o modo cloud), e Firebase Cloud Messaging (notificações). A Google atua como processador técnico e não usa estes dados para fins publicitários próprios. Nenhum dado é vendido nem partilhado com terceiros.</p>
+      <p>Se iniciares sessão com a Google, o Google Sign-In partilha connosco o teu endereço de email para criar a tua conta, segundo as regras habituais da Google.</p>
+      <h2>Durante quanto tempo estes dados são conservados?</h2>
+      <p>Enquanto a tua conta existir. Podes eliminar a tua conta a qualquer momento em Perfil → Conta → Eliminar a minha conta: esta ação elimina imediatamente o teu perfil e os teus dados dos nossos servidores, bem como os dados armazenados localmente no dispositivo que estiveres a usar.</p>
+      <h2>Os teus direitos</h2>
+      <p>Podes consultar, corrigir ou eliminar os teus dados a qualquer momento diretamente a partir da app, ou escrever-nos para <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> para qualquer pedido (acesso, retificação, eliminação, exportação de dados).</p>
+    </article>
 
-    <h2>Combien de temps ces données sont-elles conservées ?</h2>
-    <p>Tant que ton compte existe. Tu peux supprimer ton compte à tout moment depuis Profil → Compte → Supprimer mon compte : cette action supprime immédiatement ton profil et tes données sur nos serveurs, ainsi que les données stockées localement sur l'appareil utilisé.</p>
+    <article data-lang-content="de" hidden>
+      <p class="updated">Letzte Aktualisierung: 1. September 2026</p>
+      <div class="card"><p>Dieses Dokument wurde nicht von einem Anwalt geprüft. Es beschreibt nach bestem Wissen und so genau wie möglich, welche Daten Best Perfs tatsächlich erhebt und was damit geschieht — stellt aber keine Rechtsberatung dar.</p></div>
+      <h2>Wer verwaltet diese Daten?</h2>
+      <p>Best Perfs wird von einem unabhängigen Entwickler entwickelt. Bei Fragen zu dieser Richtlinie oder deinen Daten schreibe an <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Welche Daten werden erhoben?</h2>
+      <ul>
+        <li><strong>Konto</strong>: E-Mail-Adresse, Passwort (verwaltet von Firebase Authentication, von uns nie im Klartext gesehen oder gespeichert), Benutzername, Geburtsdatum.</li>
+        <li><strong>Sportliche Leistungen</strong>: die Statistiken, die du selbst erfasst (Laufen, Schwimmen, Radfahren, Triathlon, Krafttraining) — Übungsart, Zeit, Distanz, Wiederholungen, Gewicht, Datum.</li>
+        <li><strong>"Nachweis"-Fotos</strong>: wenn du eines zu einer Leistung hinzufügst, wird es entweder nur auf deinem Gerät oder in einem sicheren Cloud-Speicher gespeichert, je nach der Einstellung, die du selbst unter Profil → Speicher wählst. Im Modus "Dieses Gerät" verlässt es nie dein Telefon.</li>
+        <li><strong>Freunde und Rangliste</strong>: deine Freundesliste innerhalb der App und — nur wenn du das Teilen aktivierst — deine besten Leistungen, sichtbar für sie in der Rangliste.</li>
+        <li><strong>Benachrichtigungen</strong>: ein technisches Token, mit dem dir app-bezogene Benachrichtigungen gesendet werden (z. B. ein beendeter Timer), falls du diese erlaubt hast.</li>
+        <li><strong>Einstellungen</strong>: Sprache, Einheiten, visuelles Theme — damit deine Einstellungen dich auf all deinen Geräten begleiten.</li>
+      </ul>
+      <p>Best Perfs erhebt weder deinen Standort noch deine Kontakte oder Werbedaten und zeigt keine Werbung an.</p>
+      <h2>Warum werden diese Daten erhoben?</h2>
+      <p>Nur damit die App funktioniert: Erfassen und Anzeigen deiner Leistungen, Vergleichen der Ergebnisse mit Freunden, wenn du das möchtest, Synchronisieren deiner Daten zwischen deinen Geräten und Senden der Benachrichtigungen, die du erlaubt hast.</p>
+      <h2>Wer hat sonst noch Zugriff auf diese Daten?</h2>
+      <p>Deine Daten werden von <strong>Firebase</strong> (Google Cloud) gehostet: Firebase Authentication (Konten), Cloud Firestore (Statistiken, Einstellungen, Freunde), Firebase Storage (Fotos, falls du den Cloud-Modus wählst) und Firebase Cloud Messaging (Benachrichtigungen). Google fungiert als technischer Auftragsverarbeiter und nutzt diese Daten nicht für eigene Werbezwecke. Es werden keine Daten verkauft oder an Dritte weitergegeben.</p>
+      <p>Wenn du dich mit Google anmeldest, teilt Google Sign-In uns deine E-Mail-Adresse mit, um dein Konto zu erstellen, gemäß den üblichen Regeln von Google.</p>
+      <h2>Wie lange werden diese Daten aufbewahrt?</h2>
+      <p>Solange dein Konto besteht. Du kannst dein Konto jederzeit unter Profil → Konto → Mein Konto löschen entfernen: Dies löscht sofort dein Profil und deine Daten auf unseren Servern sowie die lokal auf dem verwendeten Gerät gespeicherten Daten.</p>
+      <h2>Deine Rechte</h2>
+      <p>Du kannst deine Daten jederzeit direkt in der App einsehen, korrigieren oder löschen, oder uns unter <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> für jede Anfrage (Zugriff, Berichtigung, Löschung, Datenexport) schreiben.</p>
+    </article>
 
-    <h2>Tes droits</h2>
-    <p>Tu peux à tout moment consulter, corriger ou supprimer tes données directement depuis l'appli, ou nous écrire à <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> pour toute demande (accès, rectification, suppression, export de tes données).</p>
+    <article data-lang-content="it" hidden>
+      <p class="updated">Ultimo aggiornamento: 1 settembre 2026</p>
+      <div class="card"><p>Questo documento non è stato controllato da un avvocato. Descrive in buona fede, e nel modo più accurato possibile, quali dati Best Perfs raccoglie realmente e cosa ne viene fatto — ma non costituisce consulenza legale.</p></div>
+      <h2>Chi gestisce questi dati?</h2>
+      <p>Best Perfs è sviluppata da uno sviluppatore indipendente. Per qualsiasi domanda su questa informativa o sui tuoi dati, scrivi a <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Quali dati vengono raccolti?</h2>
+      <ul>
+        <li><strong>Account</strong>: indirizzo email, password (gestita da Firebase Authentication, mai vista né memorizzata da noi in chiaro), nome utente, data di nascita.</li>
+        <li><strong>Prestazioni sportive</strong>: le statistiche che registri tu stesso (corsa, nuoto, ciclismo, triathlon, allenamento con i pesi) — tipo di esercizio, tempo, distanza, ripetizioni, peso, data.</li>
+        <li><strong>Foto "prova"</strong>: se scegli di aggiungerne una a una prestazione, viene memorizzata solo sul tuo dispositivo o su uno spazio cloud sicuro, in base all'impostazione che scegli tu stesso in Profilo → Archiviazione. In modalità "Questo dispositivo", non lascia mai il tuo telefono.</li>
+        <li><strong>Amici e classifica</strong>: la tua lista di amici all'interno dell'app e — solo se attivi la condivisione — le tue migliori prestazioni visibili da loro nella classifica.</li>
+        <li><strong>Notifiche</strong>: un token tecnico usato per inviarti notifiche relative all'app (es. un timer che termina), se le hai autorizzate.</li>
+        <li><strong>Impostazioni</strong>: lingua, unità di misura, tema visivo — per ritrovare le tue preferenze su tutti i tuoi dispositivi.</li>
+      </ul>
+      <p>Best Perfs non raccoglie la tua posizione, i tuoi contatti, né alcun dato pubblicitario, e non mostra pubblicità.</p>
+      <h2>Perché questi dati vengono raccolti?</h2>
+      <p>Solo per far funzionare l'app: registrare e mostrare le tue prestazioni, confrontare i risultati con gli amici se lo desideri, sincronizzare i tuoi dati tra i tuoi dispositivi e inviarti le notifiche che hai autorizzato.</p>
+      <h2>Chi altro ha accesso a questi dati?</h2>
+      <p>I tuoi dati sono ospitati da <strong>Firebase</strong> (Google Cloud): Firebase Authentication (account), Cloud Firestore (statistiche, impostazioni, amici), Firebase Storage (foto se scegli la modalità cloud) e Firebase Cloud Messaging (notifiche). Google agisce come responsabile tecnico del trattamento e non utilizza questi dati per propri fini pubblicitari. Nessun dato viene venduto o condiviso con terzi.</p>
+      <p>Se accedi con Google, Google Sign-In ci condivide il tuo indirizzo email per creare il tuo account, secondo le regole abituali di Google.</p>
+      <h2>Per quanto tempo questi dati vengono conservati?</h2>
+      <p>Finché il tuo account esiste. Puoi eliminare il tuo account in qualsiasi momento da Profilo → Account → Elimina il mio account: questa azione elimina immediatamente il tuo profilo e i tuoi dati dai nostri server, così come i dati memorizzati localmente sul dispositivo che stai usando.</p>
+      <h2>I tuoi diritti</h2>
+      <p>Puoi consultare, correggere o eliminare i tuoi dati in qualsiasi momento direttamente dall'app, oppure scriverci a <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> per qualsiasi richiesta (accesso, rettifica, cancellazione, esportazione dei dati).</p>
+    </article>
 
-    <hr>
+    <article data-lang-content="nl" hidden>
+      <p class="updated">Laatst bijgewerkt: 1 september 2026</p>
+      <div class="card"><p>Dit document is niet nagekeken door een jurist. Het beschrijft te goeder trouw, en zo nauwkeurig mogelijk, welke gegevens Best Perfs daadwerkelijk verzamelt en wat daarmee gebeurt — maar vormt geen juridisch advies.</p></div>
+      <h2>Wie beheert deze gegevens?</h2>
+      <p>Best Perfs wordt ontwikkeld door een onafhankelijke ontwikkelaar. Voor vragen over dit beleid of je gegevens, schrijf naar <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Welke gegevens worden verzameld?</h2>
+      <ul>
+        <li><strong>Account</strong>: e-mailadres, wachtwoord (beheerd door Firebase Authentication, nooit door ons gezien of in platte tekst opgeslagen), gebruikersnaam, geboortedatum.</li>
+        <li><strong>Sportprestaties</strong>: de statistieken die je zelf registreert (hardlopen, zwemmen, fietsen, triatlon, krachttraining) — type oefening, tijd, afstand, herhalingen, gewicht, datum.</li>
+        <li><strong>"Bewijs"-foto's</strong>: als je ervoor kiest er een toe te voegen aan een prestatie, wordt deze ofwel alleen op je apparaat ofwel op een beveiligde cloudopslag bewaard, afhankelijk van de instelling die je zelf kiest onder Profiel → Opslag. In de modus "Dit apparaat" verlaat de foto nooit je telefoon.</li>
+        <li><strong>Vrienden en ranglijst</strong>: je vriendenlijst binnen de app, en — alleen als je delen inschakelt — je beste prestaties zichtbaar voor hen op de ranglijst.</li>
+        <li><strong>Meldingen</strong>: een technisch token waarmee je app-gerelateerde meldingen ontvangt (bijv. een afgelopen timer), als je die hebt toegestaan.</li>
+        <li><strong>Instellingen</strong>: taal, eenheden, visueel thema — zodat je voorkeuren je volgen op al je apparaten.</li>
+      </ul>
+      <p>Best Perfs verzamelt niet je locatie, je contacten, of enige advertentiegegevens, en toont geen advertenties.</p>
+      <h2>Waarom worden deze gegevens verzameld?</h2>
+      <p>Alleen om de app te laten werken: je prestaties vastleggen en tonen, resultaten vergelijken met vrienden als je dat wilt, je gegevens synchroniseren tussen je apparaten, en je de meldingen sturen die je hebt toegestaan.</p>
+      <h2>Wie heeft nog meer toegang tot deze gegevens?</h2>
+      <p>Je gegevens worden gehost door <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (statistieken, instellingen, vrienden), Firebase Storage (foto's als je de cloudmodus kiest), en Firebase Cloud Messaging (meldingen). Google treedt op als technische verwerker en gebruikt deze gegevens niet voor eigen advertentiedoeleinden. Er worden geen gegevens verkocht of gedeeld met derden.</p>
+      <p>Als je inlogt met Google, deelt Google Sign-In je e-mailadres met ons om je account aan te maken, volgens de gebruikelijke regels van Google.</p>
+      <h2>Hoe lang worden deze gegevens bewaard?</h2>
+      <p>Zolang je account bestaat. Je kunt je account op elk moment verwijderen via Profiel → Account → Mijn account verwijderen: dit verwijdert onmiddellijk je profiel en je gegevens van onze servers, evenals de lokaal opgeslagen gegevens op het gebruikte apparaat.</p>
+      <h2>Jouw rechten</h2>
+      <p>Je kunt je gegevens op elk moment rechtstreeks vanuit de app bekijken, corrigeren of verwijderen, of ons schrijven naar <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> voor elk verzoek (inzage, rectificatie, verwijdering, export van gegevens).</p>
+    </article>
 
-    <span class="lang-tag">English</span>
+    <article data-lang-content="el" hidden>
+      <p class="updated">Τελευταία ενημέρωση: 1 Σεπτεμβρίου 2026</p>
+      <div class="card"><p>Αυτό το έγγραφο δεν έχει ελεγχθεί από δικηγόρο. Περιγράφει με καλή πίστη, και όσο το δυνατόν πιο ακριβώς, ποια δεδομένα συλλέγει πραγματικά η Best Perfs και τι απογίνονται — αλλά δεν αποτελεί νομική συμβουλή.</p></div>
+      <h2>Ποιος διαχειρίζεται αυτά τα δεδομένα;</h2>
+      <p>Η Best Perfs αναπτύσσεται από έναν ανεξάρτητο προγραμματιστή. Για οποιαδήποτε ερώτηση σχετικά με αυτή την πολιτική ή τα δεδομένα σου, γράψε στο <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>Ποια δεδομένα συλλέγονται;</h2>
+      <ul>
+        <li><strong>Λογαριασμός</strong>: διεύθυνση email, κωδικός πρόσβασης (διαχειρίζεται από το Firebase Authentication, ποτέ δεν τον βλέπουμε ούτε τον αποθηκεύουμε σε απλό κείμενο), όνομα χρήστη, ημερομηνία γέννησης.</li>
+        <li><strong>Αθλητικές επιδόσεις</strong>: τα στατιστικά που καταγράφεις εσύ ο ίδιος (τρέξιμο, κολύμβηση, ποδηλασία, τρίαθλο, ενδυνάμωση) — τύπος άσκησης, χρόνος, απόσταση, επαναλήψεις, βάρος, ημερομηνία.</li>
+        <li><strong>Φωτογραφίες "απόδειξης"</strong>: αν επιλέξεις να προσθέσεις μία σε μια επίδοση, αποθηκεύεται είτε μόνο στη συσκευή σου είτε σε ασφαλή αποθηκευτικό χώρο cloud, ανάλογα με τη ρύθμιση που επιλέγεις εσύ στο Προφίλ → Αποθήκευση. Στη λειτουργία "Αυτή η συσκευή", δεν φεύγει ποτέ από το τηλέφωνό σου.</li>
+        <li><strong>Φίλοι και κατάταξη</strong>: η λίστα φίλων σου μέσα στην εφαρμογή, και — μόνο αν ενεργοποιήσεις την κοινή χρήση — οι καλύτερες επιδόσεις σου ορατές από αυτούς στην κατάταξη.</li>
+        <li><strong>Ειδοποιήσεις</strong>: ένα τεχνικό token που χρησιμοποιείται για να σου στέλνει ειδοποιήσεις σχετικές με την εφαρμογή (π.χ. ολοκλήρωση χρονομέτρου), αν τις έχεις επιτρέψει.</li>
+        <li><strong>Ρυθμίσεις</strong>: γλώσσα, μονάδες μέτρησης, οπτικό θέμα — ώστε οι προτιμήσεις σου να σε ακολουθούν σε όλες τις συσκευές σου.</li>
+      </ul>
+      <p>Η Best Perfs δεν συλλέγει την τοποθεσία σου, τις επαφές σου, ούτε κανένα διαφημιστικό δεδομένο, και δεν εμφανίζει διαφημίσεις.</p>
+      <h2>Γιατί συλλέγονται αυτά τα δεδομένα;</h2>
+      <p>Μόνο για να λειτουργεί η εφαρμογή: καταγραφή και εμφάνιση των επιδόσεών σου, σύγκριση αποτελεσμάτων με φίλους αν το επιθυμείς, συγχρονισμός των δεδομένων σου μεταξύ των συσκευών σου, και αποστολή των ειδοποιήσεων που έχεις επιτρέψει.</p>
+      <h2>Ποιος άλλος έχει πρόσβαση σε αυτά τα δεδομένα;</h2>
+      <p>Τα δεδομένα σου φιλοξενούνται από το <strong>Firebase</strong> (Google Cloud): Firebase Authentication (λογαριασμοί), Cloud Firestore (στατιστικά, ρυθμίσεις, φίλοι), Firebase Storage (φωτογραφίες αν επιλέξεις τη λειτουργία cloud), και Firebase Cloud Messaging (ειδοποιήσεις). Η Google ενεργεί ως τεχνικός επεξεργαστής και δεν χρησιμοποιεί αυτά τα δεδομένα για δικούς της διαφημιστικούς σκοπούς. Κανένα δεδομένο δεν πωλείται ούτε κοινοποιείται σε τρίτους.</p>
+      <p>Αν συνδεθείς με Google, το Google Sign-In μοιράζεται μαζί μας τη διεύθυνση email σου για να δημιουργήσουμε τον λογαριασμό σου, σύμφωνα με τους συνήθεις κανόνες της Google.</p>
+      <h2>Για πόσο χρόνο διατηρούνται αυτά τα δεδομένα;</h2>
+      <p>Όσο υπάρχει ο λογαριασμός σου. Μπορείς να διαγράψεις τον λογαριασμό σου οποιαδήποτε στιγμή από το Προφίλ → Λογαριασμός → Διαγραφή του λογαριασμού μου: αυτή η ενέργεια διαγράφει άμεσα το προφίλ και τα δεδομένα σου από τους διακομιστές μας, καθώς και τα δεδομένα που είναι αποθηκευμένα τοπικά στη συσκευή που χρησιμοποιείς.</p>
+      <h2>Τα δικαιώματά σου</h2>
+      <p>Μπορείς να δεις, να διορθώσεις ή να διαγράψεις τα δεδομένα σου οποιαδήποτε στιγμή απευθείας από την εφαρμογή, ή να μας γράψεις στο <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> για οποιοδήποτε αίτημα (πρόσβαση, διόρθωση, διαγραφή, εξαγωγή δεδομένων).</p>
+    </article>
 
-    <div class="card">
-      <p>This document has not been reviewed by a lawyer. It describes in good faith, and as accurately as possible, what data Best Perfs actually collects and what happens to it — but it is not legal advice.</p>
-    </div>
+    <article data-lang-content="ar" dir="rtl" hidden>
+      <p class="updated">آخر تحديث: 1 سبتمبر 2026</p>
+      <div class="card"><p>لم تتم مراجعة هذه الوثيقة من قبل محامٍ. تصف بحسن نية، وبأكبر قدر ممكن من الدقة، البيانات التي تجمعها Best Perfs فعليًا وما يحدث لها — لكنها لا تشكل استشارة قانونية.</p></div>
+      <h2>من يدير هذه البيانات؟</h2>
+      <p>يتم تطوير Best Perfs من قبل مطور مستقل. لأي سؤال حول هذه السياسة أو بياناتك، راسلنا على <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
+      <h2>ما هي البيانات التي يتم جمعها؟</h2>
+      <ul>
+        <li><strong>الحساب</strong>: عنوان البريد الإلكتروني، كلمة المرور (تُدار بواسطة Firebase Authentication، ولا نراها أو نخزنها أبدًا كنص عادي)، اسم المستخدم، تاريخ الميلاد.</li>
+        <li><strong>الأداء الرياضي</strong>: الإحصائيات التي تسجلها بنفسك (الجري، السباحة، ركوب الدراجات، الترياتلون، تمارين القوة) — نوع التمرين، الوقت، المسافة، عدد التكرارات، الوزن، التاريخ.</li>
+        <li><strong>صور "الإثبات"</strong>: إذا اخترت إضافة صورة إلى أداء معين، يتم تخزينها إما فقط على جهازك أو في مساحة تخزين سحابية آمنة، حسب الإعداد الذي تختاره بنفسك في الملف الشخصي ← التخزين. في وضع "هذا الجهاز"، لا تغادر هاتفك أبدًا.</li>
+        <li><strong>الأصدقاء والترتيب</strong>: قائمة أصدقائك داخل التطبيق، و — فقط إذا فعّلت المشاركة — أفضل أدائك المرئي لهم في الترتيب.</li>
+        <li><strong>الإشعارات</strong>: رمز تقني يُستخدم لإرسال إشعارات متعلقة بالتطبيق (مثل انتهاء مؤقّت)، إذا سمحت بها.</li>
+        <li><strong>الإعدادات</strong>: اللغة، الوحدات، المظهر البصري — حتى تتبعك تفضيلاتك على جميع أجهزتك.</li>
+      </ul>
+      <p>لا تجمع Best Perfs موقعك الجغرافي، ولا جهات اتصالك، ولا أي بيانات إعلانية، ولا تعرض أي إعلانات.</p>
+      <h2>لماذا يتم جمع هذه البيانات؟</h2>
+      <p>فقط لتشغيل التطبيق: تسجيل وعرض أدائك، مقارنة النتائج مع الأصدقاء إذا اخترت ذلك، مزامنة بياناتك بين أجهزتك، وإرسال الإشعارات التي سمحت بها.</p>
+      <h2>من آخر لديه حق الوصول إلى هذه البيانات؟</h2>
+      <p>تُستضاف بياناتك بواسطة <strong>Firebase</strong> (Google Cloud): Firebase Authentication (الحسابات)، Cloud Firestore (الإحصائيات، الإعدادات، الأصدقاء)، Firebase Storage (الصور إذا اخترت وضع السحابة)، وFirebase Cloud Messaging (الإشعارات). تعمل Google كمعالج تقني ولا تستخدم هذه البيانات لأغراضها الإعلانية الخاصة. لا يتم بيع أي بيانات أو مشاركتها مع أي طرف ثالث آخر.</p>
+      <p>إذا سجّلت الدخول باستخدام Google، يشارك Google Sign-In عنوان بريدك الإلكتروني معنا لإنشاء حسابك، وفقًا لقواعد Google المعتادة.</p>
+      <h2>إلى متى يتم الاحتفاظ بهذه البيانات؟</h2>
+      <p>طالما أن حسابك موجود. يمكنك حذف حسابك في أي وقت من الملف الشخصي ← الحساب ← حذف حسابي: يؤدي هذا الإجراء إلى حذف ملفك الشخصي وبياناتك فورًا من خوادمنا، وكذلك البيانات المخزنة محليًا على الجهاز الذي تستخدمه.</p>
+      <h2>حقوقك</h2>
+      <p>يمكنك الاطلاع على بياناتك أو تصحيحها أو حذفها في أي وقت مباشرة من التطبيق، أو مراسلتنا على <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> لأي طلب (الوصول، التصحيح، الحذف، تصدير البيانات).</p>
+    </article>
 
-    <h2>Who manages this data?</h2>
-    <p>Best Perfs is developed by an independent developer. For any question about this policy or your data, write to <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>.</p>
-
-    <h2>What data is collected?</h2>
-    <ul>
-      <li><strong>Account</strong>: email address, password (handled by Firebase Authentication, never seen or stored by us in plain text), username, date of birth.</li>
-      <li><strong>Sport performances</strong>: the stats you log yourself (running, swimming, cycling, triathlon, strength training) — exercise type, time, distance, reps, weight, date.</li>
-      <li><strong>"Proof" photos</strong>: if you choose to attach one to a performance, it's stored either only on your device or on secure cloud storage, depending on the setting you choose yourself under Profile → Storage. In "This device" mode, it never leaves your phone.</li>
-      <li><strong>Friends and leaderboard</strong>: your friends list within the app, and — only if you enable sharing — your best performances as seen by them on the leaderboard.</li>
-      <li><strong>Notifications</strong>: a technical token used to send you app-related notifications (e.g. a timer finishing), if you've allowed them.</li>
-      <li><strong>Settings</strong>: language, units, visual theme — so your preferences follow you across devices.</li>
-    </ul>
-    <p>Best Perfs does not collect your location, your contacts, or any advertising data, and displays no ads.</p>
-
-    <h2>Why is this data collected?</h2>
-    <p>Only to make the app work: recording and displaying your performances, comparing results with friends if you choose to, syncing your data across your devices, and sending the notifications you've allowed.</p>
-
-    <h2>Who else has access to this data?</h2>
-    <p>Your data is hosted by <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (stats, settings, friends), Firebase Storage (photos if you choose cloud mode), and Firebase Cloud Messaging (notifications). Google acts as a technical processor and does not use this data for its own advertising purposes. No data is sold or shared with any other third party.</p>
-    <p>If you sign in with Google, Google Sign-In shares your email address with us to create your account, under Google's usual rules.</p>
-
-    <h2>How long is this data kept?</h2>
-    <p>For as long as your account exists. You can delete your account at any time from Profile → Account → Delete my account: this immediately deletes your profile and data from our servers, as well as data stored locally on the device you're using.</p>
-
-    <h2>Your rights</h2>
-    <p>You can view, correct, or delete your data at any time directly from the app, or write to us at <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> for any request (access, correction, deletion, data export).</p>
+    <article data-lang-content="zh" hidden>
+      <p class="updated">最后更新：2026年9月1日</p>
+      <div class="card"><p>本文件未经律师审阅。它本着诚信原则，尽可能准确地说明 Best Perfs 实际收集哪些数据以及这些数据的用途——但不构成法律意见。</p></div>
+      <h2>谁负责管理这些数据？</h2>
+      <p>Best Perfs 由一名独立开发者开发。如对本政策或你的数据有任何疑问，请发送邮件至 <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a>。</p>
+      <h2>收集哪些数据？</h2>
+      <ul>
+        <li><strong>账户</strong>：电子邮件地址、密码（由 Firebase Authentication 管理，我们从未以明文查看或存储）、用户名、出生日期。</li>
+        <li><strong>运动表现</strong>：你自己记录的统计数据（跑步、游泳、骑行、铁人三项、力量训练）——运动类型、时间、距离、次数、重量、日期。</li>
+        <li><strong>"证明"照片</strong>：如果你选择为某项表现添加照片，它将仅存储在你的设备上，或存储在安全的云存储中，具体取决于你在"个人资料 → 存储"中自行选择的设置。在"此设备"模式下，照片永远不会离开你的手机。</li>
+        <li><strong>好友与排行榜</strong>：你在应用内的好友列表，以及——仅当你启用分享时——你的最佳表现会在排行榜上对他们可见。</li>
+        <li><strong>通知</strong>：用于向你发送应用相关通知（例如计时器结束）的技术令牌，前提是你已允许通知。</li>
+        <li><strong>设置</strong>：语言、单位、视觉主题——以便你的偏好设置在所有设备上保持一致。</li>
+      </ul>
+      <p>Best Perfs 不收集你的位置信息、联系人或任何广告数据，也不展示任何广告。</p>
+      <h2>为什么要收集这些数据？</h2>
+      <p>仅为了让应用正常运行：记录并显示你的表现，在你愿意的情况下与好友比较结果，在你的设备之间同步数据，并发送你已允许的通知。</p>
+      <h2>还有谁可以访问这些数据？</h2>
+      <p>你的数据托管在 <strong>Firebase</strong>（Google Cloud）上：Firebase Authentication（账户）、Cloud Firestore（统计数据、设置、好友）、Firebase Storage（如果你选择云存储模式则包括照片），以及 Firebase Cloud Messaging（通知）。Google 作为技术处理方，不会将这些数据用于其自身的广告目的。任何数据都不会被出售或与其他第三方共享。</p>
+      <p>如果你使用 Google 登录，Google Sign-In 会与我们共享你的电子邮件地址以创建你的账户，遵循 Google 的常规规则。</p>
+      <h2>这些数据会保留多久？</h2>
+      <p>只要你的账户存在。你可以随时从"个人资料 → 账户 → 删除我的账户"中删除你的账户：此操作会立即从我们的服务器中删除你的个人资料和数据，以及存储在你所使用设备本地的数据。</p>
+      <h2>你的权利</h2>
+      <p>你可以随时直接在应用内查看、更正或删除你的数据，或发送邮件至 <a href="mailto:jubestapps@gmail.com">jubestapps@gmail.com</a> 提出任何请求（访问、更正、删除、数据导出）。</p>
+    </article>
   </div>
+
+  <script>
+    (function () {
+      var SUPPORTED = ["de", "en", "es", "fr", "it", "nl", "pt", "el", "ar", "zh"];
+      var select = document.getElementById("lang-select");
+      var sections = document.querySelectorAll("[data-lang-content]");
+
+      function applyLang(lang) {
+        sections.forEach(function (el) {
+          el.hidden = el.dataset.langContent !== lang;
+        });
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        select.value = lang;
+      }
+
+      function detectInitialLang() {
+        var fromHash = (location.hash || "").replace("#", "");
+        if (SUPPORTED.indexOf(fromHash) !== -1) return fromHash;
+        var browserLang = ((navigator.language || "fr").split("-")[0] || "fr").toLowerCase();
+        if (SUPPORTED.indexOf(browserLang) !== -1) return browserLang;
+        return "fr";
+      }
+
+      select.addEventListener("change", function () {
+        applyLang(select.value);
+        history.replaceState(null, "", "#" + select.value);
+      });
+
+      applyLang(detectInitialLang());
+    })();
+  </script>
 </body>
 </html>
