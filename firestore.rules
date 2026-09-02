@@ -54,9 +54,16 @@ service cloud.firestore {
     match /leaderboardEntries/{entryId} {
       allow read: if isSignedIn() &&
         (entryId.split('_')[0] == request.auth.uid || isFriendOf(entryId.split('_')[0]));
-      allow write: if isSignedIn() &&
+      // create/update need request.resource (the incoming doc); delete has no
+      // such thing - request.resource is undefined for deletes, so folding
+      // delete into the same "write" rule as create/update made every delete
+      // silently fail (rule errors deny by default), leaving stale entries
+      // behind whenever a best performance stopped qualifying or an account
+      // was deleted.
+      allow create, update: if isSignedIn() &&
         entryId.split('_')[0] == request.auth.uid &&
         request.resource.data.uid == request.auth.uid;
+      allow delete: if isSignedIn() && entryId.split('_')[0] == request.auth.uid;
     }
 
     // In-app notifications: only the recipient can read/delete theirs.

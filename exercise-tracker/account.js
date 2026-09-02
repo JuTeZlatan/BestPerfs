@@ -20,6 +20,10 @@ import {
   writeBatch,
   serverTimestamp,
   arrayUnion,
+  collection,
+  query,
+  where,
+  getDocs,
 } from "./firebase-init.js";
 
 const appRootEl = document.getElementById("app-root");
@@ -291,7 +295,27 @@ async function deleteAccount() {
   const uid = currentUid;
   if (!user || !uid) return;
   try {
-    await deleteDoc(doc(db, "users", uid));
+    const username = accountUsernameDisplay.textContent.trim();
+    const requestsRef = collection(db, "friendRequests");
+    const leaderboardRef = collection(db, "leaderboardEntries");
+    const [asFromSnap, asToSnap, leaderboardSnap] = await Promise.all([
+      getDocs(query(requestsRef, where("fromUid", "==", uid))),
+      getDocs(query(requestsRef, where("toUid", "==", uid))),
+      getDocs(query(leaderboardRef, where("uid", "==", uid))),
+    ]);
+
+    // Delete every trace of this account, not just the profile doc - leaving
+    // the username claimed forever, stale leaderboard entries, or ghost
+    // friend requests behind would contradict "deleting your account removes
+    // your data" (see docs/privacy.html).
+    const batch = writeBatch(db);
+    batch.delete(doc(db, "users", uid));
+    if (username) batch.delete(doc(db, "usernames", username.toLowerCase()));
+    asFromSnap.docs.forEach((d) => batch.delete(d.ref));
+    asToSnap.docs.forEach((d) => batch.delete(d.ref));
+    leaderboardSnap.docs.forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+
     SYNCED_KEYS.forEach((key) => localStorage.removeItem(key));
     await user.delete();
     location.reload();
