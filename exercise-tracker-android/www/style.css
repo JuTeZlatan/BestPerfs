@@ -2694,8 +2694,13 @@ input[type="number"]::-webkit-inner-spin-button {
   background: var(--field);
   color: var(--text);
   font-size: 0.95rem;
+  font-family: inherit;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+textarea.modal-input {
+  resize: vertical;
 }
 
 .modal-input:focus {

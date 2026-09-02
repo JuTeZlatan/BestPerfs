@@ -21,6 +21,18 @@ service cloud.firestore {
         get(/databases/$(database)/documents/friendRequests/$(pairId)).data.status == 'accepted';
     }
 
+    // True if otherUid has blocked the caller - used to stop a blocked user
+    // from sending a new friend request. exists() is checked first (in case
+    // otherUid's profile doc is somehow missing) since get() on a path that
+    // doesn't exist errors out rather than returning null, and blockedUids
+    // itself is presence-checked since most users never block anyone.
+    function isBlockedBy(otherUid) {
+      let otherPath = /databases/$(database)/documents/users/$(otherUid);
+      return exists(otherPath) &&
+        ('blockedUids' in get(otherPath).data) &&
+        request.auth.uid in get(otherPath).data.blockedUids;
+    }
+
     // Account profile (settings, fcmTokens, username, birthdate): only the
     // owner ever reads or writes their own document.
     match /users/{uid} {
@@ -34,15 +46,22 @@ service cloud.firestore {
     match /usernames/{username} {
       allow read: if isSignedIn();
       allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+      // resource == null covers a get() on a username that isn't claimed yet
+      // (the normal case when checking availability) - resource.data on a
+      // nonexistent doc errors out rather than reading as "not found".
+      allow update, delete: if isSignedIn() && resource != null && resource.data.uid == request.auth.uid;
     }
 
     // Friend requests: only the two people involved can see or act on one.
     // The doc id itself isn't trusted for authorization, only the fields.
+    // resource == null covers a get() by pairId before any request exists
+    // yet (the normal case the first time you add someone).
     match /friendRequests/{requestId} {
       allow read: if isSignedIn() &&
-        (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
-      allow create: if isSignedIn() && request.resource.data.fromUid == request.auth.uid;
+        (resource == null || resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
+      allow create: if isSignedIn() &&
+        request.resource.data.fromUid == request.auth.uid &&
+        !isBlockedBy(request.resource.data.toUid);
       allow update, delete: if isSignedIn() &&
         (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
     }
@@ -52,8 +71,16 @@ service cloud.firestore {
     // only be read by its owner or an accepted friend (mirrors what the app
     // actually queries - never a stranger's data).
     match /leaderboardEntries/{entryId} {
+      // Keyed off the "uid" field, not entryId, even though entryId also
+      // encodes it ("{uid}_{sport}_{preset}") - Firestore can only allow a
+      // list query (deleteAccount()'s cleanup uses where("uid","==",...)) if
+      // it can prove every possible result satisfies the rule purely from
+      // the query's own filters, and it can't reason about a transform like
+      // entryId.split('_')[0] to do that, only a direct field comparison
+      // that matches the query's filter exactly. resource == null covers a
+      // get() on a friend's entry for a preset they have no record in yet.
       allow read: if isSignedIn() &&
-        (entryId.split('_')[0] == request.auth.uid || isFriendOf(entryId.split('_')[0]));
+        (resource == null || resource.data.uid == request.auth.uid || isFriendOf(resource.data.uid));
       // create/update need request.resource (the incoming doc); delete has no
       // such thing - request.resource is undefined for deletes, so folding
       // delete into the same "write" rule as create/update made every delete
@@ -64,6 +91,14 @@ service cloud.firestore {
         entryId.split('_')[0] == request.auth.uid &&
         request.resource.data.uid == request.auth.uid;
       allow delete: if isSignedIn() && entryId.split('_')[0] == request.auth.uid;
+    }
+
+    // Abuse reports: write-only from the client. Only readable by the
+    // developer, via the Firebase console (Admin SDK bypasses rules) - not
+    // exposed back to any client, including the reporter.
+    match /reports/{reportId} {
+      allow create: if isSignedIn() && request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if false;
     }
 
     // In-app notifications: only the recipient can read/delete theirs.

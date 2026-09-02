@@ -10,6 +10,9 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   signOut,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
@@ -27,6 +30,7 @@ import {
   writeBatch,
   serverTimestamp,
   arrayUnion,
+  arrayRemove,
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import {
   getStorage,
@@ -68,6 +72,9 @@ export {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   signOut,
   onAuthStateChanged,
   doc,
@@ -82,6 +89,7 @@ export {
   writeBatch,
   serverTimestamp,
   arrayUnion,
+  arrayRemove,
   storageRef,
   uploadBytes,
   getDownloadURL,

@@ -11,6 +11,9 @@ import {
   where,
   getDocs,
   serverTimestamp,
+  writeBatch,
+  arrayUnion,
+  arrayRemove,
 } from "./firebase-init.js";
 
 const profileFriendsRow = document.getElementById("profile-friends-row");
@@ -66,6 +69,136 @@ friendsTabViewport.addEventListener("touchend", (e) => {
 const friendIncomingTemplate = document.getElementById("friend-incoming-template");
 const friendOutgoingTemplate = document.getElementById("friend-outgoing-template");
 const friendTemplate = document.getElementById("friend-template");
+const blockedUserTemplate = document.getElementById("blocked-user-template");
+
+const accountBlockedUsersBtn = document.getElementById("account-blocked-users-btn");
+const blockedUsersViewEl = document.getElementById("blocked-users-view");
+const blockedUsersBackBtn = document.getElementById("blocked-users-back-btn");
+const blockedUsersList = document.getElementById("blocked-users-list");
+const blockedUsersEmpty = document.getElementById("blocked-users-empty");
+
+const reportUserModal = document.getElementById("report-user-modal");
+const reportUserForm = document.getElementById("report-user-form");
+const reportUserReasonInput = document.getElementById("report-user-reason-input");
+const reportUserCancelBtn = document.getElementById("report-user-cancel-btn");
+const reportUserSuccessEl = document.getElementById("report-user-success");
+
+let pendingReportTarget = null;
+
+accountBlockedUsersBtn.addEventListener("click", () => {
+  document.getElementById("account-view").hidden = true;
+  blockedUsersViewEl.hidden = false;
+  refreshBlockedUsers();
+});
+
+blockedUsersBackBtn.addEventListener("click", () => {
+  blockedUsersViewEl.hidden = true;
+  document.getElementById("account-view").hidden = false;
+});
+
+async function refreshBlockedUsers() {
+  const myUid = auth.currentUser?.uid;
+  if (!myUid) return;
+  const snap = await getDoc(doc(db, "users", myUid)).catch(() => null);
+  const blocked = (snap && snap.exists() && snap.data().blockedUsers) || [];
+  blockedUsersEmpty.classList.toggle("visible", blocked.length === 0);
+  blockedUsersList.innerHTML = "";
+  blocked.forEach((b) => {
+    const node = blockedUserTemplate.content.cloneNode(true);
+    node.querySelector(".friend-row-name").textContent = b.username;
+    node.querySelector(".friend-unblock-btn").textContent = t("friends.unblockBtn");
+    node.querySelector(".friend-unblock-btn").addEventListener("click", () => unblockUser(b.uid, b.username));
+    blockedUsersList.appendChild(node);
+  });
+}
+
+async function blockUser(targetUid, targetUsername) {
+  const myUid = auth.currentUser?.uid;
+  if (!myUid || !targetUid) return;
+  try {
+    const batch = writeBatch(db);
+    batch.update(doc(db, "users", myUid), {
+      blockedUids: arrayUnion(targetUid),
+      blockedUsers: arrayUnion({ uid: targetUid, username: targetUsername }),
+    });
+    batch.delete(doc(db, "friendRequests", pairId(myUid, targetUid)));
+    await batch.commit();
+    refreshFriendsData();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function unblockUser(targetUid, targetUsername) {
+  const myUid = auth.currentUser?.uid;
+  if (!myUid) return;
+  try {
+    await updateDoc(doc(db, "users", myUid), {
+      blockedUids: arrayRemove(targetUid),
+      blockedUsers: arrayRemove({ uid: targetUid, username: targetUsername }),
+    });
+    refreshBlockedUsers();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function openReportModal(targetUid, targetUsername) {
+  pendingReportTarget = { uid: targetUid, username: targetUsername };
+  reportUserForm.reset();
+  reportUserForm.hidden = false;
+  reportUserSuccessEl.hidden = true;
+  reportUserModal.hidden = false;
+}
+
+reportUserCancelBtn.addEventListener("click", () => {
+  reportUserModal.hidden = true;
+});
+
+reportUserForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const myUid = auth.currentUser?.uid;
+  if (!myUid || !pendingReportTarget) return;
+  try {
+    await setDoc(doc(collection(db, "reports")), {
+      reportedUid: pendingReportTarget.uid,
+      reportedUsername: pendingReportTarget.username,
+      reporterUid: myUid,
+      reporterUsername: myUsername(),
+      reason: reportUserReasonInput.value.trim(),
+      createdAt: serverTimestamp(),
+    });
+    reportUserForm.hidden = true;
+    reportUserSuccessEl.hidden = false;
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// Wires the shared "..." row menu (block/report) already used elsewhere in
+// the app onto a friend/incoming-request row.
+function wireRowMenu(node, targetUid, targetUsername) {
+  const rowMenuBtn = node.querySelector(".row-menu-btn");
+  const rowMenuDropdown = node.querySelector(".row-menu-dropdown");
+  if (!rowMenuBtn || !rowMenuDropdown) return;
+  rowMenuBtn.title = t("rowMenu.title");
+  rowMenuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleRowMenu(rowMenuDropdown);
+  });
+  const blockBtn = node.querySelector(".row-menu-block");
+  blockBtn.textContent = t("friends.blockBtn");
+  blockBtn.addEventListener("click", () => {
+    rowMenuDropdown.hidden = true;
+    openConfirmModal(t("friends.blockConfirm", { name: targetUsername }), () => blockUser(targetUid, targetUsername));
+  });
+  const reportBtn = node.querySelector(".row-menu-report");
+  reportBtn.textContent = t("friends.reportBtn");
+  reportBtn.addEventListener("click", () => {
+    rowMenuDropdown.hidden = true;
+    openReportModal(targetUid, targetUsername);
+  });
+}
 
 function pairId(uidA, uidB) {
   return uidA < uidB ? `${uidA}_${uidB}` : `${uidB}_${uidA}`;
@@ -147,8 +280,8 @@ async function refreshFriendsData() {
   renderIncoming(incoming);
   renderOutgoing(outgoing);
   const friends = [
-    ...friendsAsFromSnap.docs.map((d) => ({ id: d.id, username: d.data().toUsername })),
-    ...friendsAsToSnap.docs.map((d) => ({ id: d.id, username: d.data().fromUsername })),
+    ...friendsAsFromSnap.docs.map((d) => ({ id: d.id, uid: d.data().toUid, username: d.data().toUsername })),
+    ...friendsAsToSnap.docs.map((d) => ({ id: d.id, uid: d.data().fromUid, username: d.data().fromUsername })),
   ];
   friends.sort((a, b) => a.username.localeCompare(b.username));
   renderFriends(friends);
@@ -180,6 +313,8 @@ function renderIncoming(requests) {
       }
       refreshFriendsData();
     });
+
+    wireRowMenu(node, request.fromUid, request.fromUsername);
 
     friendsIncomingList.appendChild(node);
   });
@@ -225,6 +360,8 @@ function renderFriends(friends) {
         refreshFriendsData();
       });
     });
+
+    wireRowMenu(node, friend.uid, friend.username);
 
     friendsListEl.appendChild(node);
   });

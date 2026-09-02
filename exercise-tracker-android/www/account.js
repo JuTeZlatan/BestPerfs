@@ -10,6 +10,9 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   signOut,
   onAuthStateChanged,
   doc,
@@ -52,6 +55,24 @@ const accountBirthdateDisplay = document.getElementById("account-birthdate-displ
 const accountLogoutBtn = document.getElementById("account-logout-btn");
 const accountDeleteBtn = document.getElementById("account-delete-btn");
 const accountDeleteErrorEl = document.getElementById("account-delete-error");
+
+const accountChangeEmailBtn = document.getElementById("account-change-email-btn");
+const changeEmailModal = document.getElementById("change-email-modal");
+const changeEmailForm = document.getElementById("change-email-form");
+const changeEmailNewInput = document.getElementById("change-email-new-input");
+const changeEmailPasswordInput = document.getElementById("change-email-password-input");
+const changeEmailCancelBtn = document.getElementById("change-email-cancel-btn");
+const changeEmailErrorEl = document.getElementById("change-email-error");
+const changeEmailSuccessEl = document.getElementById("change-email-success");
+
+const MAX_BIRTHDATE_CHANGES = 2;
+const accountChangeBirthdateBtn = document.getElementById("account-change-birthdate-btn");
+const changeBirthdateModal = document.getElementById("change-birthdate-modal");
+const changeBirthdateForm = document.getElementById("change-birthdate-form");
+const changeBirthdateInput = document.getElementById("change-birthdate-input");
+const changeBirthdateWarningEl = document.getElementById("change-birthdate-warning");
+const changeBirthdateCancelBtn = document.getElementById("change-birthdate-cancel-btn");
+const changeBirthdateErrorEl = document.getElementById("change-birthdate-error");
 
 const gateGoogleBtn = document.getElementById("gate-google-btn");
 const gateAuthForm = document.getElementById("gate-auth-form");
@@ -328,6 +349,84 @@ accountDeleteBtn.addEventListener("click", () => {
   openConfirmModal(t("auth.deleteAccountConfirm"), deleteAccount);
 });
 
+// ---- Change email (email/password accounts only - Google accounts keep
+// Google's email). Requires reauthentication, and the address only actually
+// changes once the confirmation link sent to the NEW address is clicked. ----
+accountChangeEmailBtn.addEventListener("click", () => {
+  clearFieldError(changeEmailErrorEl);
+  changeEmailSuccessEl.hidden = true;
+  changeEmailForm.reset();
+  changeEmailModal.hidden = false;
+});
+
+changeEmailCancelBtn.addEventListener("click", () => {
+  changeEmailModal.hidden = true;
+});
+
+changeEmailForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFieldError(changeEmailErrorEl);
+  changeEmailSuccessEl.hidden = true;
+  const user = auth.currentUser;
+  const newEmail = changeEmailNewInput.value.trim();
+  const currentPassword = changeEmailPasswordInput.value;
+  if (!user || !user.email) return;
+  try {
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    await verifyBeforeUpdateEmail(user, newEmail);
+    changeEmailForm.reset();
+    changeEmailSuccessEl.hidden = false;
+  } catch (error) {
+    showFieldError(changeEmailErrorEl, error);
+  }
+});
+
+// ---- Change birthdate: capped at MAX_BIRTHDATE_CHANGES over the account's
+// lifetime (the initial value set at signup doesn't count), enforced
+// client-side with a warning + remaining count - low-stakes field, not worth
+// the added rule complexity of enforcing it server-side too. ----
+function renderBirthdateWarning() {
+  const remaining = Math.max(0, MAX_BIRTHDATE_CHANGES - currentBirthdateChangesUsed);
+  changeBirthdateForm.hidden = remaining <= 0;
+  changeBirthdateWarningEl.textContent =
+    remaining > 0 ? t("auth.changeBirthdateWarning", { remaining: String(remaining) }) : t("auth.changeBirthdateNoneLeft");
+}
+
+accountChangeBirthdateBtn.addEventListener("click", () => {
+  clearFieldError(changeBirthdateErrorEl);
+  changeBirthdateInput.value = "";
+  renderBirthdateWarning();
+  changeBirthdateModal.hidden = false;
+});
+
+changeBirthdateCancelBtn.addEventListener("click", () => {
+  changeBirthdateModal.hidden = true;
+});
+
+changeBirthdateForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFieldError(changeBirthdateErrorEl);
+  const newBirthdate = changeBirthdateInput.value;
+  if (!newBirthdate || !currentUid || currentBirthdateChangesUsed >= MAX_BIRTHDATE_CHANGES) return;
+  try {
+    const nextCount = currentBirthdateChangesUsed + 1;
+    await updateDoc(doc(db, "users", currentUid), {
+      birthdate: newBirthdate,
+      birthdateChangesUsed: nextCount,
+    });
+    currentBirthdateChangesUsed = nextCount;
+    accountBirthdateDisplay.textContent = formatBirthdate(newBirthdate);
+    changeBirthdateModal.hidden = true;
+  } catch (error) {
+    showFieldError(changeBirthdateErrorEl, error);
+  }
+});
+
+document.addEventListener("languagechange", () => {
+  if (!changeBirthdateModal.hidden) renderBirthdateWarning();
+});
+
 // ---- Cloud data sync ----
 const SYNCED_KEYS = [
   "exercise-tracker-data",
@@ -353,6 +452,7 @@ const KEY_TO_FIELD = {
 };
 
 let currentUid = null;
+let currentBirthdateChangesUsed = 0;
 
 const nativeSetItem = localStorage.setItem.bind(localStorage);
 localStorage.setItem = function (key, value) {
@@ -594,6 +694,9 @@ async function syncSignedInUser(user) {
     accountBirthdateDisplay.textContent = formatBirthdate(data.birthdate);
     ensureUsernameMapping(currentUid, data.username);
     registerPushToken(currentUid);
+
+    currentBirthdateChangesUsed = data.birthdateChangesUsed || 0;
+    accountChangeEmailBtn.hidden = !user.providerData.some((p) => p.providerId === "password");
 
     let anyDiff = false;
     SYNCED_KEYS.forEach((key) => {

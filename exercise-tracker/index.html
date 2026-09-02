@@ -760,6 +760,21 @@
           <span class="account-field-value" id="account-birthdate-display"></span>
         </div>
         <div class="profile-menu">
+          <button id="account-change-email-btn" class="profile-menu-row" type="button" hidden>
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8 6.5 8-6.5"/></svg></span>
+            <span data-i18n="auth.changeEmailRow">Modifier l'email</span>
+            <span class="profile-menu-chevron">›</span>
+          </button>
+          <button id="account-change-birthdate-btn" class="profile-menu-row" type="button">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg></span>
+            <span data-i18n="auth.changeBirthdateRow">Modifier la date de naissance</span>
+            <span class="profile-menu-chevron">›</span>
+          </button>
+          <button id="account-blocked-users-btn" class="profile-menu-row" type="button">
+            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg></span>
+            <span data-i18n="friends.blockedUsersRow">Utilisateurs bloqués</span>
+            <span class="profile-menu-chevron">›</span>
+          </button>
           <button id="account-logout-btn" class="profile-menu-row" type="button">
             <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h7"/><path d="M11 12h9"/><path d="M17 8l4 4-4 4"/></svg></span>
             <span data-i18n="auth.logout">Se déconnecter</span>
@@ -771,6 +786,15 @@
         </div>
         <p id="account-delete-error" class="auth-error" hidden></p>
       </div>
+    </section>
+
+    <section id="blocked-users-view" hidden>
+      <div class="subpage-header">
+        <button id="blocked-users-back-btn" class="subpage-back-btn" type="button" data-i18n-title="common.back"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg></button>
+        <h1 data-i18n="friends.blockedUsersRow">Utilisateurs bloqués</h1>
+      </div>
+      <div id="blocked-users-list" class="exercise-list"></div>
+      <p id="blocked-users-empty" class="empty-state" data-i18n="friends.blockedEmpty">Aucun utilisateur bloqué.</p>
     </section>
 
     <section id="friends-view" hidden>
@@ -1021,6 +1045,54 @@
     </div>
   </div>
 
+  <div id="change-email-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="auth.changeEmailRow">Modifier l'email</p>
+      <form id="change-email-form">
+        <input type="email" id="change-email-new-input" class="modal-input" data-i18n-placeholder="auth.changeEmailNewPlaceholder" placeholder="Nouvel email" required>
+        <div class="password-field">
+          <input type="password" id="change-email-password-input" class="modal-input" data-i18n-placeholder="auth.currentPasswordPlaceholder" placeholder="Mot de passe actuel" required>
+          <button type="button" class="password-toggle-btn" data-i18n-title="auth.showPassword" title="Afficher le mot de passe"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <p id="change-email-error" class="auth-error" hidden></p>
+        <p id="change-email-success" class="auth-success" hidden data-i18n="auth.changeEmailSent">Un email de confirmation vient d'être envoyé à la nouvelle adresse.</p>
+        <div class="modal-actions">
+          <button type="button" id="change-email-cancel-btn" class="modal-btn" data-i18n="modal.cancel">Annuler</button>
+          <button type="submit" class="modal-btn primary" data-i18n="auth.changeEmailBtn">Envoyer le lien</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="change-birthdate-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="auth.changeBirthdateRow">Modifier la date de naissance</p>
+      <p id="change-birthdate-warning" class="auth-hint"></p>
+      <form id="change-birthdate-form">
+        <input type="date" id="change-birthdate-input" class="modal-input" required>
+        <p id="change-birthdate-error" class="auth-error" hidden></p>
+        <div class="modal-actions">
+          <button type="button" id="change-birthdate-cancel-btn" class="modal-btn" data-i18n="modal.cancel">Annuler</button>
+          <button type="submit" class="modal-btn primary" data-i18n="common.validate">Valider</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="report-user-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="friends.reportTitle">Signaler cet utilisateur</p>
+      <form id="report-user-form">
+        <textarea id="report-user-reason-input" class="modal-input" data-i18n-placeholder="friends.reportReasonPlaceholder" placeholder="Décris le problème (optionnel)" maxlength="500" rows="4"></textarea>
+        <div class="modal-actions">
+          <button type="button" id="report-user-cancel-btn" class="modal-btn" data-i18n="modal.cancel">Annuler</button>
+          <button type="submit" class="modal-btn primary" data-i18n="friends.reportSubmitBtn">Envoyer</button>
+        </div>
+      </form>
+      <p id="report-user-success" class="auth-success" hidden data-i18n="friends.reportSent">Signalement envoyé, merci.</p>
+    </div>
+  </div>
+
   <div id="confirm-modal" class="modal-overlay" hidden>
     <div class="modal-box">
       <p class="modal-message" id="modal-message">Supprimer cet exercice ?</p>
@@ -1253,6 +1325,13 @@
         <button class="friend-accept-btn" type="button" data-i18n="friends.acceptBtn">Accepter</button>
         <button class="friend-decline-btn" type="button" data-i18n="friends.declineBtn">Refuser</button>
       </div>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-block" type="button" data-i18n="friends.blockBtn">Bloquer</button>
+          <button class="row-menu-report" type="button" data-i18n="friends.reportBtn">Signaler</button>
+        </div>
+      </div>
     </div>
   </template>
 
@@ -1268,6 +1347,20 @@
     <div class="friend-row">
       <span class="friend-row-name"></span>
       <button class="friend-remove-btn" type="button" data-i18n="friends.removeBtn">Retirer</button>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-block" type="button" data-i18n="friends.blockBtn">Bloquer</button>
+          <button class="row-menu-report" type="button" data-i18n="friends.reportBtn">Signaler</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="blocked-user-template">
+    <div class="friend-row">
+      <span class="friend-row-name"></span>
+      <button class="friend-unblock-btn" type="button" data-i18n="friends.unblockBtn">Débloquer</button>
     </div>
   </template>
 
