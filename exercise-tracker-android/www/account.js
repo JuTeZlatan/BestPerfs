@@ -275,8 +275,14 @@ gateAuthForm.addEventListener("submit", async (e) => {
   }
 });
 
-accountLogoutBtn.addEventListener("click", () => {
-  signOut(auth);
+accountLogoutBtn.addEventListener("click", async () => {
+  await signOut(auth).catch(() => {});
+  // Wipe locally cached data on the way out - script.js/sports.js only read
+  // localStorage once at page load, so without this + a reload, whoever
+  // signs in next on this device would inherit this account's stats in
+  // memory until the next full refresh.
+  SYNCED_KEYS.forEach((key) => localStorage.removeItem(key));
+  location.reload();
 });
 
 async function deleteAccount() {
@@ -286,10 +292,9 @@ async function deleteAccount() {
   if (!user || !uid) return;
   try {
     await deleteDoc(doc(db, "users", uid));
-    localStorage.removeItem("exercise-tracker-data");
-    localStorage.removeItem("exercise-tracker-presets");
-    localStorage.removeItem("exercise-tracker-sports");
+    SYNCED_KEYS.forEach((key) => localStorage.removeItem(key));
     await user.delete();
+    location.reload();
   } catch (error) {
     showFieldError(accountDeleteErrorEl, error);
   }
@@ -583,12 +588,20 @@ async function syncSignedInUser(user) {
       showApp();
     }
   } else {
-    const payload = { updatedAt: serverTimestamp() };
-    SYNCED_KEYS.forEach((key) => {
-      const value = localStorage.getItem(key);
-      if (value !== null) payload[KEY_TO_FIELD[key]] = value;
-    });
-    setDoc(userDocRef, payload, { merge: true }).catch(() => {});
+    // Brand-new account (no Firestore doc yet): the app requires signing in
+    // before any feature is usable, so there's no legitimate way this
+    // device's local storage already holds THIS user's own data - anything
+    // cached here is leftover from a previous account used on this device
+    // (e.g. logging out and signing up as someone else without a reload in
+    // between). Start from a clean slate instead of adopting - and
+    // re-uploading - someone else's stats.
+    const hadStaleData = SYNCED_KEYS.some((key) => localStorage.getItem(key) !== null);
+    SYNCED_KEYS.forEach((key) => localStorage.removeItem(key));
+    setDoc(userDocRef, { updatedAt: serverTimestamp() }, { merge: true }).catch(() => {});
+    if (hadStaleData) {
+      location.reload();
+      return;
+    }
     showUsernamePrompt();
   }
 }
