@@ -56,6 +56,7 @@ const accountLogoutBtn = document.getElementById("account-logout-btn");
 const accountDeleteBtn = document.getElementById("account-delete-btn");
 const accountDeleteErrorEl = document.getElementById("account-delete-error");
 
+const accountEmailRowMenu = document.getElementById("account-email-row-menu");
 const accountChangeEmailBtn = document.getElementById("account-change-email-btn");
 const changeEmailModal = document.getElementById("change-email-modal");
 const changeEmailForm = document.getElementById("change-email-form");
@@ -349,10 +350,25 @@ accountDeleteBtn.addEventListener("click", () => {
   openConfirmModal(t("auth.deleteAccountConfirm"), deleteAccount);
 });
 
+// ---- "..." row menus on the email/birthdate fields (same pattern as the
+// exercise/sport rows) - toggleRowMenu is a global from script.js. ----
+document.querySelectorAll("#account-signed-in .row-menu-btn").forEach((btn) => {
+  const dropdown = btn.nextElementSibling;
+  btn.title = t("rowMenu.title");
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleRowMenu(dropdown);
+  });
+  document.addEventListener("languagechange", () => {
+    btn.title = t("rowMenu.title");
+  });
+});
+
 // ---- Change email (email/password accounts only - Google accounts keep
 // Google's email). Requires reauthentication, and the address only actually
 // changes once the confirmation link sent to the NEW address is clicked. ----
 accountChangeEmailBtn.addEventListener("click", () => {
+  accountChangeEmailBtn.closest(".row-menu-dropdown").hidden = true;
   clearFieldError(changeEmailErrorEl);
   changeEmailSuccessEl.hidden = true;
   changeEmailForm.reset();
@@ -394,6 +410,7 @@ function renderBirthdateWarning() {
 }
 
 accountChangeBirthdateBtn.addEventListener("click", () => {
+  accountChangeBirthdateBtn.closest(".row-menu-dropdown").hidden = true;
   clearFieldError(changeBirthdateErrorEl);
   changeBirthdateInput.value = "";
   renderBirthdateWarning();
@@ -696,7 +713,7 @@ async function syncSignedInUser(user) {
     registerPushToken(currentUid);
 
     currentBirthdateChangesUsed = data.birthdateChangesUsed || 0;
-    accountChangeEmailBtn.hidden = !user.providerData.some((p) => p.providerId === "password");
+    accountEmailRowMenu.hidden = !user.providerData.some((p) => p.providerId === "password");
 
     let anyDiff = false;
     SYNCED_KEYS.forEach((key) => {

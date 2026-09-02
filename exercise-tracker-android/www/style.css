@@ -1076,6 +1076,17 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   margin-bottom: 4px;
 }
 
+.account-field-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.account-field-row .account-field-value {
+  flex: 1;
+  min-width: 0;
+}
+
 .account-field-value {
   display: block;
   padding: 10px 12px;
@@ -1085,6 +1096,9 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
   color: var(--text-dim);
   font-size: 0.85rem;
   min-height: 1.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .auth-field-label {

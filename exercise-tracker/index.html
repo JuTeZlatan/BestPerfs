@@ -753,23 +753,29 @@
         </div>
         <div class="account-field">
           <span class="account-field-label" data-i18n="auth.email">Email</span>
-          <span class="account-field-value" id="account-email-display"></span>
+          <div class="account-field-row">
+            <span class="account-field-value" id="account-email-display"></span>
+            <div class="row-menu" id="account-email-row-menu">
+              <button class="row-menu-btn" type="button" title="Options">⋮</button>
+              <div class="row-menu-dropdown" hidden>
+                <button id="account-change-email-btn" class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="account-field">
           <span class="account-field-label" data-i18n="auth.birthdate">Date de naissance</span>
-          <span class="account-field-value" id="account-birthdate-display"></span>
+          <div class="account-field-row">
+            <span class="account-field-value" id="account-birthdate-display"></span>
+            <div class="row-menu">
+              <button class="row-menu-btn" type="button" title="Options">⋮</button>
+              <div class="row-menu-dropdown" hidden>
+                <button id="account-change-birthdate-btn" class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="profile-menu">
-          <button id="account-change-email-btn" class="profile-menu-row" type="button" hidden>
-            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5l8 6.5 8-6.5"/></svg></span>
-            <span data-i18n="auth.changeEmailRow">Modifier l'email</span>
-            <span class="profile-menu-chevron">›</span>
-          </button>
-          <button id="account-change-birthdate-btn" class="profile-menu-row" type="button">
-            <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg></span>
-            <span data-i18n="auth.changeBirthdateRow">Modifier la date de naissance</span>
-            <span class="profile-menu-chevron">›</span>
-          </button>
           <button id="account-blocked-users-btn" class="profile-menu-row" type="button">
             <span class="profile-menu-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.5 5.5l13 13"/></svg></span>
             <span data-i18n="friends.blockedUsersRow">Utilisateurs bloqués</span>
