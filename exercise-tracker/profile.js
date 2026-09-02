@@ -22,13 +22,27 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
 // ---- App version, shown at the bottom of Support - read from the native
 // app itself (App.getInfo()) so it's always accurate without having to keep
 // a hardcoded string in sync with android/app/build.gradle by hand ----
-const appVersionLabelEl = document.getElementById("app-version-label");
-const isNativePlatformForVersion = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
-if (isNativePlatformForVersion && Capacitor.Plugins.App) {
+function renderAppVersion(targetEl) {
+  if (!targetEl) return;
+  const isNativePlatformForVersion = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
+  if (!isNativePlatformForVersion) return;
+  // Always show *something* immediately, and keep it visible even if
+  // getInfo() fails, instead of silently staying hidden - a stuck "loading"
+  // or an explicit error is far more useful for debugging "which build is
+  // actually installed" than an empty screen that looks like nothing ran.
+  targetEl.hidden = false;
+  targetEl.textContent = "Best Perfs (chargement de la version...)";
+  if (!Capacitor.Plugins || !Capacitor.Plugins.App || !Capacitor.Plugins.App.getInfo) {
+    targetEl.textContent = "Best Perfs (App.getInfo indisponible)";
+    return;
+  }
   Capacitor.Plugins.App.getInfo()
     .then((info) => {
-      appVersionLabelEl.textContent = `Best Perfs v${info.version} (${info.build})`;
-      appVersionLabelEl.hidden = false;
+      targetEl.textContent = `Best Perfs v${info.version} (${info.build})`;
     })
-    .catch(() => {});
+    .catch((error) => {
+      targetEl.textContent = `Best Perfs (version indisponible : ${error?.message || error})`;
+    });
 }
+renderAppVersion(document.getElementById("app-version-label"));
+renderAppVersion(document.getElementById("landing-version-tag"));
