@@ -93,6 +93,59 @@ service cloud.firestore {
       allow delete: if isSignedIn() && entryId.split('_')[0] == request.auth.uid;
     }
 
+    // True if the caller is an accepted participant of challengeId.
+    function isChallengeParticipant(challengeId) {
+      let pPath = /databases/$(database)/documents/challengeParticipants/$(challengeId + '_' + request.auth.uid);
+      return exists(pPath) && get(pPath).data.status == 'accepted';
+    }
+
+    // A challenge's own details (sport, preset, dates, creator) - no
+    // performance data lives here. Readable by anyone signed in (an invited
+    // user needs to see it before deciding to accept), immutable once
+    // created for this first version.
+    match /challenges/{challengeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.creatorUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // One doc per "{challengeId}_{uid}": an invite, and once accepted, proof
+    // of participation used by the two functions above. The creator writes
+    // one per invited friend (status "pending") plus their own (status
+    // "accepted", auto-joining their own challenge) in the same batch as
+    // creating the challenge; only the invited uid can then flip their own
+    // doc to "accepted"/"declined", or delete it to leave later.
+    match /challengeParticipants/{participantId} {
+      allow read: if isSignedIn() &&
+        (resource == null || resource.data.uid == request.auth.uid || isChallengeParticipant(resource.data.challengeId));
+      // Not cross-checked against challenges/{challengeId}.creatorUid: that
+      // doc is created in the same batch as these participant docs, and a
+      // get() here doesn't see a sibling write from the same uncommitted
+      // batch, so it always read as "doesn't exist yet" and denied every
+      // creation. invitedBy == request.auth.uid already stops anyone from
+      // forging an invite as coming from someone else.
+      allow create: if isSignedIn() &&
+        request.resource.data.invitedBy == request.auth.uid &&
+        request.resource.data.status in ['pending', 'accepted'];
+      allow update: if isSignedIn() && resource.data.uid == request.auth.uid &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.status in ['accepted', 'declined'];
+      allow delete: if isSignedIn() && resource != null && resource.data.uid == request.auth.uid;
+    }
+
+    // One doc per "{challengeId}_{uid}": that participant's current best
+    // within the challenge's window, kept in sync client-side by their own
+    // device whenever they save a matching perf (mirrors leaderboardEntries).
+    // Readable by fellow participants even if not mutual friends - a
+    // challenge can include people who don't otherwise know each other.
+    match /challengeEntries/{entryId} {
+      allow read: if isSignedIn() && (resource == null || isChallengeParticipant(resource.data.challengeId));
+      allow create, update: if isSignedIn() &&
+        request.resource.data.uid == request.auth.uid &&
+        isChallengeParticipant(request.resource.data.challengeId);
+      allow delete: if isSignedIn() && resource != null && resource.data.uid == request.auth.uid;
+    }
+
     // Abuse reports: write-only from the client. Only readable by the
     // developer, via the Firebase console (Admin SDK bypasses rules) - not
     // exposed back to any client, including the reporter.

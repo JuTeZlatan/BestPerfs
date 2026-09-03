@@ -416,8 +416,7 @@ async function renderClassementList() {
   });
 }
 
-document.getElementById("classement-icon-btn").addEventListener("click", () => {
-  window.showView("classement");
+document.querySelector('.bottom-nav-btn[data-view="classement"]').addEventListener("click", () => {
   selectClassementSport(classementSport);
 });
 
@@ -430,3 +429,20 @@ document.addEventListener("languagechange", () => {
 });
 
 updateClassementSportLabel();
+
+// ---- Shared with challenges.js: same sports/presets are challengeable, and
+// challenge rankings use the exact same value/formatting logic. ----
+window.SportData = {
+  LEADERBOARD_SPORTS,
+  PRESET_KEYS,
+  FITNESS_METRIC,
+  NATATION_DISTANCES,
+  SWIM_STROKES,
+  CLASSEMENT_SPORT_LABEL_KEYS,
+  CLASSEMENT_SPORT_ICONS,
+  perfSeconds,
+  triathlonSeconds,
+  presetKeyForEntry,
+  formatSeconds,
+  formatFitnessValue,
+};

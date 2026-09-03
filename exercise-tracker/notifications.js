@@ -20,6 +20,8 @@ const notifRowTemplate = document.getElementById("notif-row-template");
 const NOTIF_TEXT_KEYS = {
   friend_request: "notifications.friendRequest",
   friend_accepted: "notifications.friendAccepted",
+  challenge_invite: "notifications.challengeInvite",
+  challenge_accepted: "notifications.challengeAccepted",
 };
 
 let notifications = [];
@@ -83,6 +85,10 @@ function openNotification(notif) {
   } else if (notif.type === "friend_accepted") {
     window.showView("profile");
     window.openFriendsView(0);
+  } else if (notif.type === "challenge_invite") {
+    window.openChallengesView && window.openChallengesView(1);
+  } else if (notif.type === "challenge_accepted") {
+    window.openChallengesView && window.openChallengesView(0);
   }
 }
 

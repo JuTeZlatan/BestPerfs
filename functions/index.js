@@ -66,6 +66,40 @@ exports.onFriendRequestAccepted = onDocumentUpdated("friendRequests/{requestId}"
   ]);
 });
 
+// New challenge invite received (skips the creator's own auto-accepted
+// participant doc, created in the same batch - only real invites notify).
+exports.onChallengeInviteCreated = onDocumentCreated("challengeParticipants/{participantId}", async (event) => {
+  const data = event.data.data();
+  if (data.status !== "pending" || data.uid === data.invitedBy) return;
+  const inviterSnap = await db.doc(`users/${data.invitedBy}`).get();
+  const inviterUsername = inviterSnap.exists ? inviterSnap.data().username : "";
+  await Promise.all([
+    sendToUser(data.uid, "Best Perfs", `${inviterUsername} te défie`),
+    db.collection("notifications").add({
+      uid: data.uid,
+      type: "challenge_invite",
+      fromUsername: inviterUsername,
+      createdAt: FieldValue.serverTimestamp(),
+    }),
+  ]);
+});
+
+// Challenge invite accepted - notify the challenge's creator.
+exports.onChallengeInviteAccepted = onDocumentUpdated("challengeParticipants/{participantId}", async (event) => {
+  const before = event.data.before.data();
+  const after = event.data.after.data();
+  if (before.status !== "pending" || after.status !== "accepted" || after.uid === after.invitedBy) return;
+  await Promise.all([
+    sendToUser(after.invitedBy, "Best Perfs", `${after.username} a rejoint ton défi`),
+    db.collection("notifications").add({
+      uid: after.invitedBy,
+      type: "challenge_accepted",
+      fromUsername: after.username,
+      createdAt: FieldValue.serverTimestamp(),
+    }),
+  ]);
+});
+
 // Deletes email/password signups that never clicked their confirmation link
 // within 10 minutes of finishing signup (username + birthdate submitted -
 // see account.js's usernameForm handler, which sets pendingEmailVerification

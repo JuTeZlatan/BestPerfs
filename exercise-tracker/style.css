@@ -166,18 +166,6 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
   display: block;
 }
 
-.classement-switcher.classement-switcher-fixed {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 600;
-  display: none;
-}
-
-body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switcher.classement-switcher-fixed {
-  display: block;
-}
-
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -311,29 +299,6 @@ body:has(#app-root:not([hidden]) #sports-view:not([hidden])) .classement-switche
 }
 
 .lang-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--float-shadow), var(--glow-soft);
-}
-
-.classement-icon-btn {
-  width: 36px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 12px;
-  border: none;
-  background: var(--card-gradient), var(--card-glass);
-  backdrop-filter: blur(6px);
-  box-shadow: var(--float-shadow);
-  color: var(--text);
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.15s ease;
-}
-
-.classement-icon-btn:hover {
   transform: translateY(-1px);
   box-shadow: var(--float-shadow), var(--glow-soft);
 }
@@ -1335,6 +1300,30 @@ h1 .view-icon {
   transform: translateY(-1px);
   box-shadow: var(--glow-strong);
 }
+
+.add-form-submit {
+  display: block;
+  width: 100%;
+  margin: 18px 0 8px;
+  padding: 14px 20px;
+  border-radius: var(--cut-sm);
+  border: none;
+  background: var(--accent-gradient);
+  color: var(--on-accent);
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: var(--float-shadow);
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.add-form-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-strong);
+}
 .add-form button[type="submit"]:active { transform: translateY(0); }
 
 
@@ -1785,6 +1774,77 @@ h1 .view-icon {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.challenge-row {
+  cursor: pointer;
+}
+
+.challenge-row-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent-2);
+  font-size: 1.05rem;
+}
+
+.challenge-row-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.challenge-row-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.challenge-row-dates {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+}
+
+.challenge-dates-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.challenge-date-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.challenge-date-field input[type="date"] {
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--field);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.challenge-friend-check {
+  cursor: pointer;
+}
+
+.challenge-friend-check .challenge-friend-checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
 }
 
 .classement-preset-dropdown {
