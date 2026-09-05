@@ -21,6 +21,7 @@
     "challenge-create-view",
     "challenge-detail-view",
     "profile-view",
+    "statistics-view",
     "account-view",
     "friends-view",
     "units-view",
@@ -94,6 +95,7 @@
   // the exact path taken to reach the current screen.
   const PARENT = {
     "account-view": "profile-view",
+    "statistics-view": "profile-view",
     "friends-view": "profile-view",
     "units-view": "profile-view",
     "themes-view": "profile-view",

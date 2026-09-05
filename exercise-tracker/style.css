@@ -1274,6 +1274,30 @@ h1 .view-icon {
   min-width: 0;
 }
 
+/* The description gets its own full-width line, with room for its long
+   placeholder example to actually be readable, instead of being squeezed
+   down to a sliver next to the distance/time fields on the same nowrap
+   row every other .add-form uses on narrow screens. The #id selector
+   outranks the mobile media query's .add-form { flex-wrap: nowrap }
+   regardless of source order. */
+#add-running-form {
+  flex-wrap: wrap;
+}
+
+#running-desc-input {
+  flex: 1 1 100%;
+  min-width: 0;
+  font-size: 0.95rem;
+  padding: 12px 14px;
+}
+
+.running-fields-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  width: 100%;
+}
+
 .add-form input:focus,
 .add-form select:focus {
   border-color: var(--accent);
@@ -1836,17 +1860,6 @@ h1 .view-icon {
   font-family: inherit;
 }
 
-.challenge-friend-check {
-  cursor: pointer;
-}
-
-.challenge-friend-check .challenge-friend-checkbox {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  accent-color: var(--accent);
-}
-
 .classement-preset-dropdown {
   max-width: 220px;
 }
@@ -1956,6 +1969,27 @@ h1 .view-icon {
 .friend-cancel-btn:hover,
 .friend-remove-btn:hover {
   color: var(--danger);
+}
+
+.friend-invite-remove-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.16);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.friend-invite-remove-btn:hover {
+  background: var(--danger);
+  color: #fff;
 }
 
 .exercise-name,

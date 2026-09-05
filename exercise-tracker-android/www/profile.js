@@ -13,9 +13,26 @@ supportBackBtn.addEventListener("click", () => {
   profileViewForSupport.hidden = false;
 });
 
+// ---- Statistics: placeholder for now, will surface real numbers computed
+// from the user's own logged performances once that's built. ----
+const profileStatisticsRow = document.getElementById("profile-statistics-row");
+const statisticsViewEl = document.getElementById("statistics-view");
+const statisticsBackBtn = document.getElementById("statistics-back-btn");
+
+profileStatisticsRow.addEventListener("click", () => {
+  profileViewForSupport.hidden = true;
+  statisticsViewEl.hidden = false;
+});
+
+statisticsBackBtn.addEventListener("click", () => {
+  statisticsViewEl.hidden = true;
+  profileViewForSupport.hidden = false;
+});
+
 document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     supportViewEl.hidden = true;
+    statisticsViewEl.hidden = true;
   });
 });
 

@@ -72,7 +72,7 @@ const challengesInvitesEmpty = document.getElementById("challenges-invites-empty
 
 const challengeRowTemplate = document.getElementById("challenge-row-template");
 const challengeInviteTemplate = document.getElementById("challenge-invite-template");
-const challengeFriendCheckTemplate = document.getElementById("challenge-friend-check-template");
+const challengeFriendSelectedTemplate = document.getElementById("challenge-friend-selected-template");
 const challengeRankingRowTemplate = document.getElementById("challenge-ranking-row-template");
 
 // ---- Sport/preset labels+icons+formatting come from leaderboard.js's
@@ -121,6 +121,8 @@ const ccPresetSelects = {
 const ccNatationStrokeSelect = document.getElementById("challenge-create-preset-natation-stroke");
 const ccStartInput = document.getElementById("challenge-create-start-input");
 const ccEndInput = document.getElementById("challenge-create-end-input");
+const ccFriendPickerBtn = document.getElementById("challenge-create-friend-picker-btn");
+const ccFriendPickerMenu = document.getElementById("challenge-create-friend-picker-menu");
 const ccFriendsList = document.getElementById("challenge-create-friends-list");
 const ccFriendsEmpty = document.getElementById("challenge-create-friends-empty");
 const ccErrorEl = document.getElementById("challenge-create-error");
@@ -130,6 +132,8 @@ let ccSport = "course";
 let ccPreset = null;
 let ccNatationDistance = null;
 let ccNatationStroke = null;
+let ccAllFriends = [];
+let ccSelectedFriends = [];
 
 function ccUpdateSportLabel() {
   ccSportLabel.textContent = sportLabel(ccSport);
@@ -180,6 +184,7 @@ document.addEventListener("click", (e) => {
     const menu = dropdown.querySelector(".classement-preset-menu");
     if (!menu.hidden && !dropdown.contains(e.target)) menu.hidden = true;
   });
+  if (!ccFriendPickerMenu.hidden && !ccFriendPickerMenu.contains(e.target) && e.target !== ccFriendPickerBtn) ccFriendPickerMenu.hidden = true;
 });
 
 function ccUpdateNatationPreset() {
@@ -253,21 +258,50 @@ async function getMyFriends() {
   ].sort((a, b) => a.username.localeCompare(b.username));
 }
 
-async function renderCreateFriendsList() {
-  const friends = await getMyFriends();
+const ccFriendPickerWrapper = document.getElementById("challenge-create-friend-picker");
+
+function ccRenderFriendPickerMenu() {
+  const available = ccAllFriends.filter((f) => !ccSelectedFriends.some((s) => s.uid === f.uid));
+  ccFriendPickerMenu.innerHTML = "";
+  available.forEach((friend) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sport-option";
+    btn.textContent = friend.username;
+    btn.addEventListener("click", () => {
+      ccSelectedFriends.push(friend);
+      ccFriendPickerMenu.hidden = true;
+      ccRenderFriendPickerMenu();
+      ccRenderSelectedFriendsList();
+    });
+    ccFriendPickerMenu.appendChild(btn);
+  });
+}
+
+function ccRenderSelectedFriendsList() {
   ccFriendsList.innerHTML = "";
-  ccFriendsEmpty.classList.toggle("visible", friends.length === 0);
-  friends.forEach((friend) => {
-    const node = challengeFriendCheckTemplate.content.cloneNode(true);
+  ccFriendPickerWrapper.hidden = ccAllFriends.length === 0;
+  ccFriendsEmpty.classList.toggle("visible", ccAllFriends.length === 0);
+  ccSelectedFriends.forEach((friend) => {
+    const node = challengeFriendSelectedTemplate.content.cloneNode(true);
     node.querySelector(".friend-row-name").textContent = friend.username;
-    const checkbox = node.querySelector(".challenge-friend-checkbox");
-    checkbox.value = friend.uid;
-    checkbox.dataset.username = friend.username;
+    node.querySelector(".friend-invite-remove-btn").addEventListener("click", () => {
+      ccSelectedFriends = ccSelectedFriends.filter((f) => f.uid !== friend.uid);
+      ccRenderFriendPickerMenu();
+      ccRenderSelectedFriendsList();
+    });
     ccFriendsList.appendChild(node);
   });
 }
 
-function openChallengeCreateView() {
+ccFriendPickerBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const opening = ccFriendPickerMenu.hidden;
+  window.closeAllDropdowns();
+  ccFriendPickerMenu.hidden = !opening;
+});
+
+async function openChallengeCreateView() {
   challengesViewEl.hidden = true;
   challengeCreateView.hidden = false;
   clearFieldError(ccErrorEl);
@@ -275,7 +309,11 @@ function openChallengeCreateView() {
   const today = todayISO();
   ccStartInput.value = today;
   ccEndInput.value = today;
-  renderCreateFriendsList();
+  ccSelectedFriends = [];
+  ccFriendPickerMenu.hidden = true;
+  ccAllFriends = await getMyFriends();
+  ccRenderFriendPickerMenu();
+  ccRenderSelectedFriendsList();
 }
 
 function clearFieldError(el) {
@@ -312,10 +350,7 @@ ccSubmitBtn.addEventListener("click", async () => {
     showFieldError(ccErrorEl, "challenges.errorDateOrder");
     return;
   }
-  const invitedUids = Array.from(ccFriendsList.querySelectorAll(".challenge-friend-checkbox:checked")).map((cb) => ({
-    uid: cb.value,
-    username: cb.dataset.username,
-  }));
+  const invitedUids = ccSelectedFriends.map((friend) => ({ uid: friend.uid, username: friend.username }));
 
   try {
     const challengeRef = doc(collection(db, "challenges"));
@@ -604,6 +639,17 @@ window.openChallengesView = openChallengesView;
 document.querySelector('.bottom-nav-btn[data-view="challenges"]').addEventListener("click", () => {
   setChallengesActiveTab(0);
   refreshChallengesData();
+});
+
+// Any bottom-nav switch (including re-tapping "Défis") must close these
+// sub-pages - they aren't part of NAV_VIEWS (timer.js's showView only
+// toggles the 5 top-level views), so without this they'd stay visible,
+// stacked underneath whichever main view showView() switches to.
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    challengeCreateView.hidden = true;
+    challengeDetailView.hidden = true;
+  });
 });
 
 ccUpdateSportLabel();

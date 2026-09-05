@@ -606,4 +606,15 @@ document.querySelector('.bottom-nav-btn[data-view="challenges"]').addEventListen
   refreshChallengesData();
 });
 
+// Any bottom-nav switch (including re-tapping "Défis") must close these
+// sub-pages - they aren't part of NAV_VIEWS (timer.js's showView only
+// toggles the 5 top-level views), so without this they'd stay visible,
+// stacked underneath whichever main view showView() switches to.
+document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    challengeCreateView.hidden = true;
+    challengeDetailView.hidden = true;
+  });
+});
+
 ccUpdateSportLabel();
