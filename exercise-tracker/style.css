@@ -1213,6 +1213,18 @@ h1 .view-icon {
   margin: 32px 0 12px;
 }
 
+.section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 12px;
+}
+
+.section-title-row .section-title {
+  flex: 1;
+  margin: 0;
+}
+
 .add-form {
   display: flex;
   flex-wrap: wrap;
@@ -1990,6 +2002,20 @@ h1 .view-icon {
 .friend-invite-remove-btn:hover {
   background: var(--danger);
   color: #fff;
+}
+
+.challenge-invite-suggestion {
+  cursor: pointer;
+}
+
+.challenge-invite-suggestion:hover {
+  background: var(--card-glass), var(--card-gradient);
+}
+
+#challenge-invite-suggestions {
+  margin-top: 10px;
+  max-height: 240px;
+  overflow-y: auto;
 }
 
 .exercise-name,

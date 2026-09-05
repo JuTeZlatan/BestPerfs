@@ -133,6 +133,7 @@
     ["date-prompt-modal", "date-prompt-cancel-btn"],
     ["proof-manager-modal", "proof-manager-close-btn"],
     ["friends-add-modal", "friends-add-cancel-btn"],
+    ["challenge-invite-modal", "challenge-invite-close-btn"],
     ["confirm-modal", "modal-cancel-btn"],
   ];
 

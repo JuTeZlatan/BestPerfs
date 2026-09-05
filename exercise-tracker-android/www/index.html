@@ -842,13 +842,9 @@
         </div>
       </div>
 
-      <p class="section-title" data-i18n="challenges.stepFriends">Inviter des amis</p>
-      <div id="challenge-create-friend-picker" class="sport-dropdown">
-        <button id="challenge-create-friend-picker-btn" class="sport-select-btn" type="button">
-          <span data-i18n="challenges.addFriendBtn">Ajouter un ami</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div id="challenge-create-friend-picker-menu" class="sport-menu" hidden></div>
+      <div class="section-title-row">
+        <p class="section-title" data-i18n="challenges.stepFriends">Inviter des amis</p>
+        <button id="challenge-create-friend-add-btn" class="friends-add-toggle-btn" type="button" data-i18n-title="challenges.addFriendBtn">+</button>
       </div>
       <div id="challenge-create-friends-list" class="exercise-list"></div>
       <p id="challenge-create-friends-empty" class="empty-state" data-i18n="challenges.noFriendsYet">Ajoute des amis pour pouvoir les défier.</p>
@@ -915,6 +911,12 @@
       <div class="friend-row challenge-friend-selected">
         <span class="friend-row-name"></span>
         <button class="friend-invite-remove-btn" type="button" data-i18n-title="challenges.removeFriendBtn">×</button>
+      </div>
+    </template>
+
+    <template id="challenge-invite-suggestion-template">
+      <div class="friend-row challenge-invite-suggestion">
+        <span class="friend-row-name"></span>
       </div>
     </template>
 
@@ -1310,6 +1312,18 @@
           <button type="submit" class="modal-btn primary" data-i18n="friends.addButton">Ajouter</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div id="challenge-invite-modal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <p class="modal-message" data-i18n="challenges.addFriendBtn">Ajouter un ami</p>
+      <input type="text" id="challenge-invite-search-input" class="modal-input" data-i18n-placeholder="challenges.inviteSearchPlaceholder" placeholder="Tape au moins 2 lettres du pseudo..." maxlength="24" autocomplete="off">
+      <div id="challenge-invite-suggestions" class="exercise-list"></div>
+      <p id="challenge-invite-empty" class="empty-state" data-i18n="challenges.inviteNoMatch" hidden>Aucun ami ne correspond.</p>
+      <div class="modal-actions">
+        <button type="button" id="challenge-invite-close-btn" class="modal-btn primary" data-i18n="common.close">Fermer</button>
+      </div>
     </div>
   </div>
 

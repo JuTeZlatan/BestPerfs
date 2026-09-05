@@ -72,7 +72,7 @@ const challengesInvitesEmpty = document.getElementById("challenges-invites-empty
 
 const challengeRowTemplate = document.getElementById("challenge-row-template");
 const challengeInviteTemplate = document.getElementById("challenge-invite-template");
-const challengeFriendCheckTemplate = document.getElementById("challenge-friend-check-template");
+const challengeFriendSelectedTemplate = document.getElementById("challenge-friend-selected-template");
 const challengeRankingRowTemplate = document.getElementById("challenge-ranking-row-template");
 
 // ---- Sport/preset labels+icons+formatting come from leaderboard.js's
@@ -121,6 +121,7 @@ const ccPresetSelects = {
 const ccNatationStrokeSelect = document.getElementById("challenge-create-preset-natation-stroke");
 const ccStartInput = document.getElementById("challenge-create-start-input");
 const ccEndInput = document.getElementById("challenge-create-end-input");
+const ccFriendAddBtn = document.getElementById("challenge-create-friend-add-btn");
 const ccFriendsList = document.getElementById("challenge-create-friends-list");
 const ccFriendsEmpty = document.getElementById("challenge-create-friends-empty");
 const ccErrorEl = document.getElementById("challenge-create-error");
@@ -130,6 +131,8 @@ let ccSport = "course";
 let ccPreset = null;
 let ccNatationDistance = null;
 let ccNatationStroke = null;
+let ccAllFriends = [];
+let ccSelectedFriends = [];
 
 function ccUpdateSportLabel() {
   ccSportLabel.textContent = sportLabel(ccSport);
@@ -253,21 +256,71 @@ async function getMyFriends() {
   ].sort((a, b) => a.username.localeCompare(b.username));
 }
 
-async function renderCreateFriendsList() {
-  const friends = await getMyFriends();
-  ccFriendsList.innerHTML = "";
-  ccFriendsEmpty.classList.toggle("visible", friends.length === 0);
-  friends.forEach((friend) => {
-    const node = challengeFriendCheckTemplate.content.cloneNode(true);
+// ---- Invite modal: type >= 2 characters to get suggestions drawn from the
+// user's own friend list (not a live server search - it's already a small,
+// locally-held list from getMyFriends()). ----
+const challengeInviteModal = document.getElementById("challenge-invite-modal");
+const challengeInviteSearchInput = document.getElementById("challenge-invite-search-input");
+const challengeInviteSuggestions = document.getElementById("challenge-invite-suggestions");
+const challengeInviteEmpty = document.getElementById("challenge-invite-empty");
+const challengeInviteCloseBtn = document.getElementById("challenge-invite-close-btn");
+const challengeInviteSuggestionTemplate = document.getElementById("challenge-invite-suggestion-template");
+
+function ccRenderInviteSuggestions() {
+  const queryText = challengeInviteSearchInput.value.trim().toLowerCase();
+  challengeInviteSuggestions.innerHTML = "";
+  if (queryText.length < 2) {
+    challengeInviteEmpty.classList.remove("visible");
+    return;
+  }
+  const available = ccAllFriends.filter(
+    (f) => !ccSelectedFriends.some((s) => s.uid === f.uid) && f.username.toLowerCase().includes(queryText)
+  );
+  challengeInviteEmpty.classList.toggle("visible", available.length === 0);
+  available.forEach((friend) => {
+    const node = challengeInviteSuggestionTemplate.content.cloneNode(true);
     node.querySelector(".friend-row-name").textContent = friend.username;
-    const checkbox = node.querySelector(".challenge-friend-checkbox");
-    checkbox.value = friend.uid;
-    checkbox.dataset.username = friend.username;
+    node.querySelector(".challenge-invite-suggestion").addEventListener("click", () => {
+      ccSelectedFriends.push(friend);
+      challengeInviteSearchInput.value = "";
+      challengeInviteSearchInput.focus();
+      ccRenderInviteSuggestions();
+      ccRenderSelectedFriendsList();
+    });
+    challengeInviteSuggestions.appendChild(node);
+  });
+}
+
+challengeInviteSearchInput.addEventListener("input", ccRenderInviteSuggestions);
+
+ccFriendAddBtn.addEventListener("click", () => {
+  challengeInviteSearchInput.value = "";
+  ccRenderInviteSuggestions();
+  challengeInviteModal.hidden = false;
+  challengeInviteSearchInput.focus();
+});
+
+challengeInviteCloseBtn.addEventListener("click", () => {
+  challengeInviteModal.hidden = true;
+});
+
+function ccRenderSelectedFriendsList() {
+  ccFriendsList.innerHTML = "";
+  ccFriendAddBtn.hidden = ccAllFriends.length === 0;
+  ccFriendsEmpty.classList.toggle("visible", ccAllFriends.length === 0);
+  ccSelectedFriends.forEach((friend) => {
+    const node = challengeFriendSelectedTemplate.content.cloneNode(true);
+    node.querySelector(".friend-row-name").textContent = friend.username;
+    node.querySelector(".friend-invite-remove-btn").addEventListener("click", () => {
+      ccSelectedFriends = ccSelectedFriends.filter((f) => f.uid !== friend.uid);
+      ccRenderInviteSuggestions();
+      ccRenderSelectedFriendsList();
+    });
     ccFriendsList.appendChild(node);
   });
 }
 
-function openChallengeCreateView() {
+async function openChallengeCreateView() {
   challengesViewEl.hidden = true;
   challengeCreateView.hidden = false;
   clearFieldError(ccErrorEl);
@@ -275,7 +328,10 @@ function openChallengeCreateView() {
   const today = todayISO();
   ccStartInput.value = today;
   ccEndInput.value = today;
-  renderCreateFriendsList();
+  ccSelectedFriends = [];
+  challengeInviteModal.hidden = true;
+  ccAllFriends = await getMyFriends();
+  ccRenderSelectedFriendsList();
 }
 
 function clearFieldError(el) {
@@ -312,10 +368,7 @@ ccSubmitBtn.addEventListener("click", async () => {
     showFieldError(ccErrorEl, "challenges.errorDateOrder");
     return;
   }
-  const invitedUids = Array.from(ccFriendsList.querySelectorAll(".challenge-friend-checkbox:checked")).map((cb) => ({
-    uid: cb.value,
-    username: cb.dataset.username,
-  }));
+  const invitedUids = ccSelectedFriends.map((friend) => ({ uid: friend.uid, username: friend.username }));
 
   try {
     const challengeRef = doc(collection(db, "challenges"));
@@ -614,6 +667,7 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     challengeCreateView.hidden = true;
     challengeDetailView.hidden = true;
+    challengeInviteModal.hidden = true;
   });
 });
 
