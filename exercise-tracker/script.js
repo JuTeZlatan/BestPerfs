@@ -89,10 +89,10 @@ function saveExercises() {
 
 function getSortedExercises() {
   if (sortOrder === "asc") {
-    return [...exercises].sort((a, b) => a.name.localeCompare(b.name, "fr"));
+    return [...exercises].sort((a, b) => (exerciseDisplayName(a) || "").localeCompare(exerciseDisplayName(b) || "", "fr"));
   }
   if (sortOrder === "desc") {
-    return [...exercises].sort((a, b) => b.name.localeCompare(a.name, "fr"));
+    return [...exercises].sort((a, b) => (exerciseDisplayName(b) || "").localeCompare(exerciseDisplayName(a) || "", "fr"));
   }
   const sorted = [...exercises].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   if (sortOrder === "date-asc") sorted.reverse();

@@ -873,6 +873,35 @@
         <input type="number" id="challenge-entry-s-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <input type="number" id="challenge-entry-cs-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
       </div>
+      <div id="challenge-entry-triathlon-fields" class="triathlon-panel" hidden>
+        <div class="triathlon-step">
+          <span class="triathlon-step-label"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="challenge-entry-tri-swim-h" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-swim-m" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-swim-s" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <input type="number" id="challenge-entry-tri-swim-cs" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+          </div>
+        </div>
+        <div class="triathlon-step">
+          <span class="triathlon-step-label"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="challenge-entry-tri-bike-h" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-bike-m" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-bike-s" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <input type="number" id="challenge-entry-tri-bike-cs" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+          </div>
+        </div>
+        <div class="triathlon-step">
+          <span class="triathlon-step-label"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg></span><span data-i18n="sport.running">Course à pied</span></span>
+          <div class="triathlon-step-fields">
+            <input type="number" id="challenge-entry-tri-run-h" class="preset-time-field" placeholder="H" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-run-m" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+            <input type="number" id="challenge-entry-tri-run-s" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+            <input type="number" id="challenge-entry-tri-run-cs" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+          </div>
+        </div>
+      </div>
       <button id="challenge-entry-submit-btn" class="add-form-submit" type="button" data-i18n="challenges.saveStatBtn">Enregistrer ma perf</button>
       <p id="challenge-entry-closed-msg" class="empty-state" data-i18n="challenges.entryClosed" hidden>Ce défi n'est pas (ou plus) actif : impossible d'enregistrer une perf en dehors de sa période.</p>
 

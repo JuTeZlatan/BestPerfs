@@ -497,6 +497,27 @@ const challengeEntryHInput = document.getElementById("challenge-entry-h-input");
 const challengeEntryMInput = document.getElementById("challenge-entry-m-input");
 const challengeEntrySInput = document.getElementById("challenge-entry-s-input");
 const challengeEntryCsInput = document.getElementById("challenge-entry-cs-input");
+const challengeEntryTriathlonFields = document.getElementById("challenge-entry-triathlon-fields");
+const challengeEntryTriLegInputs = {
+  swim: {
+    h: document.getElementById("challenge-entry-tri-swim-h"),
+    m: document.getElementById("challenge-entry-tri-swim-m"),
+    s: document.getElementById("challenge-entry-tri-swim-s"),
+    cs: document.getElementById("challenge-entry-tri-swim-cs"),
+  },
+  bike: {
+    h: document.getElementById("challenge-entry-tri-bike-h"),
+    m: document.getElementById("challenge-entry-tri-bike-m"),
+    s: document.getElementById("challenge-entry-tri-bike-s"),
+    cs: document.getElementById("challenge-entry-tri-bike-cs"),
+  },
+  run: {
+    h: document.getElementById("challenge-entry-tri-run-h"),
+    m: document.getElementById("challenge-entry-tri-run-m"),
+    s: document.getElementById("challenge-entry-tri-run-s"),
+    cs: document.getElementById("challenge-entry-tri-run-cs"),
+  },
+};
 const challengeEntrySubmitBtn = document.getElementById("challenge-entry-submit-btn");
 const challengeEntryClosedMsg = document.getElementById("challenge-entry-closed-msg");
 
@@ -508,6 +529,22 @@ function challengeIsActive(challenge) {
   return challenge.startDate <= today && today <= challenge.endDate;
 }
 
+function secondsFromParts(h, m, s, cs) {
+  return (Number(h) || 0) * 3600 + (Number(m) || 0) * 60 + (Number(s) || 0) + (Number(cs) || 0) / 100;
+}
+
+function fillTimeParts(inputs, totalSeconds) {
+  const seconds = totalSeconds || 0;
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  const cs = Math.round((seconds - Math.floor(seconds)) * 100);
+  inputs.h.value = h || "";
+  inputs.m.value = m || "";
+  inputs.s.value = s || "";
+  inputs.cs.value = cs || "";
+}
+
 // Personal sport/exercise logs and challenge performances are deliberately
 // separate: a challenge entry is only ever what a participant explicitly
 // enters here, for that challenge, while it's running - never derived from
@@ -517,7 +554,8 @@ function setupChallengeEntryForm(challenge) {
   challengeEntrySubmitBtn.hidden = !active;
   challengeEntryClosedMsg.hidden = active;
   challengeEntryFitnessFields.hidden = !active || challenge.sport !== "fitness";
-  challengeEntryTimeFields.hidden = !active || challenge.sport === "fitness";
+  challengeEntryTriathlonFields.hidden = !active || challenge.sport !== "triathlon";
+  challengeEntryTimeFields.hidden = !active || challenge.sport === "fitness" || challenge.sport === "triathlon";
   if (challenge.sport === "fitness") {
     const metric = window.SportData.FITNESS_METRIC[challenge.presetKey];
     challengeEntryFitnessInput.placeholder = metric === "weight" ? window.weightUnitLabel() : t("field.reps");
@@ -525,20 +563,22 @@ function setupChallengeEntryForm(challenge) {
   }
 }
 
-function fillChallengeEntryForm(challenge, value) {
-  if (value == null) return;
+function fillChallengeEntryForm(challenge, row) {
+  if (!row) return;
   if (challenge.sport === "fitness") {
-    challengeEntryFitnessInput.value = value;
+    challengeEntryFitnessInput.value = row.value;
     return;
   }
-  const h = Math.floor(value / 3600);
-  const m = Math.floor((value % 3600) / 60);
-  const s = Math.floor(value % 60);
-  const cs = Math.round((value - Math.floor(value)) * 100);
-  challengeEntryHInput.value = h || "";
-  challengeEntryMInput.value = m || "";
-  challengeEntrySInput.value = s || "";
-  challengeEntryCsInput.value = cs || "";
+  if (challenge.sport === "triathlon") {
+    fillTimeParts(challengeEntryTriLegInputs.swim, row.swimSeconds);
+    fillTimeParts(challengeEntryTriLegInputs.bike, row.bikeSeconds);
+    fillTimeParts(challengeEntryTriLegInputs.run, row.runSeconds);
+    return;
+  }
+  fillTimeParts(
+    { h: challengeEntryHInput, m: challengeEntryMInput, s: challengeEntrySInput, cs: challengeEntryCsInput },
+    row.value
+  );
 }
 
 challengeEntrySubmitBtn.addEventListener("click", async () => {
@@ -548,15 +588,24 @@ challengeEntrySubmitBtn.addEventListener("click", async () => {
   if (!uid || !username) return;
 
   let value;
+  const extra = {};
   if (currentChallenge.sport === "fitness") {
     value = Number(challengeEntryFitnessInput.value);
     if (!Number.isFinite(value) || challengeEntryFitnessInput.value === "") return;
+  } else if (currentChallenge.sport === "triathlon") {
+    const legs = challengeEntryTriLegInputs;
+    extra.swimSeconds = secondsFromParts(legs.swim.h.value, legs.swim.m.value, legs.swim.s.value, legs.swim.cs.value);
+    extra.bikeSeconds = secondsFromParts(legs.bike.h.value, legs.bike.m.value, legs.bike.s.value, legs.bike.cs.value);
+    extra.runSeconds = secondsFromParts(legs.run.h.value, legs.run.m.value, legs.run.s.value, legs.run.cs.value);
+    value = extra.swimSeconds + extra.bikeSeconds + extra.runSeconds;
+    if (value <= 0) return;
   } else {
-    const h = Number(challengeEntryHInput.value) || 0;
-    const m = Number(challengeEntryMInput.value) || 0;
-    const s = Number(challengeEntrySInput.value) || 0;
-    const cs = Number(challengeEntryCsInput.value) || 0;
-    value = h * 3600 + m * 60 + s + cs / 100;
+    value = secondsFromParts(
+      challengeEntryHInput.value,
+      challengeEntryMInput.value,
+      challengeEntrySInput.value,
+      challengeEntryCsInput.value
+    );
     if (value <= 0) return;
   }
 
@@ -568,6 +617,7 @@ challengeEntrySubmitBtn.addEventListener("click", async () => {
       sport: currentChallenge.sport,
       presetKey: currentChallenge.presetKey,
       value,
+      ...extra,
       updatedAt: serverTimestamp(),
     });
   } catch (error) {
@@ -601,7 +651,7 @@ function openChallengeDetail(challenge) {
 function renderChallengeRanking(challenge, rows) {
   const uid = myUid();
   const myRow = rows.find((r) => r.uid === uid);
-  if (myRow) fillChallengeEntryForm(challenge, myRow.value);
+  if (myRow) fillChallengeEntryForm(challenge, myRow);
   const sorted = [...rows].sort((a, b) =>
     challenge.sport === "fitness" ? b.value - a.value : a.value - b.value
   );
