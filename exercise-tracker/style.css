@@ -1310,6 +1310,20 @@ h1 .view-icon {
   width: 100%;
 }
 
+/* Hiking has too many fields (name, distance, time, D+, D-) to fit on one
+   nowrap row on mobile - let it wrap onto several lines instead, with the
+   name field given its own full-width line like running's description. */
+#add-hiking-form {
+  flex-wrap: wrap;
+}
+
+#hiking-name-input {
+  flex: 1 1 100%;
+  min-width: 0;
+  font-size: 0.95rem;
+  padding: 12px 14px;
+}
+
 .add-form input:focus,
 .add-form select:focus {
   border-color: var(--accent);
@@ -3060,6 +3074,7 @@ textarea.modal-input {
   }
 
   .perf-distance-display,
+  .perf-elevation-display,
   .perf-size-display,
   .perf-time-display {
     padding: 2px 6px 2px 5px;
@@ -3070,6 +3085,7 @@ textarea.modal-input {
   }
 
   .perf-distance-display .chip-icon,
+  .perf-elevation-display .chip-icon,
   .perf-size-display .chip-icon,
   .perf-time-display .chip-icon {
     font-size: 0.6rem;
@@ -3077,9 +3093,22 @@ textarea.modal-input {
   }
 
   .perf-distance-display .chip-num,
+  .perf-elevation-display .chip-num,
   .perf-size-display .chip-num,
   .perf-time-display .chip-num {
     font-size: 0.76rem;
+  }
+
+  /* Hiking shows 3 metric chips (distance, elevation, time) instead of the
+     usual 2, so it needs its own line under the name on mobile - otherwise
+     the name field gets squeezed down to almost nothing to make room. */
+  .hiking-perf-card {
+    flex-wrap: wrap;
+  }
+
+  .hiking-perf-card .perf-text {
+    flex: 1 1 100%;
+    min-width: 0;
   }
 
   .chip-num-sub {

@@ -367,6 +367,7 @@
           <button class="sport-option" data-sport="natation"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></button>
           <button class="sport-option" data-sport="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
           <button class="sport-option" data-sport="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
+          <button class="sport-option" data-sport="randonnee"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5.5-9 4 5 2.5-3.5L21 20H3z"/><circle cx="17" cy="6" r="2"/></svg></span><span data-i18n="sport.hiking">Randonnée</span></button>
         </div>
       </div>
 
@@ -458,6 +459,18 @@
         <input type="number" id="cycling-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
         <input type="number" id="cycling-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
         <input type="number" id="cycling-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <form id="add-hiking-form" class="add-form" hidden>
+        <input type="text" id="hiking-name-input" data-i18n-placeholder="sport.hiking.namePlaceholder" placeholder="Nom de la rando (ex: Tour du Mont Blanc)" maxlength="40" required>
+        <input type="number" id="hiking-distance-input" class="distance-field" placeholder="Distance (km)" min="0" step="0.1" required>
+        <input type="number" id="hiking-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
+        <input type="number" id="hiking-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="hiking-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <input type="number" id="hiking-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+        <input type="number" id="hiking-elevation-gain-input" class="distance-field" data-i18n-placeholder="field.elevationGain" placeholder="D+ (m)" min="0" step="1">
+        <input type="number" id="hiking-elevation-loss-input" class="distance-field" data-i18n-placeholder="field.elevationLoss" placeholder="D- (m)" min="0" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
       </form>
 
@@ -1583,6 +1596,31 @@
           <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
         </span>
         <span class="perf-distance-display"></span>
+        <span class="perf-time-display"></span>
+      </div>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-info" type="button" data-i18n="info.title">Infos</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="hiking-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card hiking-perf-card">
+        <input type="text" class="perf-text" maxlength="40" placeholder="Nom de la rando" readonly>
+        <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
+        <span class="perf-distance-display"></span>
+        <span class="perf-elevation-display perf-time-tappable"></span>
         <span class="perf-time-display"></span>
       </div>
       <div class="row-menu">

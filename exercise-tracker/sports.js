@@ -38,6 +38,17 @@ const cyclingMinutesInput = document.getElementById("cycling-minutes-input");
 const cyclingSecondsInput = document.getElementById("cycling-seconds-input");
 const cyclingHundredthsInput = document.getElementById("cycling-hundredths-input");
 
+const hikingTemplate = document.getElementById("hiking-perf-template");
+const addHikingForm = document.getElementById("add-hiking-form");
+const hikingNameInput = document.getElementById("hiking-name-input");
+const hikingDistanceInput = document.getElementById("hiking-distance-input");
+const hikingHoursInput = document.getElementById("hiking-hours-input");
+const hikingMinutesInput = document.getElementById("hiking-minutes-input");
+const hikingSecondsInput = document.getElementById("hiking-seconds-input");
+const hikingHundredthsInput = document.getElementById("hiking-hundredths-input");
+const hikingElevationGainInput = document.getElementById("hiking-elevation-gain-input");
+const hikingElevationLossInput = document.getElementById("hiking-elevation-loss-input");
+
 const addRunningForm = document.getElementById("add-running-form");
 const runningDescInput = document.getElementById("running-desc-input");
 const runningDistanceSelect = document.getElementById("running-distance-select");
@@ -80,7 +91,7 @@ const triFields = {
   },
 };
 
-const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon"];
+const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon", "randonnee"];
 const TRIATHLON_SIZE_ORDER = { XS: 0, S: 1, M: 2, L: 3, XL: 4 };
 
 function distanceUnitFor(sport) {
@@ -154,8 +165,10 @@ const ICON_SWIMMING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="n
 const ICON_CYCLING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg>';
 const ICON_TRIATHLON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>';
 const ICON_FITNESS = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg>';
-const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
-const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON };
+const ICON_HIKING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5.5-9 4 5 2.5-3.5L21 20H3z"/><circle cx="17" cy="6" r="2"/></svg>';
+const ICON_ELEVATION = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16"/><path d="M3 7l3-3 3 3"/><path d="M18 20V4"/><path d="M21 17l-3 3-3-3"/></svg>';
+const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING };
+const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING };
 const SWIM_STROKE_LABEL_KEYS = {
   freestyle: "swimStroke.freestyle",
   backstroke: "swimStroke.backstroke",
@@ -168,6 +181,7 @@ const TEXT_PLACEHOLDER_KEYS = {
   velo: "sport.locationPlaceholder",
   course: "sport.running.descPlaceholder",
   triathlon: "sport.locationPlaceholder",
+  randonnee: "sport.hiking.namePlaceholder",
 };
 
 function timeChipHTML(perf, sport) {
@@ -188,6 +202,26 @@ function distanceChipHTML(perf, sport) {
   }
   const displayValue = distanceToDisplay(perf.distance, sport);
   return `<span class="chip-icon">${SPORT_ICONS[sport]}</span><span class="chip-num">${displayValue}</span><span class="chip-unit">${distanceUnitFor(sport)}</span>`;
+}
+
+// The row shows only the combined D+/D- total (what the user asked to be
+// "calculated") - the individual gain/loss values are one tap away via the
+// info-style popup, same as triathlon's leg breakdown.
+function elevationChipHTML(perf) {
+  const total = (perf.elevationGain ?? 0) + (perf.elevationLoss ?? 0);
+  return `<span class="chip-icon">${ICON_ELEVATION}</span><span class="chip-num">${mToDisplay(total)}</span><span class="chip-unit">${mUnitLabel()}</span>`;
+}
+
+function elevationPopupRowHTML(label, meters) {
+  return `<div class="tri-popup-row"><span class="tri-popup-time">${label} ${mToDisplay(meters ?? 0)} ${mUnitLabel()}</span></div>`;
+}
+
+function toggleElevationPopup(anchorEl, perf) {
+  anchorEl.dataset.popupId = anchorEl.dataset.popupId || `elev-${perf.id}`;
+  showFloatingPopup(
+    anchorEl,
+    elevationPopupRowHTML("D+", perf.elevationGain) + elevationPopupRowHTML("D-", perf.elevationLoss)
+  );
 }
 
 function sizeChipHTML(perf) {
@@ -272,9 +306,9 @@ function computeBestIds(entries, sport) {
   return bestIds;
 }
 
-const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm };
-const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate };
-const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon" };
+const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm, randonnee: addHikingForm };
+const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate, randonnee: hikingTemplate };
+const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon", randonnee: "sport.hiking" };
 
 let currentSport = "fitness";
 let sportPerfs = loadSportPerfs();
@@ -288,9 +322,10 @@ function loadSportPerfs() {
       velo: parsed.velo || [],
       course: parsed.course || [],
       triathlon: parsed.triathlon || [],
+      randonnee: parsed.randonnee || [],
     };
   } catch {
-    return { natation: [], velo: [], course: [], triathlon: [] };
+    return { natation: [], velo: [], course: [], triathlon: [], randonnee: [] };
   }
 }
 
@@ -474,6 +509,15 @@ function renderSportList() {
       distanceDisplay.hidden = !html;
     }
 
+    const elevationDisplay = node.querySelector(".perf-elevation-display");
+    if (elevationDisplay) {
+      elevationDisplay.innerHTML = elevationChipHTML(perf);
+      elevationDisplay.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleElevationPopup(elevationDisplay, perf);
+      });
+    }
+
     const sizeDisplay = node.querySelector(".perf-size-display");
     if (sizeDisplay) sizeDisplay.innerHTML = sizeChipHTML(perf);
 
@@ -645,6 +689,34 @@ addCyclingForm.addEventListener("submit", async (e) => {
   renderSportList();
 });
 
+addHikingForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const text = hikingNameInput.value.trim();
+  if (!text || hikingDistanceInput.value === "") return;
+  const perf = {
+    id: crypto.randomUUID(),
+    date: todayISO(),
+    text,
+    distance: distanceFromDisplay(Number(hikingDistanceInput.value), "randonnee"),
+    hours: hikingHoursInput.value === "" ? null : Number(hikingHoursInput.value),
+    minutes: hikingMinutesInput.value === "" ? null : Number(hikingMinutesInput.value),
+    seconds: hikingSecondsInput.value === "" ? null : Number(hikingSecondsInput.value),
+    hundredths: hikingHundredthsInput.value === "" ? null : Number(hikingHundredthsInput.value),
+    elevationGain: hikingElevationGainInput.value === "" ? null : mFromDisplay(Number(hikingElevationGainInput.value)),
+    elevationLoss: hikingElevationLossInput.value === "" ? null : mFromDisplay(Number(hikingElevationLossInput.value)),
+  };
+  addHikingForm.reset();
+  hikingNameInput.focus();
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
+  sportPerfs.randonnee.push(perf);
+  saveSportPerfs();
+  renderSportList();
+});
+
 addRunningForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = runningDescInput.value.trim();
@@ -803,6 +875,9 @@ function updateDistancePlaceholders() {
   swimDistanceManualInput.placeholder = `${distanceLabel} (${mUnitLabel()})`;
   cyclingDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
   runningDistanceManualInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+  hikingDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+  hikingElevationGainInput.placeholder = `${t("field.elevationGain")} (${mUnitLabel()})`;
+  hikingElevationLossInput.placeholder = `${t("field.elevationLoss")} (${mUnitLabel()})`;
 }
 
 document.addEventListener("languagechange", () => {
