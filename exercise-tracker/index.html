@@ -370,6 +370,8 @@
         </div>
       </div>
 
+      <p id="sports-neutral-state" class="empty-state" data-i18n="sports.chooseSportPrompt">Choisis un sport ci-dessus pour commencer.</p>
+
       <div id="fitness-panel" class="sport-panel" hidden>
         <form id="add-form" class="add-form">
           <div id="exercise-select" class="distance-dropdown" data-value="pushups">
@@ -715,118 +717,131 @@
         <h1 data-i18n="challenges.createTitle">Nouveau défi</h1>
       </div>
 
-      <p class="section-title" data-i18n="challenges.stepSport">Discipline</p>
-      <div class="sport-dropdown">
-        <button id="challenge-create-sport-select-btn" class="sport-select-btn" type="button">
-          <span id="challenge-create-sport-select-icon" class="sport-select-icon"></span>
-          <span id="challenge-create-sport-select-label"></span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div id="challenge-create-sport-menu" class="sport-menu" hidden>
-          <button class="sport-option active" data-sport="course"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg></span><span data-i18n="sport.running">Course à pied</span></button>
-          <button class="sport-option" data-sport="natation"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></button>
-          <button class="sport-option" data-sport="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
-          <button class="sport-option" data-sport="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
-          <button class="sport-option" data-sport="fitness"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg></span><span data-i18n="sport.fitness">Fitness</span></button>
-        </div>
+      <p class="section-title" data-i18n="challenges.stepSport">Choix du défi</p>
+      <div class="friends-tab-bar">
+        <button class="friends-tab-btn active" type="button" data-i18n="challenges.classicTab">Classique</button>
+        <button class="friends-tab-btn" type="button" data-i18n="challenges.customTab">Personnalisable</button>
       </div>
+      <div id="challenge-create-tab-viewport" class="friends-tab-viewport">
+        <div id="challenge-create-tab-track" class="friends-tab-track">
+          <div class="friends-tab-page">
+            <div class="sport-dropdown">
+              <button id="challenge-create-sport-select-btn" class="sport-select-btn" type="button">
+                <span id="challenge-create-sport-select-icon" class="sport-select-icon"></span>
+                <span id="challenge-create-sport-select-label"></span>
+                <span class="dropdown-arrow">▾</span>
+              </button>
+              <div id="challenge-create-sport-menu" class="sport-menu" hidden>
+                <button class="sport-option active" data-sport="course"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg></span><span data-i18n="sport.running">Course à pied</span></button>
+                <button class="sport-option" data-sport="natation"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></button>
+                <button class="sport-option" data-sport="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
+                <button class="sport-option" data-sport="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
+                <button class="sport-option" data-sport="fitness"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg></span><span data-i18n="sport.fitness">Fitness</span></button>
+              </div>
+            </div>
 
-      <div id="challenge-create-preset-course" class="sport-dropdown classement-preset-dropdown">
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="0.1">100 m</button>
-          <button class="sport-option" type="button" data-value="0.2">200 m</button>
-          <button class="sport-option" type="button" data-value="0.4">400 m</button>
-          <button class="sport-option" type="button" data-value="0.8">800 m</button>
-          <button class="sport-option" type="button" data-value="1.5">1500 m</button>
-          <button class="sport-option" type="button" data-value="3">3 km</button>
-          <button class="sport-option" type="button" data-value="5">5 km</button>
-          <button class="sport-option" type="button" data-value="10">10 km</button>
-          <button class="sport-option" type="button" data-value="half" data-i18n="sport.halfMarathon">Semi-marathon</button>
-          <button class="sport-option" type="button" data-value="marathon" data-i18n="sport.marathon">Marathon</button>
-        </div>
-      </div>
-      <div class="classement-natation-row">
-        <div id="challenge-create-preset-natation" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
-          <button class="sport-select-btn classement-preset-btn" type="button">
-            <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
-            <span class="dropdown-arrow">▾</span>
-          </button>
-          <div class="sport-menu classement-preset-menu" hidden>
-            <button class="sport-option" type="button" data-value="50">50 m</button>
-            <button class="sport-option" type="button" data-value="100">100 m</button>
-            <button class="sport-option" type="button" data-value="200">200 m</button>
-            <button class="sport-option" type="button" data-value="400">400 m</button>
-            <button class="sport-option" type="button" data-value="800">800 m</button>
-            <button class="sport-option" type="button" data-value="1500">1500 m</button>
-            <button class="sport-option" type="button" data-value="5000">5 km</button>
-            <button class="sport-option" type="button" data-value="10000">10 km</button>
+            <div id="challenge-create-preset-course" class="sport-dropdown classement-preset-dropdown">
+              <button class="sport-select-btn classement-preset-btn" type="button">
+                <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
+                <span class="dropdown-arrow">▾</span>
+              </button>
+              <div class="sport-menu classement-preset-menu" hidden>
+                <button class="sport-option" type="button" data-value="0.1">100 m</button>
+                <button class="sport-option" type="button" data-value="0.2">200 m</button>
+                <button class="sport-option" type="button" data-value="0.4">400 m</button>
+                <button class="sport-option" type="button" data-value="0.8">800 m</button>
+                <button class="sport-option" type="button" data-value="1.5">1500 m</button>
+                <button class="sport-option" type="button" data-value="3">3 km</button>
+                <button class="sport-option" type="button" data-value="5">5 km</button>
+                <button class="sport-option" type="button" data-value="10">10 km</button>
+                <button class="sport-option" type="button" data-value="half" data-i18n="sport.halfMarathon">Semi-marathon</button>
+                <button class="sport-option" type="button" data-value="marathon" data-i18n="sport.marathon">Marathon</button>
+              </div>
+            </div>
+            <div class="classement-natation-row">
+              <div id="challenge-create-preset-natation" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
+                <button class="sport-select-btn classement-preset-btn" type="button">
+                  <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
+                  <span class="dropdown-arrow">▾</span>
+                </button>
+                <div class="sport-menu classement-preset-menu" hidden>
+                  <button class="sport-option" type="button" data-value="50">50 m</button>
+                  <button class="sport-option" type="button" data-value="100">100 m</button>
+                  <button class="sport-option" type="button" data-value="200">200 m</button>
+                  <button class="sport-option" type="button" data-value="400">400 m</button>
+                  <button class="sport-option" type="button" data-value="800">800 m</button>
+                  <button class="sport-option" type="button" data-value="1500">1500 m</button>
+                  <button class="sport-option" type="button" data-value="5000">5 km</button>
+                  <button class="sport-option" type="button" data-value="10000">10 km</button>
+                </div>
+              </div>
+              <div id="challenge-create-preset-natation-stroke" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
+                <button class="sport-select-btn classement-preset-btn" type="button">
+                  <span class="classement-preset-label" data-i18n="classement.chooseStroke">Choisis un style de nage</span>
+                  <span class="dropdown-arrow">▾</span>
+                </button>
+                <div class="sport-menu classement-preset-menu" hidden>
+                  <button class="sport-option" type="button" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
+                  <button class="sport-option" type="button" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
+                  <button class="sport-option" type="button" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
+                  <button class="sport-option" type="button" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
+                  <button class="sport-option" type="button" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+                </div>
+              </div>
+            </div>
+            <div id="challenge-create-preset-triathlon" class="sport-dropdown classement-preset-dropdown" hidden>
+              <button class="sport-select-btn classement-preset-btn" type="button">
+                <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
+                <span class="dropdown-arrow">▾</span>
+              </button>
+              <div class="sport-menu classement-preset-menu" hidden>
+                <button class="sport-option" type="button" data-value="XS">XS</button>
+                <button class="sport-option" type="button" data-value="S">S</button>
+                <button class="sport-option" type="button" data-value="M">M</button>
+                <button class="sport-option" type="button" data-value="L">L</button>
+                <button class="sport-option" type="button" data-value="XL">XL</button>
+              </div>
+            </div>
+            <div id="challenge-create-preset-velo" class="sport-dropdown classement-preset-dropdown" hidden>
+              <button class="sport-select-btn classement-preset-btn" type="button">
+                <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
+                <span class="dropdown-arrow">▾</span>
+              </button>
+              <div class="sport-menu classement-preset-menu" hidden>
+                <button class="sport-option" type="button" data-value="0-10">0-10 km</button>
+                <button class="sport-option" type="button" data-value="10-20">10-20 km</button>
+                <button class="sport-option" type="button" data-value="20-30">20-30 km</button>
+                <button class="sport-option" type="button" data-value="30-40">30-40 km</button>
+                <button class="sport-option" type="button" data-value="40-50">40-50 km</button>
+                <button class="sport-option" type="button" data-value="50-60">50-60 km</button>
+                <button class="sport-option" type="button" data-value="60-70">60-70 km</button>
+                <button class="sport-option" type="button" data-value="70-80">70-80 km</button>
+                <button class="sport-option" type="button" data-value="80-90">80-90 km</button>
+                <button class="sport-option" type="button" data-value="90-100">90-100 km</button>
+                <button class="sport-option" type="button" data-value="100-150">100-150 km</button>
+                <button class="sport-option" type="button" data-value="150-200">150-200 km</button>
+                <button class="sport-option" type="button" data-value="200-300">200-300 km</button>
+              </div>
+            </div>
+            <div id="challenge-create-preset-fitness" class="sport-dropdown classement-preset-dropdown" hidden>
+              <button class="sport-select-btn classement-preset-btn" type="button">
+                <span class="classement-preset-label" data-i18n="classement.chooseExercise">Choisis un exercice</span>
+                <span class="dropdown-arrow">▾</span>
+              </button>
+              <div class="sport-menu classement-preset-menu" hidden>
+                <button class="sport-option" type="button" data-value="pushups" data-i18n="exercise.pushups">Pompes</button>
+                <button class="sport-option" type="button" data-value="situps" data-i18n="exercise.situps">Abdos</button>
+                <button class="sport-option" type="button" data-value="pullups" data-i18n="exercise.pullups">Tractions</button>
+                <button class="sport-option" type="button" data-value="dips" data-i18n="exercise.dips">Dips</button>
+                <button class="sport-option" type="button" data-value="benchpress" data-i18n="exercise.benchpress">Développé couché</button>
+                <button class="sport-option" type="button" data-value="curls" data-i18n="exercise.curls">Curls</button>
+                <button class="sport-option" type="button" data-value="squats" data-i18n="exercise.squats">Squats</button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div id="challenge-create-preset-natation-stroke" class="sport-dropdown classement-preset-dropdown classement-preset-dropdown-half" hidden>
-          <button class="sport-select-btn classement-preset-btn" type="button">
-            <span class="classement-preset-label" data-i18n="classement.chooseStroke">Choisis un style de nage</span>
-            <span class="dropdown-arrow">▾</span>
-          </button>
-          <div class="sport-menu classement-preset-menu" hidden>
-            <button class="sport-option" type="button" data-value="freestyle" data-i18n="swimStroke.freestyle">Nage libre</button>
-            <button class="sport-option" type="button" data-value="backstroke" data-i18n="swimStroke.backstroke">Dos</button>
-            <button class="sport-option" type="button" data-value="breaststroke" data-i18n="swimStroke.breaststroke">Brasse</button>
-            <button class="sport-option" type="button" data-value="butterfly" data-i18n="swimStroke.butterfly">Papillon</button>
-            <button class="sport-option" type="button" data-value="medley" data-i18n="swimStroke.medley">4 nages</button>
+          <div class="friends-tab-page">
+            <p class="empty-state visible" data-i18n="challenges.customComingSoon">Bientôt disponible : crée un défi entièrement personnalisé.</p>
           </div>
-        </div>
-      </div>
-      <div id="challenge-create-preset-triathlon" class="sport-dropdown classement-preset-dropdown" hidden>
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="XS">XS</button>
-          <button class="sport-option" type="button" data-value="S">S</button>
-          <button class="sport-option" type="button" data-value="M">M</button>
-          <button class="sport-option" type="button" data-value="L">L</button>
-          <button class="sport-option" type="button" data-value="XL">XL</button>
-        </div>
-      </div>
-      <div id="challenge-create-preset-velo" class="sport-dropdown classement-preset-dropdown" hidden>
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.choosePreset">Choisis une distance</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="0-10">0-10 km</button>
-          <button class="sport-option" type="button" data-value="10-20">10-20 km</button>
-          <button class="sport-option" type="button" data-value="20-30">20-30 km</button>
-          <button class="sport-option" type="button" data-value="30-40">30-40 km</button>
-          <button class="sport-option" type="button" data-value="40-50">40-50 km</button>
-          <button class="sport-option" type="button" data-value="50-60">50-60 km</button>
-          <button class="sport-option" type="button" data-value="60-70">60-70 km</button>
-          <button class="sport-option" type="button" data-value="70-80">70-80 km</button>
-          <button class="sport-option" type="button" data-value="80-90">80-90 km</button>
-          <button class="sport-option" type="button" data-value="90-100">90-100 km</button>
-          <button class="sport-option" type="button" data-value="100-150">100-150 km</button>
-          <button class="sport-option" type="button" data-value="150-200">150-200 km</button>
-          <button class="sport-option" type="button" data-value="200-300">200-300 km</button>
-        </div>
-      </div>
-      <div id="challenge-create-preset-fitness" class="sport-dropdown classement-preset-dropdown" hidden>
-        <button class="sport-select-btn classement-preset-btn" type="button">
-          <span class="classement-preset-label" data-i18n="classement.chooseExercise">Choisis un exercice</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
-        <div class="sport-menu classement-preset-menu" hidden>
-          <button class="sport-option" type="button" data-value="pushups" data-i18n="exercise.pushups">Pompes</button>
-          <button class="sport-option" type="button" data-value="situps" data-i18n="exercise.situps">Abdos</button>
-          <button class="sport-option" type="button" data-value="pullups" data-i18n="exercise.pullups">Tractions</button>
-          <button class="sport-option" type="button" data-value="dips" data-i18n="exercise.dips">Dips</button>
-          <button class="sport-option" type="button" data-value="benchpress" data-i18n="exercise.benchpress">Développé couché</button>
-          <button class="sport-option" type="button" data-value="curls" data-i18n="exercise.curls">Curls</button>
-          <button class="sport-option" type="button" data-value="squats" data-i18n="exercise.squats">Squats</button>
         </div>
       </div>
 

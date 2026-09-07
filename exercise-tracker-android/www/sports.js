@@ -13,6 +13,7 @@ const sportMenuEl = document.getElementById("sport-menu");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
 const fitnessPanelEl = document.getElementById("fitness-panel");
+const sportsNeutralStateEl = document.getElementById("sports-neutral-state");
 const sportSortBarEl = document.getElementById("sport-sort-bar");
 const sportSortBtn = document.getElementById("sport-sort-btn");
 const sportSortMenu = document.getElementById("sport-sort-menu");
@@ -313,7 +314,26 @@ function sortSportMenu() {
   buttons.forEach((btn) => sportMenuEl.appendChild(btn));
 }
 
+// Landing on Sports (fresh from another tab, or the very first load) always
+// shows this neutral placeholder instead of resuming whatever sport was open
+// last time - only picking a sport from the dropdown reveals its panel.
+function showSportsNeutralState() {
+  sportsNeutralStateEl.classList.add("visible");
+  fitnessPanelEl.hidden = true;
+  triathlonPanelEl.hidden = true;
+  Object.values(SPORT_FORMS).forEach((form) => {
+    form.hidden = true;
+  });
+  sportSortBarEl.hidden = true;
+  sportListEl.innerHTML = "";
+  sportEmptyStateEl.classList.remove("visible");
+  sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => btn.classList.remove("active"));
+  sportSelectLabel.textContent = t("sports.selectPrompt");
+  sportSelectIcon.innerHTML = "";
+}
+
 function selectSport(sport) {
+  sportsNeutralStateEl.classList.remove("visible");
   currentSport = sport;
   sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.sport === sport);
@@ -862,4 +882,8 @@ bindDistanceSelect(runningDistanceSelect, runningDistanceManualInput);
 
 sortSportMenu();
 updateDistancePlaceholders();
-selectSport("fitness");
+showSportsNeutralState();
+
+document.querySelector('.bottom-nav-btn[data-view="sports"]').addEventListener("click", () => {
+  showSportsNeutralState();
+});

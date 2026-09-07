@@ -320,10 +320,44 @@ function ccRenderSelectedFriendsList() {
   });
 }
 
+// ---- "Classique" (existing sport/preset picker) vs "Personnalisable"
+// (custom challenge, details to come) tabs, same swipeable pattern as the
+// Mes défis / Invitations tabs above. ----
+const ccModeTabBtns = Array.from(challengeCreateView.querySelectorAll(".friends-tab-btn"));
+const ccModeTabViewport = document.getElementById("challenge-create-tab-viewport");
+const ccModeTabTrack = document.getElementById("challenge-create-tab-track");
+let ccActiveModeIndex = 0;
+
+function setCcActiveMode(index) {
+  ccActiveModeIndex = index;
+  ccModeTabBtns.forEach((btn, i) => btn.classList.toggle("active", i === index));
+  ccModeTabTrack.style.transform = `translateX(-${index * 100}%)`;
+  clearFieldError(ccErrorEl);
+}
+
+ccModeTabBtns.forEach((btn, i) => {
+  btn.addEventListener("click", () => setCcActiveMode(i));
+});
+
+let ccModeTouchStartX = 0;
+let ccModeTouchStartY = 0;
+ccModeTabViewport.addEventListener("touchstart", (e) => {
+  ccModeTouchStartX = e.touches[0].clientX;
+  ccModeTouchStartY = e.touches[0].clientY;
+});
+ccModeTabViewport.addEventListener("touchend", (e) => {
+  const deltaX = e.changedTouches[0].clientX - ccModeTouchStartX;
+  const deltaY = e.changedTouches[0].clientY - ccModeTouchStartY;
+  if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+  if (deltaX < 0 && ccActiveModeIndex < ccModeTabBtns.length - 1) setCcActiveMode(ccActiveModeIndex + 1);
+  else if (deltaX > 0 && ccActiveModeIndex > 0) setCcActiveMode(ccActiveModeIndex - 1);
+});
+
 async function openChallengeCreateView() {
   challengesViewEl.hidden = true;
   challengeCreateView.hidden = false;
   clearFieldError(ccErrorEl);
+  setCcActiveMode(0);
   ccSelectSport("course");
   const today = todayISO();
   ccStartInput.value = today;
@@ -356,6 +390,10 @@ ccSubmitBtn.addEventListener("click", async () => {
   const uid = myUid();
   const username = myUsername();
   if (!uid || !username) return;
+  if (ccActiveModeIndex === 1) {
+    showFieldError(ccErrorEl, "challenges.customComingSoon");
+    return;
+  }
   if (!ccPreset) {
     showFieldError(ccErrorEl, "challenges.errorNoPreset");
     return;
