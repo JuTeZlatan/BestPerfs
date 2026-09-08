@@ -2643,6 +2643,47 @@ input[type="number"]::-webkit-inner-spin-button {
   display: block;
 }
 
+.stat-tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 10px;
+  border-radius: var(--cut-sm);
+  background: var(--card-gradient), var(--card-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--float-shadow);
+  text-align: center;
+}
+
+.stat-tile-icon {
+  font-size: 1.6rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-tile-value {
+  font-family: "Oswald", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stat-tile-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .timer-panel {
   background: var(--card-gradient), var(--card-glass);
   backdrop-filter: blur(6px);

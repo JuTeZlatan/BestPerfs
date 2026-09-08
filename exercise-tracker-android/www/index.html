@@ -1103,7 +1103,30 @@
         </div>
       </div>
 
-      <p id="statistics-empty-state" class="empty-state visible" data-i18n="statistics.comingSoon">Bientôt disponible : des statistiques calculées à partir de tes performances enregistrées.</p>
+      <p id="statistics-empty-state" class="empty-state" data-i18n="statistics.comingSoon">Bientôt disponible : des statistiques calculées à partir de tes performances enregistrées.</p>
+
+      <div id="statistics-general-content" class="stat-tile-grid">
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></span>
+          <span class="stat-tile-value" id="stat-total-count">0</span>
+          <span class="stat-tile-label" data-i18n="statistics.totalStats">Stats enregistrées</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+          <span class="stat-tile-value" id="stat-challenges-won">0</span>
+          <span class="stat-tile-label" data-i18n="statistics.challengesWon">Défis gagnés</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+          <span class="stat-tile-value" id="stat-avg-rank">—</span>
+          <span class="stat-tile-label" data-i18n="statistics.avgRank">Classement moyen</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="5"/><path d="M9 10.5L6 4h3l2.5 5.5"/><path d="M15 10.5L18 4h-3l-2.5 5.5"/></svg></span>
+          <span class="stat-tile-value" id="stat-first-places">0</span>
+          <span class="stat-tile-label" data-i18n="statistics.firstPlaces">1ères places</span>
+        </div>
+      </div>
     </section>
 
     <section id="account-view" hidden>
@@ -1779,7 +1802,7 @@
   <script src="script.js"></script>
   <script src="timer.js"></script>
   <script src="sports.js"></script>
-  <script src="profile.js"></script>
+  <script type="module" src="profile.js"></script>
   <script src="back-nav.js"></script>
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="account.js"></script>
