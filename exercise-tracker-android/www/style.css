@@ -1759,6 +1759,24 @@ h1 .view-icon {
   min-width: 0;
 }
 
+/* The Classique/Personnalisable tabs hold sport/preset dropdown menus that
+   need to expand past the tab page's own box - the sliding-track's
+   overflow:hidden and transform (needed for the Mes défis/Invitations
+   slide animation) would clip those menus, so this tab pair switches pages
+   with plain hidden toggling instead of a slide. */
+#challenge-create-tab-viewport {
+  overflow: visible;
+}
+
+#challenge-create-tab-track {
+  display: block;
+  transition: none;
+}
+
+#challenge-create-tab-track .friends-tab-page {
+  flex: initial;
+}
+
 .friends-tab-page .empty-state {
   margin-top: 16px;
 }

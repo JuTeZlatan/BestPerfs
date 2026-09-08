@@ -29,6 +29,49 @@ statisticsBackBtn.addEventListener("click", () => {
   profileViewForSupport.hidden = false;
 });
 
+// ---- Statistics filter dropdown: Général plus every tracked sport. Only
+// wires the picker itself for now - the actual numbers per filter are a
+// later pass, so every choice still shows the same "coming soon" message. ----
+const statisticsSelectBtn = document.getElementById("statistics-select-btn");
+const statisticsSelectLabel = document.getElementById("statistics-select-label");
+const statisticsSelectIcon = document.getElementById("statistics-select-icon");
+const statisticsMenuEl = document.getElementById("statistics-menu");
+let currentStatFilter = "general";
+
+function selectStatFilter(option) {
+  currentStatFilter = option.dataset.stat;
+  statisticsMenuEl.querySelectorAll(".sport-option").forEach((btn) => btn.classList.toggle("active", btn === option));
+  statisticsSelectLabel.textContent = option.querySelector("span:last-child").textContent;
+  statisticsSelectIcon.innerHTML = option.querySelector(".view-icon").innerHTML;
+}
+
+statisticsSelectBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const opening = statisticsMenuEl.hidden;
+  window.closeAllDropdowns();
+  statisticsMenuEl.hidden = !opening;
+});
+
+statisticsMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    selectStatFilter(btn);
+    statisticsMenuEl.hidden = true;
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!statisticsMenuEl.hidden && !statisticsMenuEl.contains(e.target) && e.target !== statisticsSelectBtn) {
+    statisticsMenuEl.hidden = true;
+  }
+});
+
+document.addEventListener("languagechange", () => {
+  const active = statisticsMenuEl.querySelector(".sport-option.active");
+  if (active) statisticsSelectLabel.textContent = active.querySelector("span:last-child").textContent;
+});
+
+selectStatFilter(statisticsMenuEl.querySelector('.sport-option[data-stat="general"]'));
+
 document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     supportViewEl.hidden = true;

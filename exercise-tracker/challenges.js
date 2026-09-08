@@ -331,7 +331,9 @@ let ccActiveModeIndex = 0;
 function setCcActiveMode(index) {
   ccActiveModeIndex = index;
   ccModeTabBtns.forEach((btn, i) => btn.classList.toggle("active", i === index));
-  ccModeTabTrack.style.transform = `translateX(-${index * 100}%)`;
+  ccModeTabTrack.querySelectorAll(".friends-tab-page").forEach((page, i) => {
+    page.hidden = i !== index;
+  });
   clearFieldError(ccErrorEl);
 }
 
