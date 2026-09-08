@@ -6,14 +6,14 @@ function todayISO() {
   return new Date(now - offset).toISOString().slice(0, 10);
 }
 
-const sportSelectBtn = document.getElementById("sport-select-btn");
-const sportSelectLabel = document.getElementById("sport-select-label");
-const sportSelectIcon = document.getElementById("sport-select-icon");
-const sportMenuEl = document.getElementById("sport-menu");
+const sportSelectGrid = document.getElementById("sport-select-grid");
+const sportActiveHeader = document.getElementById("sport-active-header");
+const sportActiveIcon = document.getElementById("sport-active-icon");
+const sportActiveLabel = document.getElementById("sport-active-label");
+const sportChangeBtn = document.getElementById("sport-change-btn");
 const sportListEl = document.getElementById("sport-list");
 const sportEmptyStateEl = document.getElementById("sport-empty-state");
 const fitnessPanelEl = document.getElementById("fitness-panel");
-const sportsNeutralStateEl = document.getElementById("sports-neutral-state");
 const sportSortBarEl = document.getElementById("sport-sort-bar");
 const sportSortBtn = document.getElementById("sport-sort-btn");
 const sportSortMenu = document.getElementById("sport-sort-menu");
@@ -335,25 +335,16 @@ function saveSportPerfs() {
 }
 
 function updateSportSelectLabel() {
-  sportSelectLabel.textContent = t(SPORT_LABEL_KEYS[currentSport]);
-  sportSelectIcon.innerHTML = SPORT_SELECT_ICONS[currentSport] || "";
-}
-
-function sortSportMenu() {
-  const buttons = Array.from(sportMenuEl.querySelectorAll(".sport-option"));
-  buttons.sort((a, b) => {
-    const textA = t(SPORT_LABEL_KEYS[a.dataset.sport]);
-    const textB = t(SPORT_LABEL_KEYS[b.dataset.sport]);
-    return textA.localeCompare(textB, getLang());
-  });
-  buttons.forEach((btn) => sportMenuEl.appendChild(btn));
+  sportActiveLabel.textContent = t(SPORT_LABEL_KEYS[currentSport]);
+  sportActiveIcon.innerHTML = SPORT_SELECT_ICONS[currentSport] || "";
 }
 
 // Landing on Sports (fresh from another tab, or the very first load) always
-// shows this neutral placeholder instead of resuming whatever sport was open
-// last time - only picking a sport from the dropdown reveals its panel.
+// shows this big icon grid instead of resuming whatever sport was open last
+// time - only picking a tile reveals its panel.
 function showSportsNeutralState() {
-  sportsNeutralStateEl.classList.add("visible");
+  sportSelectGrid.hidden = false;
+  sportActiveHeader.hidden = true;
   fitnessPanelEl.hidden = true;
   triathlonPanelEl.hidden = true;
   Object.values(SPORT_FORMS).forEach((form) => {
@@ -362,17 +353,12 @@ function showSportsNeutralState() {
   sportSortBarEl.hidden = true;
   sportListEl.innerHTML = "";
   sportEmptyStateEl.classList.remove("visible");
-  sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => btn.classList.remove("active"));
-  sportSelectLabel.textContent = t("sports.selectPrompt");
-  sportSelectIcon.innerHTML = "";
 }
 
 function selectSport(sport) {
-  sportsNeutralStateEl.classList.remove("visible");
+  sportSelectGrid.hidden = true;
+  sportActiveHeader.hidden = false;
   currentSport = sport;
-  sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.sport === sport);
-  });
   fitnessPanelEl.hidden = sport !== "fitness";
   triathlonPanelEl.hidden = sport !== "triathlon";
   if (sport === "triathlon") resetTriathlonWizard();
@@ -393,29 +379,11 @@ function selectSport(sport) {
   renderSportList();
 }
 
-sportSelectBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  const opening = sportMenuEl.hidden;
-  window.closeAllDropdowns();
-  sportMenuEl.hidden = !opening;
+sportSelectGrid.querySelectorAll(".sport-icon-tile").forEach((tile) => {
+  tile.addEventListener("click", () => selectSport(tile.dataset.sport));
 });
 
-sportMenuEl.querySelectorAll(".sport-option").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectSport(btn.dataset.sport);
-    sportMenuEl.hidden = true;
-  });
-});
-
-document.addEventListener("click", (e) => {
-  if (!sportMenuEl.hidden && !sportMenuEl.contains(e.target) && e.target !== sportSelectBtn) {
-    sportMenuEl.hidden = true;
-  }
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !sportMenuEl.hidden) sportMenuEl.hidden = true;
-});
+sportChangeBtn.addEventListener("click", () => showSportsNeutralState());
 
 sportSortBtn.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -881,7 +849,6 @@ function updateDistancePlaceholders() {
 }
 
 document.addEventListener("languagechange", () => {
-  sortSportMenu();
   updateSportSelectLabel();
   updateDistancePlaceholders();
   renderSportList();
@@ -955,7 +922,6 @@ bindDistanceSelect(runningDistanceSelect, runningDistanceManualInput);
   });
 })(triSizeInput);
 
-sortSportMenu();
 updateDistancePlaceholders();
 showSportsNeutralState();
 

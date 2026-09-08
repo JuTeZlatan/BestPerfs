@@ -2654,6 +2654,96 @@ input[type="number"]::-webkit-inner-spin-button {
   display: none;
 }
 
+.sport-icon-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sport-icon-grid[hidden] {
+  display: none;
+}
+
+.sport-icon-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 10px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--cut-sm);
+  background: var(--card-gradient), var(--card-glass);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--float-shadow);
+  color: var(--text);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.sport-icon-tile:hover {
+  box-shadow: var(--float-shadow), var(--glow-soft);
+  transform: translateY(-1px);
+}
+
+.sport-icon-tile-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.sport-icon-tile-label {
+  font-family: "Oswald", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.sport-active-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sport-active-header[hidden] {
+  display: none;
+}
+
+.sport-active-icon {
+  flex-shrink: 0;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+.sport-active-label {
+  flex: 1;
+  min-width: 0;
+  font-family: "Oswald", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sport-change-btn {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--card-gradient), var(--card-glass);
+  color: var(--text);
+  font-family: "Oswald", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
 .stat-tile {
   display: flex;
   flex-direction: column;
