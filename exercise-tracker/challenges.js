@@ -559,8 +559,7 @@ async function refreshChallengesData() {
 
   const myChallenges = acceptedChallenges
     .map((s, i) => (s.exists() ? { id: s.id, ...s.data() } : null))
-    .filter(Boolean)
-    .sort((a, b) => (a.endDate < b.endDate ? 1 : -1));
+    .filter(Boolean);
 
   const myInvites = pendingChallenges
     .map((s, i) => (s.exists() ? { id: s.id, ...s.data() } : null))
@@ -570,17 +569,40 @@ async function refreshChallengesData() {
   renderInvites(myInvites);
 }
 
+// Sort key = the challenge's end timestamp - still-waiting challenges have
+// no activatedAt yet, so they sort first (soonest attention needed).
+function challengeSortKey(challenge) {
+  if (!challenge.activatedAt) return -Infinity;
+  return challengeEndDate(challenge).getTime();
+}
+
 function renderMyChallenges(challenges) {
   challengesMyList.innerHTML = "";
   challengesMyEmpty.classList.toggle("visible", challenges.length === 0);
-  challenges.forEach((challenge) => {
+
+  const ongoing = challenges.filter((c) => !c.activatedAt || challengeIsActive(c)).sort((a, b) => challengeSortKey(a) - challengeSortKey(b));
+  const ended = challenges.filter((c) => c.activatedAt && !challengeIsActive(c)).sort((a, b) => challengeSortKey(b) - challengeSortKey(a));
+
+  function appendRow(challenge) {
     const node = challengeRowTemplate.content.cloneNode(true);
     node.querySelector(".challenge-row-icon").innerHTML = sportIcon(challenge.sport);
     node.querySelector(".challenge-row-title").textContent = `${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
     node.querySelector(".challenge-row-dates").textContent = challengeTimingLabel(challenge);
     node.querySelector(".challenge-row").addEventListener("click", () => openChallengeDetail(challenge));
     challengesMyList.appendChild(node);
-  });
+  }
+
+  function appendSection(labelKey, list) {
+    if (!list.length) return;
+    const separator = document.createElement("p");
+    separator.className = "sport-month-separator";
+    separator.textContent = t(labelKey);
+    challengesMyList.appendChild(separator);
+    list.forEach(appendRow);
+  }
+
+  appendSection("challenges.ongoingSection", ongoing);
+  appendSection("challenges.endedSection", ended);
 }
 
 function renderInvites(invites) {
