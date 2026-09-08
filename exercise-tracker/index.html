@@ -1103,8 +1103,6 @@
         </div>
       </div>
 
-      <p id="statistics-empty-state" class="empty-state" data-i18n="statistics.comingSoon">Bientôt disponible : des statistiques calculées à partir de tes performances enregistrées.</p>
-
       <div id="statistics-general-content" class="stat-tile-grid">
         <div class="stat-tile">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></span>
@@ -1126,7 +1124,19 @@
           <span class="stat-tile-value" id="stat-first-places">0</span>
           <span class="stat-tile-label" data-i18n="statistics.firstPlaces">1ères places</span>
         </div>
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg></span>
+          <span class="stat-tile-value" id="stat-friend-count">0</span>
+          <span class="stat-tile-label" data-i18n="statistics.friendCount">Amis</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z"/></svg></span>
+          <span class="stat-tile-value" id="stat-streak">0</span>
+          <span class="stat-tile-label" data-i18n="statistics.streak">Série actuelle</span>
+        </div>
       </div>
+
+      <div id="statistics-sport-content" class="stat-tile-grid" hidden></div>
     </section>
 
     <section id="account-view" hidden>

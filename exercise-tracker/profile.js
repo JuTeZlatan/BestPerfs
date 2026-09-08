@@ -19,17 +19,19 @@ supportBackBtn.addEventListener("click", () => {
 const profileStatisticsRow = document.getElementById("profile-statistics-row");
 const statisticsViewEl = document.getElementById("statistics-view");
 const statisticsBackBtn = document.getElementById("statistics-back-btn");
-const statisticsEmptyState = document.getElementById("statistics-empty-state");
 const statisticsGeneralContent = document.getElementById("statistics-general-content");
+const statisticsSportContent = document.getElementById("statistics-sport-content");
 const statTotalCountEl = document.getElementById("stat-total-count");
 const statChallengesWonEl = document.getElementById("stat-challenges-won");
 const statAvgRankEl = document.getElementById("stat-avg-rank");
 const statFirstPlacesEl = document.getElementById("stat-first-places");
+const statFriendCountEl = document.getElementById("stat-friend-count");
+const statStreakEl = document.getElementById("stat-streak");
 
 profileStatisticsRow.addEventListener("click", () => {
   profileViewForSupport.hidden = true;
   statisticsViewEl.hidden = false;
-  if (currentStatFilter === "general") refreshGeneralStats();
+  refreshCurrentStats();
 });
 
 statisticsBackBtn.addEventListener("click", () => {
@@ -37,9 +39,8 @@ statisticsBackBtn.addEventListener("click", () => {
   profileViewForSupport.hidden = false;
 });
 
-// ---- Statistics filter dropdown: Général plus every tracked sport. Général
-// shows real numbers (below); the other filters are still a later pass, so
-// they show the "coming soon" message. ----
+// ---- Statistics filter dropdown: Général plus every tracked sport, each
+// with its own set of icon tiles. ----
 const statisticsSelectBtn = document.getElementById("statistics-select-btn");
 const statisticsSelectLabel = document.getElementById("statistics-select-label");
 const statisticsSelectIcon = document.getElementById("statistics-select-icon");
@@ -52,8 +53,13 @@ function selectStatFilter(option) {
   statisticsSelectLabel.textContent = option.querySelector("span:last-child").textContent;
   statisticsSelectIcon.innerHTML = option.querySelector(".view-icon").innerHTML;
   statisticsGeneralContent.hidden = currentStatFilter !== "general";
-  statisticsEmptyState.classList.toggle("visible", currentStatFilter !== "general");
+  statisticsSportContent.hidden = currentStatFilter === "general";
+  if (!statisticsViewEl.hidden) refreshCurrentStats();
+}
+
+function refreshCurrentStats() {
   if (currentStatFilter === "general") refreshGeneralStats();
+  else renderSportStats(currentStatFilter);
 }
 
 statisticsSelectBtn.addEventListener("click", (e) => {
@@ -79,6 +85,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("languagechange", () => {
   const active = statisticsMenuEl.querySelector(".sport-option.active");
   if (active) statisticsSelectLabel.textContent = active.querySelector("span:last-child").textContent;
+  if (!statisticsViewEl.hidden && currentStatFilter !== "general") renderSportStats(currentStatFilter);
 });
 
 // ---- Général stats: pools rankings from Classement (friends leaderboard)
@@ -186,7 +193,45 @@ async function computeGeneralStats() {
     wins,
     avgRank: rankPool.length ? rankPool.reduce((a, b) => a + b, 0) / rankPool.length : null,
     firstPlaces,
+    friendCount: friendUids.length,
+    streak: computeCurrentStreak(),
   };
+}
+
+// A "day logged" is any date with at least one personal perf - streak counts
+// consecutive days back from today (or yesterday, so logging nothing yet
+// today doesn't zero out a streak still in progress).
+function localDateISO(d) {
+  const offset = d.getTimezoneOffset() * 60000;
+  return new Date(d - offset).toISOString().slice(0, 10);
+}
+
+function computeCurrentStreak() {
+  const days = new Set();
+  try {
+    const exercises = JSON.parse(localStorage.getItem("exercise-tracker-data") || "[]");
+    exercises.forEach((e) => e.date && days.add(e.date));
+  } catch {
+    // ignore malformed local data
+  }
+  try {
+    const sportsData = JSON.parse(localStorage.getItem("exercise-tracker-sports") || "{}");
+    Object.values(sportsData).forEach((arr) => {
+      if (Array.isArray(arr)) arr.forEach((e) => e.date && days.add(e.date));
+    });
+  } catch {
+    // ignore malformed local data
+  }
+  if (days.size === 0) return 0;
+
+  const cursor = new Date();
+  if (!days.has(localDateISO(cursor))) cursor.setDate(cursor.getDate() - 1);
+  let streak = 0;
+  while (days.has(localDateISO(cursor))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
 }
 
 let statsRequestToken = 0;
@@ -198,6 +243,121 @@ async function refreshGeneralStats() {
   statChallengesWonEl.textContent = String(stats.wins);
   statAvgRankEl.textContent = stats.avgRank == null ? "—" : stats.avgRank.toFixed(1);
   statFirstPlacesEl.textContent = String(stats.firstPlaces);
+  statFriendCountEl.textContent = String(stats.friendCount);
+  statStreakEl.textContent = String(stats.streak);
+}
+
+// ---- Per-sport stats: personal-tracking numbers only (Classement/Défis are
+// already covered in Général), computed straight from localStorage so
+// switching sports is instant. ----
+const ICON_COUNT = '<path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/>';
+const ICON_ROUTE = '<path d="M9 19l-2 -3h9a3 3 0 0 0 0 -6h-11a3 3 0 0 1 0 -6h9"/>';
+const ICON_CLOCK = '<circle cx="12" cy="13" r="8"/><path d="M12 13V9"/><path d="M9 3h6"/><path d="M12 3v2"/>';
+const ICON_TARGET = '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>';
+const ICON_ELEVATION = '<path d="M6 4v16"/><path d="M3 7l3-3 3 3"/><path d="M18 20V4"/><path d="M21 17l-3 3-3-3"/>';
+const ICON_TROPHY =
+  '<path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/>';
+const ICON_DUMBBELL =
+  '<path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/>';
+
+function loadSportEntries(sport) {
+  try {
+    const sportsData = JSON.parse(localStorage.getItem("exercise-tracker-sports") || "{}");
+    return Array.isArray(sportsData[sport]) ? sportsData[sport] : [];
+  } catch {
+    return [];
+  }
+}
+
+function loadFitnessEntries() {
+  try {
+    return JSON.parse(localStorage.getItem("exercise-tracker-data") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function entrySeconds(perf) {
+  return (perf.hours ?? 0) * 3600 + (perf.minutes ?? 0) * 60 + (perf.seconds ?? 0) + (perf.hundredths ?? 0) / 100;
+}
+
+function triathlonEntrySeconds(perf) {
+  const leg = (l) => (l?.hours ?? 0) * 3600 + (l?.minutes ?? 0) * 60 + (l?.seconds ?? 0) + (l?.hundredths ?? 0) / 100;
+  return leg(perf.swim) + leg(perf.bike) + leg(perf.run);
+}
+
+function formatHoursMinutes(totalSeconds) {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.round((totalSeconds % 3600) / 60);
+  if (h === 0) return `${m}min`;
+  return `${h}h${String(m).padStart(2, "0")}`;
+}
+
+function distinctGroupCount(entries, groupKeyFn) {
+  const keys = new Set();
+  entries.forEach((e) => {
+    const key = groupKeyFn(e);
+    if (key != null && key !== "") keys.add(key);
+  });
+  return keys.size;
+}
+
+function tile(icon, value, labelKey) {
+  return `<div class="stat-tile"><span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icon}</svg></span><span class="stat-tile-value">${value}</span><span class="stat-tile-label">${t(labelKey)}</span></div>`;
+}
+
+function renderSportStats(sport) {
+  if (sport === "fitness") {
+    const entries = loadFitnessEntries();
+    const distinctExercises = distinctGroupCount(entries, (e) => e.exerciseKey || e.name);
+    const totalReps = entries.reduce((sum, e) => sum + (typeof e.maxReps === "number" ? e.maxReps : 0), 0);
+    const totalWeight = entries.reduce((sum, e) => sum + (typeof e.maxWeight === "number" ? e.maxWeight : 0), 0);
+    statisticsSportContent.innerHTML =
+      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
+      tile(ICON_TARGET, distinctExercises, "statistics.distinctExercises") +
+      tile(ICON_COUNT, totalReps, "statistics.totalReps") +
+      tile(ICON_DUMBBELL, `${window.weightToDisplay ? window.weightToDisplay(totalWeight) : totalWeight} ${window.weightUnitLabel ? window.weightUnitLabel() : "kg"}`, "statistics.totalWeight");
+    return;
+  }
+
+  if (sport === "triathlon") {
+    const entries = loadSportEntries("triathlon");
+    const totalSeconds = entries.reduce((sum, e) => sum + triathlonEntrySeconds(e), 0);
+    const bestSeconds = entries.length ? Math.min(...entries.map(triathlonEntrySeconds)) : null;
+    const distinctSizes = distinctGroupCount(entries, (e) => e.size);
+    statisticsSportContent.innerHTML =
+      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
+      tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime") +
+      tile(ICON_TROPHY, bestSeconds == null ? "—" : formatHoursMinutes(bestSeconds), "statistics.bestTime") +
+      tile(ICON_TARGET, distinctSizes, "statistics.distinctSizes");
+    return;
+  }
+
+  // course, natation, velo, randonnee
+  const entries = loadSportEntries(sport);
+  const totalDistance = entries.reduce((sum, e) => sum + (e.distance || 0), 0);
+  const isNatation = sport === "natation";
+  const distanceDisplay = isNatation
+    ? `${window.mToDisplay ? window.mToDisplay(totalDistance) : totalDistance} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`
+    : `${window.kmToDisplay ? window.kmToDisplay(totalDistance) : totalDistance} ${window.kmUnitLabel ? window.kmUnitLabel() : "km"}`;
+  const groupKeyFn = isNatation ? (e) => `${e.distance}-${e.text}` : (e) => e.distance;
+
+  if (sport === "randonnee") {
+    const totalElevation = entries.reduce((sum, e) => sum + (e.elevationGain || 0) + (e.elevationLoss || 0), 0);
+    statisticsSportContent.innerHTML =
+      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
+      tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance") +
+      tile(ICON_ELEVATION, `${window.mToDisplay ? window.mToDisplay(totalElevation) : totalElevation} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`, "statistics.totalElevation") +
+      tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances");
+    return;
+  }
+
+  const totalSeconds = entries.reduce((sum, e) => sum + entrySeconds(e), 0);
+  statisticsSportContent.innerHTML =
+    tile(ICON_COUNT, entries.length, "statistics.totalStats") +
+    tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance") +
+    tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime") +
+    tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances");
 }
 
 selectStatFilter(statisticsMenuEl.querySelector('.sport-option[data-stat="general"]'));
