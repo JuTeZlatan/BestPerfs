@@ -1,4 +1,4 @@
-const { onDocumentCreated, onDocumentUpdated } = require("firebase-functions/v2/firestore");
+const { onDocumentCreated, onDocumentUpdated, onDocumentWritten } = require("firebase-functions/v2/firestore");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { initializeApp } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
@@ -98,6 +98,27 @@ exports.onChallengeInviteAccepted = onDocumentUpdated("challengeParticipants/{pa
       createdAt: FieldValue.serverTimestamp(),
     }),
   ]);
+});
+
+// A challenge's countdown only starts once every invited participant has
+// responded (accepted or declined - a decline doesn't block the others,
+// see account of the decision in challenges.js). A challenge with no
+// invites at all activates as soon as the creator's own accepted doc is
+// written. Firestore rules can't express "check every sibling doc for this
+// challengeId", so activation happens here with admin access instead -
+// challenges/{id} stays update:false for clients (see firestore.rules).
+exports.onChallengeParticipantWrite = onDocumentWritten("challengeParticipants/{participantId}", async (event) => {
+  const after = event.data.after.exists ? event.data.after.data() : null;
+  if (!after) return;
+  const challengeRef = db.doc(`challenges/${after.challengeId}`);
+  const challengeSnap = await challengeRef.get();
+  if (!challengeSnap.exists || challengeSnap.data().activatedAt) return;
+  const participantsSnap = await db.collection("challengeParticipants").where("challengeId", "==", after.challengeId).get();
+  if (participantsSnap.empty) return;
+  const allResolved = participantsSnap.docs.every((d) => d.data().status !== "pending");
+  if (allResolved) {
+    await challengeRef.update({ activatedAt: FieldValue.serverTimestamp() });
+  }
 });
 
 // Deletes email/password signups that never clicked their confirmation link

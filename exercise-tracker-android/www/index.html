@@ -859,14 +859,27 @@
       </div>
 
       <p class="section-title" data-i18n="challenges.stepDates">Durée</p>
-      <div class="challenge-dates-row">
-        <div class="challenge-date-field">
-          <label class="account-field-label" for="challenge-create-start-input" data-i18n="challenges.startDate">Début</label>
-          <input type="date" id="challenge-create-start-input" required>
+      <div class="challenge-duration-row">
+        <div id="challenge-create-months-select" class="sport-dropdown challenge-duration-dropdown" data-value="0">
+          <button type="button" class="sport-select-btn challenge-duration-btn">
+            <span class="challenge-duration-label"></span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu" hidden></div>
         </div>
-        <div class="challenge-date-field">
-          <label class="account-field-label" for="challenge-create-end-input" data-i18n="challenges.endDate">Fin</label>
-          <input type="date" id="challenge-create-end-input" required>
+        <div id="challenge-create-days-select" class="sport-dropdown challenge-duration-dropdown" data-value="1">
+          <button type="button" class="sport-select-btn challenge-duration-btn">
+            <span class="challenge-duration-label"></span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu" hidden></div>
+        </div>
+        <div id="challenge-create-hours-select" class="sport-dropdown challenge-duration-dropdown" data-value="0">
+          <button type="button" class="sport-select-btn challenge-duration-btn">
+            <span class="challenge-duration-label"></span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="sport-menu" hidden></div>
         </div>
       </div>
 

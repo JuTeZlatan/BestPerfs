@@ -24,10 +24,6 @@ function myUsername() {
   return el ? el.textContent.trim() : "";
 }
 
-function todayISO() {
-  return window.todayISO ? window.todayISO() : new Date().toISOString().slice(0, 10);
-}
-
 // ---- DOM refs ----
 const challengesViewEl = document.getElementById("challenges-view");
 const challengeCreateToggle = document.getElementById("challenge-create-toggle");
@@ -97,12 +93,45 @@ function presetDisplayLabel(sport, presetKey) {
   if (sport === "triathlon") return presetKey;
   return t(`exercise.${presetKey}`);
 }
-function formatChallengeDates(startDate, endDate) {
-  const fmt = (iso) => {
-    const [y, m, d] = iso.split("-");
-    return `${d}/${m}/${y}`;
-  };
-  return `${fmt(startDate)} → ${fmt(endDate)}`;
+// A challenge's duration is months/days/hours picked at creation - it only
+// turns into an actual end timestamp once activated (see challengeEndDate).
+function formatChallengeDuration(challenge) {
+  const parts = [];
+  if (challenge.durationMonths) parts.push(`${challenge.durationMonths} ${t(challenge.durationMonths === 1 ? "challenges.unitMonth" : "challenges.unitMonths")}`);
+  if (challenge.durationDays) parts.push(`${challenge.durationDays} ${t(challenge.durationDays === 1 ? "challenges.unitDay" : "challenges.unitDays")}`);
+  if (challenge.durationHours) parts.push(`${challenge.durationHours} ${t(challenge.durationHours === 1 ? "challenges.unitHour" : "challenges.unitHours")}`);
+  return parts.join(" ");
+}
+
+function challengeEndDate(challenge) {
+  if (!challenge.activatedAt) return null;
+  const end = challenge.activatedAt.toDate ? challenge.activatedAt.toDate() : new Date(challenge.activatedAt);
+  end.setMonth(end.getMonth() + (challenge.durationMonths || 0));
+  end.setDate(end.getDate() + (challenge.durationDays || 0));
+  end.setHours(end.getHours() + (challenge.durationHours || 0));
+  return end;
+}
+
+function formatCountdown(msRemaining) {
+  const totalSeconds = Math.max(0, Math.floor(msRemaining / 1000));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  return days > 0
+    ? `${days}j ${pad(hours)}h${pad(minutes)}m${pad(seconds)}s`
+    : `${pad(hours)}h${pad(minutes)}m${pad(seconds)}s`;
+}
+
+// Row/label text for a challenge's timing: proposed duration while waiting
+// on invitees to respond, otherwise remaining time (or "ended").
+function challengeTimingLabel(challenge) {
+  if (!challenge.activatedAt) return t("challenges.waitingForInvitees");
+  const end = challengeEndDate(challenge);
+  const msRemaining = end.getTime() - Date.now();
+  if (msRemaining <= 0) return t("challenges.ended");
+  return t("challenges.timeRemaining", { time: formatCountdown(msRemaining) });
 }
 
 // ---- Create-challenge sport/preset picker (mirrors leaderboard.js's
@@ -119,8 +148,6 @@ const ccPresetSelects = {
   fitness: document.getElementById("challenge-create-preset-fitness"),
 };
 const ccNatationStrokeSelect = document.getElementById("challenge-create-preset-natation-stroke");
-const ccStartInput = document.getElementById("challenge-create-start-input");
-const ccEndInput = document.getElementById("challenge-create-end-input");
 const ccFriendAddBtn = document.getElementById("challenge-create-friend-add-btn");
 const ccFriendsList = document.getElementById("challenge-create-friends-list");
 const ccFriendsEmpty = document.getElementById("challenge-create-friends-empty");
@@ -237,7 +264,77 @@ document.addEventListener("languagechange", () => {
   const activeDropdown = ccPresetSelects[ccSport];
   const activeOption = activeDropdown?.querySelector(".sport-option.active");
   if (activeOption) activeDropdown.querySelector(".classement-preset-label").textContent = activeOption.textContent;
+  Object.keys(ccDurationDropdowns).forEach((unit) => ccPopulateDurationDropdown(unit));
 });
+
+// ---- Duration dropdowns: months (0-12), days (0-31), hours (0-24) picked
+// at creation. The actual end timestamp only exists once the challenge
+// activates (see challengeEndDate) - this just captures the raw components. ----
+const ccDurationConfig = {
+  months: { max: 12, singularKey: "challenges.unitMonth", pluralKey: "challenges.unitMonths" },
+  days: { max: 31, singularKey: "challenges.unitDay", pluralKey: "challenges.unitDays" },
+  hours: { max: 24, singularKey: "challenges.unitHour", pluralKey: "challenges.unitHours" },
+};
+const ccDurationDropdowns = {
+  months: document.getElementById("challenge-create-months-select"),
+  days: document.getElementById("challenge-create-days-select"),
+  hours: document.getElementById("challenge-create-hours-select"),
+};
+let ccDuration = { months: 0, days: 1, hours: 0 };
+
+function ccDurationOptionLabel(unit, value) {
+  const cfg = ccDurationConfig[unit];
+  return `${value} ${t(value === 1 ? cfg.singularKey : cfg.pluralKey)}`;
+}
+
+function ccUpdateDurationLabel(unit) {
+  ccDurationDropdowns[unit].querySelector(".challenge-duration-label").textContent = ccDurationOptionLabel(unit, ccDuration[unit]);
+}
+
+function ccPopulateDurationDropdown(unit) {
+  const dropdown = ccDurationDropdowns[unit];
+  const menu = dropdown.querySelector(".sport-menu");
+  menu.innerHTML = "";
+  for (let i = 0; i <= ccDurationConfig[unit].max; i++) {
+    const opt = document.createElement("button");
+    opt.type = "button";
+    opt.className = "sport-option";
+    opt.classList.toggle("active", i === ccDuration[unit]);
+    opt.textContent = ccDurationOptionLabel(unit, i);
+    opt.addEventListener("click", () => {
+      ccDuration[unit] = i;
+      menu.querySelectorAll(".sport-option").forEach((o) => o.classList.toggle("active", o === opt));
+      ccUpdateDurationLabel(unit);
+      menu.hidden = true;
+    });
+    menu.appendChild(opt);
+  }
+  ccUpdateDurationLabel(unit);
+}
+
+Object.entries(ccDurationDropdowns).forEach(([unit, dropdown]) => {
+  const btn = dropdown.querySelector(".sport-select-btn");
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const menu = dropdown.querySelector(".sport-menu");
+    const opening = menu.hidden;
+    window.closeAllDropdowns();
+    menu.hidden = !opening;
+  });
+  ccPopulateDurationDropdown(unit);
+});
+
+document.addEventListener("click", (e) => {
+  Object.values(ccDurationDropdowns).forEach((dropdown) => {
+    const menu = dropdown.querySelector(".sport-menu");
+    if (!menu.hidden && !dropdown.contains(e.target)) menu.hidden = true;
+  });
+});
+
+function ccResetDuration() {
+  ccDuration = { months: 0, days: 1, hours: 0 };
+  Object.keys(ccDurationDropdowns).forEach((unit) => ccPopulateDurationDropdown(unit));
+}
 
 // ---- Friends list (for invite multi-select) - a small local query, same
 // pattern already used independently in friends.js/leaderboard.js. ----
@@ -361,9 +458,7 @@ async function openChallengeCreateView() {
   clearFieldError(ccErrorEl);
   setCcActiveMode(0);
   ccSelectSport("course");
-  const today = todayISO();
-  ccStartInput.value = today;
-  ccEndInput.value = today;
+  ccResetDuration();
   ccSelectedFriends = [];
   challengeInviteModal.hidden = true;
   ccAllFriends = await getMyFriends();
@@ -400,12 +495,8 @@ ccSubmitBtn.addEventListener("click", async () => {
     showFieldError(ccErrorEl, "challenges.errorNoPreset");
     return;
   }
-  if (!ccStartInput.value || !ccEndInput.value) {
-    showFieldError(ccErrorEl, "challenges.errorNoDates");
-    return;
-  }
-  if (ccEndInput.value < ccStartInput.value) {
-    showFieldError(ccErrorEl, "challenges.errorDateOrder");
+  if (!ccDuration.months && !ccDuration.days && !ccDuration.hours) {
+    showFieldError(ccErrorEl, "challenges.errorNoDuration");
     return;
   }
   const invitedUids = ccSelectedFriends.map((friend) => ({ uid: friend.uid, username: friend.username }));
@@ -418,8 +509,9 @@ ccSubmitBtn.addEventListener("click", async () => {
       creatorUsername: username,
       sport: ccSport,
       presetKey: ccPreset,
-      startDate: ccStartInput.value,
-      endDate: ccEndInput.value,
+      durationMonths: ccDuration.months,
+      durationDays: ccDuration.days,
+      durationHours: ccDuration.hours,
       createdAt: serverTimestamp(),
     });
     batch.set(doc(db, "challengeParticipants", `${challengeRef.id}_${uid}`), {
@@ -485,7 +577,7 @@ function renderMyChallenges(challenges) {
     const node = challengeRowTemplate.content.cloneNode(true);
     node.querySelector(".challenge-row-icon").innerHTML = sportIcon(challenge.sport);
     node.querySelector(".challenge-row-title").textContent = `${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
-    node.querySelector(".challenge-row-dates").textContent = formatChallengeDates(challenge.startDate, challenge.endDate);
+    node.querySelector(".challenge-row-dates").textContent = challengeTimingLabel(challenge);
     node.querySelector(".challenge-row").addEventListener("click", () => openChallengeDetail(challenge));
     challengesMyList.appendChild(node);
   });
@@ -498,7 +590,7 @@ function renderInvites(invites) {
     const node = challengeInviteTemplate.content.cloneNode(true);
     node.querySelector(".challenge-row-icon").innerHTML = sportIcon(challenge.sport);
     node.querySelector(".challenge-row-title").textContent = `${challenge.creatorUsername} · ${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
-    node.querySelector(".challenge-row-dates").textContent = formatChallengeDates(challenge.startDate, challenge.endDate);
+    node.querySelector(".challenge-row-dates").textContent = formatChallengeDuration(challenge);
 
     node.querySelector(".challenge-accept-btn").addEventListener("click", async () => {
       const uid = myUid();
@@ -563,10 +655,12 @@ const challengeEntryClosedMsg = document.getElementById("challenge-entry-closed-
 
 let currentChallenge = null;
 let detailUnsubscribe = null;
+let detailCountdownInterval = null;
 
 function challengeIsActive(challenge) {
-  const today = todayISO();
-  return challenge.startDate <= today && today <= challenge.endDate;
+  if (!challenge.activatedAt) return false;
+  const end = challengeEndDate(challenge);
+  return Date.now() < end.getTime();
 }
 
 function secondsFromParts(h, m, s, cs) {
@@ -666,9 +760,15 @@ challengeEntrySubmitBtn.addEventListener("click", async () => {
 });
 
 new MutationObserver(() => {
-  if (challengeDetailView.hidden && detailUnsubscribe) {
-    detailUnsubscribe();
-    detailUnsubscribe = null;
+  if (challengeDetailView.hidden) {
+    if (detailUnsubscribe) {
+      detailUnsubscribe();
+      detailUnsubscribe = null;
+    }
+    if (detailCountdownInterval) {
+      clearInterval(detailCountdownInterval);
+      detailCountdownInterval = null;
+    }
   }
 }).observe(challengeDetailView, { attributes: true, attributeFilter: ["hidden"] });
 
@@ -677,8 +777,14 @@ function openChallengeDetail(challenge) {
   challengesViewEl.hidden = true;
   challengeDetailView.hidden = false;
   challengeDetailTitle.textContent = `${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
-  challengeDetailDates.textContent = formatChallengeDates(challenge.startDate, challenge.endDate);
   setupChallengeEntryForm(challenge);
+
+  challengeDetailDates.textContent = challengeTimingLabel(challenge);
+  if (detailCountdownInterval) clearInterval(detailCountdownInterval);
+  detailCountdownInterval = setInterval(() => {
+    challengeDetailDates.textContent = challengeTimingLabel(challenge);
+    setupChallengeEntryForm(challenge);
+  }, 1000);
 
   if (detailUnsubscribe) detailUnsubscribe();
   detailUnsubscribe = onSnapshot(

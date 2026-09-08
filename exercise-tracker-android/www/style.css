@@ -1374,6 +1374,14 @@ h1 .view-icon {
   transform: translateY(-1px);
   box-shadow: var(--glow-strong);
 }
+
+/* .add-form-submit's own display:block outranks the [hidden] attribute's
+   UA-stylesheet display:none (author rules beat UA defaults at equal
+   specificity), so any button using this class needs this explicit
+   override to actually disappear when JS sets it hidden. */
+.add-form-submit[hidden] {
+  display: none;
+}
 .add-form button[type="submit"]:active { transform: translateY(0); }
 
 
@@ -1890,6 +1898,30 @@ h1 .view-icon {
 .challenge-date-field {
   flex: 1;
   min-width: 0;
+}
+
+.challenge-duration-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.challenge-duration-dropdown {
+  flex: 1;
+  min-width: 0;
+}
+
+.challenge-duration-btn {
+  padding: 10px 8px;
+  font-size: 0.8rem;
+}
+
+.challenge-duration-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .challenge-date-field input[type="date"] {
