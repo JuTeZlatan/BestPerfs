@@ -706,15 +706,29 @@
         <button id="challenge-create-toggle" class="friends-add-toggle-btn" type="button" data-i18n-title="challenges.createButton">+</button>
       </div>
 
-      <div class="friends-tab-bar">
+      <div id="challenges-main-tab-bar" class="friends-tab-bar">
         <button class="friends-tab-btn active" type="button" data-i18n="challenges.myTab">Mes défis</button>
         <button class="friends-tab-btn" type="button" data-i18n="challenges.invitesTab">Invitations</button>
       </div>
       <div id="challenges-tab-viewport" class="friends-tab-viewport">
         <div id="challenges-tab-track" class="friends-tab-track">
           <div class="friends-tab-page">
-            <div id="challenges-my-list" class="exercise-list"></div>
-            <p id="challenges-my-empty" class="empty-state" data-i18n="challenges.emptyMy">Tu n'as encore rejoint aucun défi.</p>
+            <div id="challenges-my-sub-tab-bar" class="friends-tab-bar challenges-my-sub-tab-bar">
+              <button class="friends-tab-btn active" type="button" data-i18n="challenges.ongoingSection">En cours</button>
+              <button class="friends-tab-btn" type="button" data-i18n="challenges.endedSection">Terminés</button>
+            </div>
+            <div id="challenges-my-tab-viewport" class="friends-tab-viewport">
+              <div id="challenges-my-tab-track" class="friends-tab-track">
+                <div class="friends-tab-page">
+                  <div id="challenges-ongoing-list" class="exercise-list"></div>
+                  <p id="challenges-ongoing-empty" class="empty-state" data-i18n="challenges.emptyOngoing">Aucun défi en cours.</p>
+                </div>
+                <div class="friends-tab-page">
+                  <div id="challenges-ended-list" class="exercise-list"></div>
+                  <p id="challenges-ended-empty" class="empty-state" data-i18n="challenges.emptyEnded">Aucun défi terminé.</p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="friends-tab-page">
             <div id="challenges-invites-list" class="exercise-list"></div>

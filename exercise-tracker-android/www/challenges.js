@@ -32,7 +32,7 @@ const challengeCreateView = document.getElementById("challenge-create-view");
 const challengeDetailView = document.getElementById("challenge-detail-view");
 const challengeDetailBackBtn = document.getElementById("challenge-detail-back-btn");
 
-const challengesTabBtns = Array.from(challengesViewEl.querySelectorAll(".friends-tab-btn"));
+const challengesTabBtns = Array.from(document.getElementById("challenges-main-tab-bar").querySelectorAll(".friends-tab-btn"));
 const challengesTabViewport = document.getElementById("challenges-tab-viewport");
 const challengesTabTrack = document.getElementById("challenges-tab-track");
 let challengesActiveTabIndex = 0;
@@ -61,10 +61,43 @@ challengesTabViewport.addEventListener("touchend", (e) => {
   else if (deltaX > 0 && challengesActiveTabIndex > 0) setChallengesActiveTab(challengesActiveTabIndex - 1);
 });
 
-const challengesMyList = document.getElementById("challenges-my-list");
-const challengesMyEmpty = document.getElementById("challenges-my-empty");
+const challengesOngoingList = document.getElementById("challenges-ongoing-list");
+const challengesOngoingEmpty = document.getElementById("challenges-ongoing-empty");
+const challengesEndedList = document.getElementById("challenges-ended-list");
+const challengesEndedEmpty = document.getElementById("challenges-ended-empty");
 const challengesInvitesList = document.getElementById("challenges-invites-list");
 const challengesInvitesEmpty = document.getElementById("challenges-invites-empty");
+
+// ---- "Mes défis" sub-tabs: En cours / Terminés (same swipeable pattern as
+// the Mes défis / Invitations tabs above, nested one level deeper). ----
+const challengesMySubTabBtns = Array.from(document.getElementById("challenges-my-sub-tab-bar").querySelectorAll(".friends-tab-btn"));
+const challengesMyTabViewport = document.getElementById("challenges-my-tab-viewport");
+const challengesMyTabTrack = document.getElementById("challenges-my-tab-track");
+let challengesMyActiveTabIndex = 0;
+
+function setChallengesMyActiveTab(index) {
+  challengesMyActiveTabIndex = index;
+  challengesMySubTabBtns.forEach((btn, i) => btn.classList.toggle("active", i === index));
+  challengesMyTabTrack.style.transform = `translateX(-${index * 100}%)`;
+}
+
+challengesMySubTabBtns.forEach((btn, i) => {
+  btn.addEventListener("click", () => setChallengesMyActiveTab(i));
+});
+
+let challengesMyTouchStartX = 0;
+let challengesMyTouchStartY = 0;
+challengesMyTabViewport.addEventListener("touchstart", (e) => {
+  challengesMyTouchStartX = e.touches[0].clientX;
+  challengesMyTouchStartY = e.touches[0].clientY;
+});
+challengesMyTabViewport.addEventListener("touchend", (e) => {
+  const deltaX = e.changedTouches[0].clientX - challengesMyTouchStartX;
+  const deltaY = e.changedTouches[0].clientY - challengesMyTouchStartY;
+  if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+  if (deltaX < 0 && challengesMyActiveTabIndex < challengesMySubTabBtns.length - 1) setChallengesMyActiveTab(challengesMyActiveTabIndex + 1);
+  else if (deltaX > 0 && challengesMyActiveTabIndex > 0) setChallengesMyActiveTab(challengesMyActiveTabIndex - 1);
+});
 
 const challengeRowTemplate = document.getElementById("challenge-row-template");
 const challengeInviteTemplate = document.getElementById("challenge-invite-template");
@@ -576,33 +609,26 @@ function challengeSortKey(challenge) {
   return challengeEndDate(challenge).getTime();
 }
 
-function renderMyChallenges(challenges) {
-  challengesMyList.innerHTML = "";
-  challengesMyEmpty.classList.toggle("visible", challenges.length === 0);
+function appendChallengeRow(container, challenge) {
+  const node = challengeRowTemplate.content.cloneNode(true);
+  node.querySelector(".challenge-row-icon").innerHTML = sportIcon(challenge.sport);
+  node.querySelector(".challenge-row-title").textContent = `${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
+  node.querySelector(".challenge-row-dates").textContent = challengeTimingLabel(challenge);
+  node.querySelector(".challenge-row").addEventListener("click", () => openChallengeDetail(challenge));
+  container.appendChild(node);
+}
 
+function renderMyChallenges(challenges) {
   const ongoing = challenges.filter((c) => !c.activatedAt || challengeIsActive(c)).sort((a, b) => challengeSortKey(a) - challengeSortKey(b));
   const ended = challenges.filter((c) => c.activatedAt && !challengeIsActive(c)).sort((a, b) => challengeSortKey(b) - challengeSortKey(a));
 
-  function appendRow(challenge) {
-    const node = challengeRowTemplate.content.cloneNode(true);
-    node.querySelector(".challenge-row-icon").innerHTML = sportIcon(challenge.sport);
-    node.querySelector(".challenge-row-title").textContent = `${sportLabel(challenge.sport)} · ${presetDisplayLabel(challenge.sport, challenge.presetKey)}`;
-    node.querySelector(".challenge-row-dates").textContent = challengeTimingLabel(challenge);
-    node.querySelector(".challenge-row").addEventListener("click", () => openChallengeDetail(challenge));
-    challengesMyList.appendChild(node);
-  }
+  challengesOngoingList.innerHTML = "";
+  challengesOngoingEmpty.classList.toggle("visible", ongoing.length === 0);
+  ongoing.forEach((challenge) => appendChallengeRow(challengesOngoingList, challenge));
 
-  function appendSection(labelKey, list) {
-    if (!list.length) return;
-    const separator = document.createElement("p");
-    separator.className = "sport-month-separator";
-    separator.textContent = t(labelKey);
-    challengesMyList.appendChild(separator);
-    list.forEach(appendRow);
-  }
-
-  appendSection("challenges.ongoingSection", ongoing);
-  appendSection("challenges.endedSection", ended);
+  challengesEndedList.innerHTML = "";
+  challengesEndedEmpty.classList.toggle("visible", ended.length === 0);
+  ended.forEach((challenge) => appendChallengeRow(challengesEndedList, challenge));
 }
 
 function renderInvites(invites) {
