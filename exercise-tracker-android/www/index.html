@@ -380,6 +380,10 @@
           <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5.5-9 4 5 2.5-3.5L21 20H3z"/><circle cx="17" cy="6" r="2"/></svg></span>
           <span class="sport-icon-tile-label" data-i18n="sport.hiking">Randonnée</span>
         </button>
+        <button class="sport-icon-tile" type="button" data-sport="trail">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4 -9l3 4l2.5 -3l3 5l3.5 -8l3 11"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.trail">Trail</span>
+        </button>
       </div>
 
       <div id="sport-active-header" class="sport-active-header" hidden>
@@ -486,6 +490,18 @@
         <input type="number" id="hiking-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
         <input type="number" id="hiking-elevation-gain-input" class="distance-field" data-i18n-placeholder="field.elevationGain" placeholder="D+ (m)" min="0" step="1">
         <input type="number" id="hiking-elevation-loss-input" class="distance-field" data-i18n-placeholder="field.elevationLoss" placeholder="D- (m)" min="0" step="1">
+        <button type="submit" data-i18n="common.add">Ajouter</button>
+      </form>
+
+      <form id="add-trail-form" class="add-form" hidden>
+        <input type="text" id="trail-name-input" data-i18n-placeholder="sport.trail.namePlaceholder" placeholder="Nom du trail (ex: Trail des Templiers)" maxlength="40" required>
+        <input type="number" id="trail-distance-input" class="distance-field" placeholder="Distance (km)" min="0" step="0.1" required>
+        <input type="number" id="trail-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
+        <input type="number" id="trail-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+        <input type="number" id="trail-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+        <input type="number" id="trail-hundredths-input" class="preset-time-field" placeholder="00" min="0" max="99" step="1">
+        <input type="number" id="trail-elevation-gain-input" class="distance-field" data-i18n-placeholder="field.elevationGain" placeholder="D+ (m)" min="0" step="1">
+        <input type="number" id="trail-elevation-loss-input" class="distance-field" data-i18n-placeholder="field.elevationLoss" placeholder="D- (m)" min="0" step="1">
         <button type="submit" data-i18n="common.add">Ajouter</button>
       </form>
 
@@ -1115,36 +1131,37 @@
           <button class="sport-option" data-stat="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
           <button class="sport-option" data-stat="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
           <button class="sport-option" data-stat="randonnee"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5.5-9 4 5 2.5-3.5L21 20H3z"/><circle cx="17" cy="6" r="2"/></svg></span><span data-i18n="sport.hiking">Randonnée</span></button>
+          <button class="sport-option" data-stat="trail"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4 -9l3 4l2.5 -3l3 5l3.5 -8l3 11"/></svg></span><span data-i18n="sport.trail">Trail</span></button>
         </div>
       </div>
 
       <div id="statistics-general-content" class="stat-tile-grid">
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoTotalGeneral">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></span>
           <span class="stat-tile-value" id="stat-total-count">0</span>
           <span class="stat-tile-label" data-i18n="statistics.totalStats">Stats enregistrées</span>
         </div>
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoWins">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
           <span class="stat-tile-value" id="stat-challenges-won">0</span>
           <span class="stat-tile-label" data-i18n="statistics.challengesWon">Défis gagnés</span>
         </div>
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoAvgRank">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
           <span class="stat-tile-value" id="stat-avg-rank">—</span>
           <span class="stat-tile-label" data-i18n="statistics.avgRank">Classement moyen</span>
         </div>
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoFirstPlaces">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="5"/><path d="M9 10.5L6 4h3l2.5 5.5"/><path d="M15 10.5L18 4h-3l-2.5 5.5"/></svg></span>
           <span class="stat-tile-value" id="stat-first-places">0</span>
           <span class="stat-tile-label" data-i18n="statistics.firstPlaces">1ères places</span>
         </div>
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoFriends">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg></span>
           <span class="stat-tile-value" id="stat-friend-count">0</span>
           <span class="stat-tile-label" data-i18n="statistics.friendCount">Amis</span>
         </div>
-        <div class="stat-tile">
+        <div class="stat-tile" data-memo="statistics.memoStreak">
           <span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z"/></svg></span>
           <span class="stat-tile-value" id="stat-streak">0</span>
           <span class="stat-tile-label" data-i18n="statistics.streak">Série actuelle</span>
@@ -1706,6 +1723,31 @@
     <div class="exercise-row">
       <div class="exercise-card hiking-perf-card">
         <input type="text" class="perf-text" maxlength="40" placeholder="Nom de la rando" readonly>
+        <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
+        <span class="perf-proof-wrap">
+          <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>
+          <button class="perf-proof-delete-badge" type="button" hidden data-i18n-title="proofs.manageTitle" title="Gérer les preuves">×</button>
+          <button class="perf-proof-add-btn" type="button" hidden data-i18n-title="proofs.addTitle" title="Ajouter des preuves">+</button>
+        </span>
+        <span class="perf-distance-display"></span>
+        <span class="perf-elevation-display perf-time-tappable"></span>
+        <span class="perf-time-display"></span>
+      </div>
+      <div class="row-menu">
+        <button class="row-menu-btn" type="button" title="Options">⋮</button>
+        <div class="row-menu-dropdown" hidden>
+          <button class="row-menu-edit" type="button" data-i18n="edit.title">Modifier</button>
+          <button class="row-menu-info" type="button" data-i18n="info.title">Infos</button>
+          <button class="row-menu-delete" type="button" data-i18n="delete.title">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="trail-perf-template">
+    <div class="exercise-row">
+      <div class="exercise-card hiking-perf-card">
+        <input type="text" class="perf-text" maxlength="40" placeholder="Nom du trail" readonly>
         <span class="perf-best-badge" hidden><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/></svg></span>
         <span class="perf-proof-wrap">
           <button class="perf-proof-btn" type="button" hidden data-i18n-title="proofs.iconTitle" title="Voir les preuves"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-11 11"/></svg></button>

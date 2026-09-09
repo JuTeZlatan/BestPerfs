@@ -1662,6 +1662,14 @@ h1 .view-icon {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  max-width: 260px;
+}
+
+.tri-popup-text {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.4;
+  white-space: normal;
 }
 
 .tri-popup-row {
@@ -2656,8 +2664,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .sport-icon-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
@@ -2670,8 +2678,8 @@ input[type="number"]::-webkit-inner-spin-button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 28px 10px;
+  gap: 6px;
+  padding: 14px 4px;
   border: 1px solid var(--card-border);
   border-radius: var(--cut-sm);
   background: var(--card-gradient), var(--card-glass);
@@ -2688,18 +2696,19 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .sport-icon-tile-icon {
-  font-size: 2.4rem;
+  font-size: 1.7rem;
   line-height: 1;
   color: var(--accent);
 }
 
 .sport-icon-tile-label {
   font-family: "Oswald", sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   text-align: center;
+  line-height: 1.2;
 }
 
 .sport-active-header {
@@ -2756,6 +2765,7 @@ input[type="number"]::-webkit-inner-spin-button {
   border: 1px solid var(--card-border);
   box-shadow: var(--float-shadow);
   text-align: center;
+  cursor: pointer;
 }
 
 .stat-tile-icon {
@@ -3284,9 +3294,10 @@ textarea.modal-input {
     font-size: 0.76rem;
   }
 
-  /* Hiking shows 3 metric chips (distance, elevation, time) instead of the
-     usual 2, so it needs its own line under the name on mobile - otherwise
-     the name field gets squeezed down to almost nothing to make room. */
+  /* Hiking and Trail both show 3 metric chips (distance, elevation, time)
+     instead of the usual 2, so they need their own line under the name on
+     mobile - otherwise the name field gets squeezed down to almost nothing
+     to make room. Trail reuses this same class, not just the name. */
   .hiking-perf-card {
     flex-wrap: wrap;
   }

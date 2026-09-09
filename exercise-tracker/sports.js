@@ -49,6 +49,17 @@ const hikingHundredthsInput = document.getElementById("hiking-hundredths-input")
 const hikingElevationGainInput = document.getElementById("hiking-elevation-gain-input");
 const hikingElevationLossInput = document.getElementById("hiking-elevation-loss-input");
 
+const trailTemplate = document.getElementById("trail-perf-template");
+const addTrailForm = document.getElementById("add-trail-form");
+const trailNameInput = document.getElementById("trail-name-input");
+const trailDistanceInput = document.getElementById("trail-distance-input");
+const trailHoursInput = document.getElementById("trail-hours-input");
+const trailMinutesInput = document.getElementById("trail-minutes-input");
+const trailSecondsInput = document.getElementById("trail-seconds-input");
+const trailHundredthsInput = document.getElementById("trail-hundredths-input");
+const trailElevationGainInput = document.getElementById("trail-elevation-gain-input");
+const trailElevationLossInput = document.getElementById("trail-elevation-loss-input");
+
 const addRunningForm = document.getElementById("add-running-form");
 const runningDescInput = document.getElementById("running-desc-input");
 const runningDistanceSelect = document.getElementById("running-distance-select");
@@ -91,7 +102,7 @@ const triFields = {
   },
 };
 
-const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon", "randonnee"];
+const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon", "randonnee", "trail"];
 const TRIATHLON_SIZE_ORDER = { XS: 0, S: 1, M: 2, L: 3, XL: 4 };
 
 function distanceUnitFor(sport) {
@@ -166,9 +177,10 @@ const ICON_CYCLING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="no
 const ICON_TRIATHLON = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg>';
 const ICON_FITNESS = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg>';
 const ICON_HIKING = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5.5-9 4 5 2.5-3.5L21 20H3z"/><circle cx="17" cy="6" r="2"/></svg>';
+const ICON_TRAIL = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4 -9l3 4l2.5 -3l3 5l3.5 -8l3 11"/></svg>';
 const ICON_ELEVATION = '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16"/><path d="M3 7l3-3 3 3"/><path d="M18 20V4"/><path d="M21 17l-3 3-3-3"/></svg>';
-const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING };
-const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING };
+const SPORT_ICONS = { natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING, trail: ICON_TRAIL };
+const SPORT_SELECT_ICONS = { fitness: ICON_FITNESS, natation: ICON_SWIMMING, velo: ICON_CYCLING, course: ICON_RUNNING, triathlon: ICON_TRIATHLON, randonnee: ICON_HIKING, trail: ICON_TRAIL };
 const SWIM_STROKE_LABEL_KEYS = {
   freestyle: "swimStroke.freestyle",
   backstroke: "swimStroke.backstroke",
@@ -182,6 +194,7 @@ const TEXT_PLACEHOLDER_KEYS = {
   course: "sport.running.descPlaceholder",
   triathlon: "sport.locationPlaceholder",
   randonnee: "sport.hiking.namePlaceholder",
+  trail: "sport.trail.namePlaceholder",
 };
 
 function timeChipHTML(perf, sport) {
@@ -306,9 +319,9 @@ function computeBestIds(entries, sport) {
   return bestIds;
 }
 
-const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm, randonnee: addHikingForm };
-const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate, randonnee: hikingTemplate };
-const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon", randonnee: "sport.hiking" };
+const SPORT_FORMS = { natation: addSwimForm, velo: addCyclingForm, course: addRunningForm, randonnee: addHikingForm, trail: addTrailForm };
+const SPORT_TEMPLATES = { natation: swimTemplate, velo: cyclingTemplate, course: runningTemplate, triathlon: triathlonTemplate, randonnee: hikingTemplate, trail: trailTemplate };
+const SPORT_LABEL_KEYS = { fitness: "sport.fitness", natation: "sport.swimming", velo: "sport.cycling", course: "sport.running", triathlon: "sport.triathlon", randonnee: "sport.hiking", trail: "sport.trail" };
 
 let currentSport = "fitness";
 let sportPerfs = loadSportPerfs();
@@ -323,9 +336,10 @@ function loadSportPerfs() {
       course: parsed.course || [],
       triathlon: parsed.triathlon || [],
       randonnee: parsed.randonnee || [],
+      trail: parsed.trail || [],
     };
   } catch {
-    return { natation: [], velo: [], course: [], triathlon: [], randonnee: [] };
+    return { natation: [], velo: [], course: [], triathlon: [], randonnee: [], trail: [] };
   }
 }
 
@@ -685,6 +699,34 @@ addHikingForm.addEventListener("submit", async (e) => {
   renderSportList();
 });
 
+addTrailForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const text = trailNameInput.value.trim();
+  if (!text || trailDistanceInput.value === "") return;
+  const perf = {
+    id: crypto.randomUUID(),
+    date: todayISO(),
+    text,
+    distance: distanceFromDisplay(Number(trailDistanceInput.value), "trail"),
+    hours: trailHoursInput.value === "" ? null : Number(trailHoursInput.value),
+    minutes: trailMinutesInput.value === "" ? null : Number(trailMinutesInput.value),
+    seconds: trailSecondsInput.value === "" ? null : Number(trailSecondsInput.value),
+    hundredths: trailHundredthsInput.value === "" ? null : Number(trailHundredthsInput.value),
+    elevationGain: trailElevationGainInput.value === "" ? null : mFromDisplay(Number(trailElevationGainInput.value)),
+    elevationLoss: trailElevationLossInput.value === "" ? null : mFromDisplay(Number(trailElevationLossInput.value)),
+  };
+  addTrailForm.reset();
+  trailNameInput.focus();
+  let keepGoing = true;
+  if (window.promptForPerfDate) keepGoing = await window.promptForPerfDate(perf, () => {});
+  if (!keepGoing) return;
+  if (window.promptForProofPhotos) keepGoing = await window.promptForProofPhotos(perf, () => {});
+  if (!keepGoing) return;
+  sportPerfs.trail.push(perf);
+  saveSportPerfs();
+  renderSportList();
+});
+
 addRunningForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = runningDescInput.value.trim();
@@ -846,6 +888,9 @@ function updateDistancePlaceholders() {
   hikingDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
   hikingElevationGainInput.placeholder = `${t("field.elevationGain")} (${mUnitLabel()})`;
   hikingElevationLossInput.placeholder = `${t("field.elevationLoss")} (${mUnitLabel()})`;
+  trailDistanceInput.placeholder = `${distanceLabel} (${kmUnitLabel()})`;
+  trailElevationGainInput.placeholder = `${t("field.elevationGain")} (${mUnitLabel()})`;
+  trailElevationLossInput.placeholder = `${t("field.elevationLoss")} (${mUnitLabel()})`;
 }
 
 document.addEventListener("languagechange", () => {

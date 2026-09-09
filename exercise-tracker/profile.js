@@ -259,6 +259,8 @@ const ICON_TROPHY =
   '<path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.5a2 2 0 0 0 0 4H7"/><path d="M17 5h2.5a2 2 0 0 1 0 4H17"/><path d="M12 13v4"/><path d="M9.5 17h5l.5 4h-6l.5-4Z"/>';
 const ICON_DUMBBELL =
   '<path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/>';
+const ICON_PACE =
+  '<path d="M12 12l3 -3"/><path d="M12 6v-2"/><path d="M4.5 9.5l-1 -1"/><path d="M4 15h-2"/><path d="M20 15h-2"/><path d="M19.5 9.5l1 -1"/><circle cx="12" cy="15" r="6"/>';
 
 function loadSportEntries(sport) {
   try {
@@ -293,6 +295,14 @@ function formatHoursMinutes(totalSeconds) {
   return `${h}h${String(m).padStart(2, "0")}`;
 }
 
+function formatPace(secondsPerUnit) {
+  if (!secondsPerUnit || !Number.isFinite(secondsPerUnit)) return "—";
+  const unit = window.kmUnitLabel ? window.kmUnitLabel() : "km";
+  const m = Math.floor(secondsPerUnit / 60);
+  const s = Math.round(secondsPerUnit % 60);
+  return `${m}:${String(s).padStart(2, "0")}/${unit}`;
+}
+
 function distinctGroupCount(entries, groupKeyFn) {
   const keys = new Set();
   entries.forEach((e) => {
@@ -302,8 +312,8 @@ function distinctGroupCount(entries, groupKeyFn) {
   return keys.size;
 }
 
-function tile(icon, value, labelKey) {
-  return `<div class="stat-tile"><span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icon}</svg></span><span class="stat-tile-value">${value}</span><span class="stat-tile-label">${t(labelKey)}</span></div>`;
+function tile(icon, value, labelKey, memoKey) {
+  return `<div class="stat-tile" data-memo="${memoKey}"><span class="stat-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${icon}</svg></span><span class="stat-tile-value">${value}</span><span class="stat-tile-label">${t(labelKey)}</span></div>`;
 }
 
 function renderSportStats(sport) {
@@ -313,10 +323,10 @@ function renderSportStats(sport) {
     const totalReps = entries.reduce((sum, e) => sum + (typeof e.maxReps === "number" ? e.maxReps : 0), 0);
     const totalWeight = entries.reduce((sum, e) => sum + (typeof e.maxWeight === "number" ? e.maxWeight : 0), 0);
     statisticsSportContent.innerHTML =
-      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
-      tile(ICON_TARGET, distinctExercises, "statistics.distinctExercises") +
-      tile(ICON_COUNT, totalReps, "statistics.totalReps") +
-      tile(ICON_DUMBBELL, `${window.weightToDisplay ? window.weightToDisplay(totalWeight) : totalWeight} ${window.weightUnitLabel ? window.weightUnitLabel() : "kg"}`, "statistics.totalWeight");
+      tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
+      tile(ICON_TARGET, distinctExercises, "statistics.distinctExercises", "statistics.memoDistinctExercises") +
+      tile(ICON_COUNT, totalReps, "statistics.totalReps", "statistics.memoTotalReps") +
+      tile(ICON_DUMBBELL, `${window.weightToDisplay ? window.weightToDisplay(totalWeight) : totalWeight} ${window.weightUnitLabel ? window.weightUnitLabel() : "kg"}`, "statistics.totalWeight", "statistics.memoTotalWeight");
     return;
   }
 
@@ -326,10 +336,10 @@ function renderSportStats(sport) {
     const bestSeconds = entries.length ? Math.min(...entries.map(triathlonEntrySeconds)) : null;
     const distinctSizes = distinctGroupCount(entries, (e) => e.size);
     statisticsSportContent.innerHTML =
-      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
-      tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime") +
-      tile(ICON_TROPHY, bestSeconds == null ? "—" : formatHoursMinutes(bestSeconds), "statistics.bestTime") +
-      tile(ICON_TARGET, distinctSizes, "statistics.distinctSizes");
+      tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
+      tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime", "statistics.memoTime") +
+      tile(ICON_TROPHY, bestSeconds == null ? "—" : formatHoursMinutes(bestSeconds), "statistics.bestTime", "statistics.memoBestTime") +
+      tile(ICON_TARGET, distinctSizes, "statistics.distinctSizes", "statistics.memoDistinctSizes");
     return;
   }
 
@@ -342,25 +352,46 @@ function renderSportStats(sport) {
     : `${window.kmToDisplay ? window.kmToDisplay(totalDistance) : totalDistance} ${window.kmUnitLabel ? window.kmUnitLabel() : "km"}`;
   const groupKeyFn = isNatation ? (e) => `${e.distance}-${e.text}` : (e) => e.distance;
 
-  if (sport === "randonnee") {
+  if (sport === "randonnee" || sport === "trail") {
     const totalElevation = entries.reduce((sum, e) => sum + (e.elevationGain || 0) + (e.elevationLoss || 0), 0);
     statisticsSportContent.innerHTML =
-      tile(ICON_COUNT, entries.length, "statistics.totalStats") +
-      tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance") +
-      tile(ICON_ELEVATION, `${window.mToDisplay ? window.mToDisplay(totalElevation) : totalElevation} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`, "statistics.totalElevation") +
-      tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances");
+      tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
+      tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance", "statistics.memoDistance") +
+      tile(ICON_ELEVATION, `${window.mToDisplay ? window.mToDisplay(totalElevation) : totalElevation} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`, "statistics.totalElevation", "statistics.memoElevation") +
+      tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances", "statistics.memoDistinctDistances");
     return;
   }
 
   const totalSeconds = entries.reduce((sum, e) => sum + entrySeconds(e), 0);
   statisticsSportContent.innerHTML =
-    tile(ICON_COUNT, entries.length, "statistics.totalStats") +
-    tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance") +
-    tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime") +
-    tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances");
+    tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
+    tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance", "statistics.memoDistance") +
+    tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime", "statistics.memoTime") +
+    tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances", "statistics.memoDistinctDistances");
+
+  // Course and Vélo also get an average pace per displayed distance unit -
+  // not meaningful for Natation (tracked in meters, not km) or the branches
+  // handled above.
+  if (sport === "course" || sport === "velo") {
+    const displayDistance = window.kmToDisplay ? window.kmToDisplay(totalDistance) : totalDistance;
+    const paceSecondsPerUnit = displayDistance > 0 ? totalSeconds / displayDistance : null;
+    statisticsSportContent.innerHTML += tile(ICON_PACE, formatPace(paceSecondsPerUnit), "statistics.avgPace", "statistics.memoAvgPace");
+  }
 }
 
 selectStatFilter(statisticsMenuEl.querySelector('.sport-option[data-stat="general"]'));
+
+document.addEventListener(
+  "click",
+  (e) => {
+    const tileEl = e.target.closest(".stat-tile[data-memo]");
+    if (!tileEl) return;
+    e.stopPropagation();
+    tileEl.dataset.popupId = tileEl.dataset.popupId || `stat-${tileEl.dataset.memo}`;
+    window.showFloatingPopup(tileEl, `<p class="tri-popup-text">${t(tileEl.dataset.memo)}</p>`);
+  },
+  true
+);
 
 document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
