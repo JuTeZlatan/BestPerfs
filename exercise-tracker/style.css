@@ -2939,6 +2939,23 @@ input[type="number"]::-webkit-inner-spin-button {
   gap: 8px;
 }
 
+/* Each H/Min/Sec field keeps a small permanent unit caption underneath, since
+   a placeholder alone disappears once a value is typed in and the field
+   becomes unreadable (just a bare number). */
+.interval-time-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.interval-time-unit {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 .interval-setup-label {
   flex: 1;
   text-align: left;
@@ -2947,7 +2964,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .interval-setup-row input.preset-time-field {
-  flex: 0 0 56px;
+  flex: none;
+  width: 48px;
   min-width: 0;
   padding: 8px 6px;
   border-radius: 12px;
