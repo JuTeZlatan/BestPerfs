@@ -373,16 +373,23 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
 
 // ---- App version, shown at the bottom of Support - read from the native
 // app itself (App.getInfo()) so it's always accurate without having to keep
-// a hardcoded string in sync with android/app/build.gradle by hand ----
+// a hardcoded string in sync with android/app/build.gradle by hand. The web
+// build has no such API, so it falls back to this constant instead - bump it
+// alongside build.gradle's versionName and sw.js's CACHE_NAME each release. ----
+const WEB_APP_VERSION = "0.4.9";
+
 function renderAppVersion(targetEl) {
   if (!targetEl) return;
+  targetEl.hidden = false;
   const isNativePlatformForVersion = typeof Capacitor !== "undefined" && Capacitor.isNativePlatform && Capacitor.isNativePlatform();
-  if (!isNativePlatformForVersion) return;
+  if (!isNativePlatformForVersion) {
+    targetEl.textContent = `Best Perfs v${WEB_APP_VERSION}`;
+    return;
+  }
   // Always show *something* immediately, and keep it visible even if
   // getInfo() fails, instead of silently staying hidden - a stuck "loading"
   // or an explicit error is far more useful for debugging "which build is
   // actually installed" than an empty screen that looks like nothing ran.
-  targetEl.hidden = false;
   targetEl.textContent = "Best Perfs (chargement de la version...)";
   if (!Capacitor.Plugins || !Capacitor.Plugins.App || !Capacitor.Plugins.App.getInfo) {
     targetEl.textContent = "Best Perfs (App.getInfo indisponible)";

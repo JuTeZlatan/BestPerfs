@@ -10,7 +10,14 @@ function getShareProofs() {
 function setShareProofs(value) {
   localStorage.setItem(SHARE_PROOFS_KEY, value ? "true" : "false");
 }
+// Cloud proof storage is gated behind this single flag until it ships as a
+// paid subscription feature - flip it to true (and re-enable the Storage
+// settings row below) once billing is in place. Kept off for now so a
+// user's device-level preference can never rack up Firebase Storage costs.
+const CLOUD_STORAGE_ENABLED = false;
+
 function getPhotoStorageMode() {
+  if (!CLOUD_STORAGE_ENABLED) return "local";
   return localStorage.getItem(PHOTO_STORAGE_MODE_KEY) === "local" ? "local" : "cloud";
 }
 function setPhotoStorageMode(mode) {

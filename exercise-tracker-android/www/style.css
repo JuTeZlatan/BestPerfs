@@ -492,6 +492,32 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
   color: var(--accent-2);
 }
 
+/* Cloud proof storage is gated behind CLOUD_STORAGE_ENABLED in proofs.js
+   until it ships as a paid feature - shown but inert, not hidden, so people
+   know it's coming rather than wondering why it disappeared. */
+.proofs-storage-row-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.proofs-storage-row-disabled:hover {
+  transform: none;
+  box-shadow: var(--float-shadow);
+}
+
+.proofs-coming-soon-badge {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(var(--accent-rgb), 0.16);
+  color: var(--text-dim);
+  font-family: "Oswald", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 [data-theme-swatch="classic"] { background: #ec2b1e; }
 [data-theme-swatch="ocean"] { background: #1e8fec; }
 [data-theme-swatch="emerald"] { background: #1eec7a; }
