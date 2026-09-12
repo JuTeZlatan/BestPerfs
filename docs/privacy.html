@@ -101,7 +101,7 @@
       <ul>
         <li><strong>Compte</strong> : adresse email, mot de passe (géré par Firebase Authentication, jamais vu ni stocké par nous en clair), pseudo, date de naissance.</li>
         <li><strong>Performances sportives</strong> : les statistiques que tu enregistres toi-même (course, natation, vélo, triathlon, musculation) — type d'exercice, temps, distance, répétitions, poids, date.</li>
-        <li><strong>Photos "preuves"</strong> : si tu choisis d'en ajouter à une performance, elles sont stockées soit uniquement sur ton appareil, soit sur un espace cloud sécurisé, selon le réglage que tu choisis toi-même dans Profil → Stockage. En mode "Cet appareil", elles ne quittent jamais ton téléphone.</li>
+        <li><strong>Photos "preuves"</strong> : si tu choisis d'en ajouter à une performance, elles sont stockées uniquement sur ton appareil — elles ne quittent jamais ton téléphone. Une option de stockage cloud sécurisé est prévue à l'avenir (en abonnement payant) mais n'est pas encore disponible.</li>
         <li><strong>Amis et classement</strong> : la liste de tes amis dans l'appli, et — uniquement si tu actives le partage — tes meilleures performances visibles par eux dans le classement.</li>
         <li><strong>Notifications</strong> : un identifiant technique (token) permettant de t'envoyer des notifications liées à l'appli (ex: fin d'un chronomètre), si tu les as autorisées.</li>
         <li><strong>Réglages</strong> : langue, unités, thème visuel — pour retrouver tes préférences sur tous tes appareils.</li>
@@ -110,7 +110,7 @@
       <h2>Pourquoi ces données sont-elles collectées ?</h2>
       <p>Uniquement pour faire fonctionner l'appli : enregistrer et afficher tes performances, comparer tes résultats avec tes amis si tu le souhaites, synchroniser tes données entre tes appareils, et t'envoyer les notifications que tu as autorisées.</p>
       <h2>Qui d'autre a accès à ces données ?</h2>
-      <p>Tes données sont hébergées par <strong>Firebase</strong> (Google Cloud) : Firebase Authentication (comptes), Cloud Firestore (statistiques, réglages, amis), Firebase Storage (photos si tu choisis le mode cloud), et Firebase Cloud Messaging (notifications). Google agit comme sous-traitant technique et n'utilise pas ces données à ses propres fins publicitaires. Aucune donnée n'est vendue ni partagée avec d'autres tiers.</p>
+      <p>Tes données sont hébergées par <strong>Firebase</strong> (Google Cloud) : Firebase Authentication (comptes), Cloud Firestore (statistiques, réglages, amis), Firebase Storage (prévu à l'avenir pour les photos en mode cloud — non encore actif), et Firebase Cloud Messaging (notifications). Google agit comme sous-traitant technique et n'utilise pas ces données à ses propres fins publicitaires. Aucune donnée n'est vendue ni partagée avec d'autres tiers.</p>
       <p>Si tu te connectes avec Google, Google Sign-In nous transmet ton adresse email pour créer ton compte — selon les règles habituelles de Google.</p>
       <h2>Combien de temps ces données sont-elles conservées ?</h2>
       <p>Tant que ton compte existe. Tu peux supprimer ton compte à tout moment depuis Profil → Compte → Supprimer mon compte : cette action supprime immédiatement ton profil et tes données sur nos serveurs, ainsi que les données stockées localement sur l'appareil utilisé.</p>
@@ -127,7 +127,7 @@
       <ul>
         <li><strong>Account</strong>: email address, password (handled by Firebase Authentication, never seen or stored by us in plain text), username, date of birth.</li>
         <li><strong>Sport performances</strong>: the stats you log yourself (running, swimming, cycling, triathlon, strength training) — exercise type, time, distance, reps, weight, date.</li>
-        <li><strong>"Proof" photos</strong>: if you choose to attach one to a performance, it's stored either only on your device or on secure cloud storage, depending on the setting you choose yourself under Profile → Storage. In "This device" mode, it never leaves your phone.</li>
+        <li><strong>"Proof" photos</strong>: if you choose to attach one to a performance, it's stored only on your device — it never leaves your phone. A secure cloud storage option is planned for the future (as a paid subscription) but isn't available yet.</li>
         <li><strong>Friends and leaderboard</strong>: your friends list within the app, and — only if you enable sharing — your best performances as seen by them on the leaderboard.</li>
         <li><strong>Notifications</strong>: a technical token used to send you app-related notifications (e.g. a timer finishing), if you've allowed them.</li>
         <li><strong>Settings</strong>: language, units, visual theme — so your preferences follow you across devices.</li>
@@ -136,7 +136,7 @@
       <h2>Why is this data collected?</h2>
       <p>Only to make the app work: recording and displaying your performances, comparing results with friends if you choose to, syncing your data across your devices, and sending the notifications you've allowed.</p>
       <h2>Who else has access to this data?</h2>
-      <p>Your data is hosted by <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (stats, settings, friends), Firebase Storage (photos if you choose cloud mode), and Firebase Cloud Messaging (notifications). Google acts as a technical processor and does not use this data for its own advertising purposes. No data is sold or shared with any other third party.</p>
+      <p>Your data is hosted by <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (stats, settings, friends), Firebase Storage (planned for the future for cloud-mode photos — not yet active), and Firebase Cloud Messaging (notifications). Google acts as a technical processor and does not use this data for its own advertising purposes. No data is sold or shared with any other third party.</p>
       <p>If you sign in with Google, Google Sign-In shares your email address with us to create your account, under Google's usual rules.</p>
       <h2>How long is this data kept?</h2>
       <p>For as long as your account exists. You can delete your account at any time from Profile → Account → Delete my account: this immediately deletes your profile and data from our servers, as well as data stored locally on the device you're using.</p>
@@ -153,7 +153,7 @@
       <ul>
         <li><strong>Cuenta</strong>: dirección de correo electrónico, contraseña (gestionada por Firebase Authentication, nunca vista ni almacenada por nosotros en texto plano), nombre de usuario, fecha de nacimiento.</li>
         <li><strong>Rendimientos deportivos</strong>: las estadísticas que registras tú mismo (running, natación, ciclismo, triatlón, musculación) — tipo de ejercicio, tiempo, distancia, repeticiones, peso, fecha.</li>
-        <li><strong>Fotos "prueba"</strong>: si eliges añadir una a un rendimiento, se almacena solo en tu dispositivo o en almacenamiento en la nube seguro, según el ajuste que elijas tú mismo en Perfil → Almacenamiento. En modo "Este dispositivo", nunca sale de tu teléfono.</li>
+        <li><strong>Fotos "prueba"</strong>: si eliges añadir una a un rendimiento, se almacena solo en tu dispositivo — nunca sale de tu teléfono. Está prevista una opción de almacenamiento en la nube seguro en el futuro (como suscripción de pago), pero aún no está disponible.</li>
         <li><strong>Amigos y clasificación</strong>: tu lista de amigos dentro de la app, y — solo si activas el compartir — tus mejores rendimientos visibles por ellos en la clasificación.</li>
         <li><strong>Notificaciones</strong>: un token técnico usado para enviarte notificaciones relacionadas con la app (ej. un cronómetro que termina), si las has permitido.</li>
         <li><strong>Ajustes</strong>: idioma, unidades, tema visual — para que tus preferencias te sigan en todos tus dispositivos.</li>
@@ -162,7 +162,7 @@
       <h2>¿Por qué se recopilan estos datos?</h2>
       <p>Solo para hacer que la app funcione: registrar y mostrar tus rendimientos, comparar resultados con amigos si lo eliges, sincronizar tus datos entre tus dispositivos, y enviarte las notificaciones que hayas permitido.</p>
       <h2>¿Quién más tiene acceso a estos datos?</h2>
-      <p>Tus datos están alojados por <strong>Firebase</strong> (Google Cloud): Firebase Authentication (cuentas), Cloud Firestore (estadísticas, ajustes, amigos), Firebase Storage (fotos si eliges el modo nube), y Firebase Cloud Messaging (notificaciones). Google actúa como procesador técnico y no usa estos datos para sus propios fines publicitarios. Ningún dato se vende ni se comparte con terceros.</p>
+      <p>Tus datos están alojados por <strong>Firebase</strong> (Google Cloud): Firebase Authentication (cuentas), Cloud Firestore (estadísticas, ajustes, amigos), Firebase Storage (previsto en el futuro para fotos en modo nube — aún no activo), y Firebase Cloud Messaging (notificaciones). Google actúa como procesador técnico y no usa estos datos para sus propios fines publicitarios. Ningún dato se vende ni se comparte con terceros.</p>
       <p>Si inicias sesión con Google, Google Sign-In nos comparte tu dirección de correo electrónico para crear tu cuenta, según las reglas habituales de Google.</p>
       <h2>¿Cuánto tiempo se conservan estos datos?</h2>
       <p>Mientras tu cuenta exista. Puedes eliminar tu cuenta en cualquier momento desde Perfil → Cuenta → Eliminar mi cuenta: esto elimina inmediatamente tu perfil y tus datos de nuestros servidores, así como los datos almacenados localmente en el dispositivo que estés usando.</p>
@@ -179,7 +179,7 @@
       <ul>
         <li><strong>Conta</strong>: endereço de email, palavra-passe (gerida pelo Firebase Authentication, nunca vista nem armazenada por nós em texto simples), nome de utilizador, data de nascimento.</li>
         <li><strong>Desempenhos desportivos</strong>: as estatísticas que registas tu mesmo (corrida, natação, ciclismo, triatlo, musculação) — tipo de exercício, tempo, distância, repetições, peso, data.</li>
-        <li><strong>Fotos "prova"</strong>: se escolheres adicionar uma a um desempenho, é armazenada apenas no teu dispositivo ou num espaço cloud seguro, consoante a definição que escolheres tu mesmo em Perfil → Armazenamento. No modo "Este dispositivo", nunca sai do teu telemóvel.</li>
+        <li><strong>Fotos "prova"</strong>: se escolheres adicionar uma a um desempenho, é armazenada apenas no teu dispositivo — nunca sai do teu telemóvel. Está prevista uma opção de armazenamento cloud seguro no futuro (como subscrição paga), mas ainda não está disponível.</li>
         <li><strong>Amigos e classificação</strong>: a tua lista de amigos dentro da app, e — apenas se ativares a partilha — os teus melhores desempenhos visíveis por eles na classificação.</li>
         <li><strong>Notificações</strong>: um token técnico usado para te enviar notificações relacionadas com a app (ex.: um cronómetro a terminar), se as tiveres permitido.</li>
         <li><strong>Definições</strong>: idioma, unidades, tema visual — para que as tuas preferências te sigam em todos os teus dispositivos.</li>
@@ -188,7 +188,7 @@
       <h2>Porque são estes dados recolhidos?</h2>
       <p>Apenas para fazer a app funcionar: registar e mostrar os teus desempenhos, comparar resultados com amigos se assim o escolheres, sincronizar os teus dados entre dispositivos, e enviar-te as notificações que tiveres permitido.</p>
       <h2>Quem mais tem acesso a estes dados?</h2>
-      <p>Os teus dados são alojados pela <strong>Firebase</strong> (Google Cloud): Firebase Authentication (contas), Cloud Firestore (estatísticas, definições, amigos), Firebase Storage (fotos se escolheres o modo cloud), e Firebase Cloud Messaging (notificações). A Google atua como processador técnico e não usa estes dados para fins publicitários próprios. Nenhum dado é vendido nem partilhado com terceiros.</p>
+      <p>Os teus dados são alojados pela <strong>Firebase</strong> (Google Cloud): Firebase Authentication (contas), Cloud Firestore (estatísticas, definições, amigos), Firebase Storage (previsto para fotos em modo cloud no futuro — ainda não ativo), e Firebase Cloud Messaging (notificações). A Google atua como processador técnico e não usa estes dados para fins publicitários próprios. Nenhum dado é vendido nem partilhado com terceiros.</p>
       <p>Se iniciares sessão com a Google, o Google Sign-In partilha connosco o teu endereço de email para criar a tua conta, segundo as regras habituais da Google.</p>
       <h2>Durante quanto tempo estes dados são conservados?</h2>
       <p>Enquanto a tua conta existir. Podes eliminar a tua conta a qualquer momento em Perfil → Conta → Eliminar a minha conta: esta ação elimina imediatamente o teu perfil e os teus dados dos nossos servidores, bem como os dados armazenados localmente no dispositivo que estiveres a usar.</p>
@@ -205,7 +205,7 @@
       <ul>
         <li><strong>Konto</strong>: E-Mail-Adresse, Passwort (verwaltet von Firebase Authentication, von uns nie im Klartext gesehen oder gespeichert), Benutzername, Geburtsdatum.</li>
         <li><strong>Sportliche Leistungen</strong>: die Statistiken, die du selbst erfasst (Laufen, Schwimmen, Radfahren, Triathlon, Krafttraining) — Übungsart, Zeit, Distanz, Wiederholungen, Gewicht, Datum.</li>
-        <li><strong>"Nachweis"-Fotos</strong>: wenn du eines zu einer Leistung hinzufügst, wird es entweder nur auf deinem Gerät oder in einem sicheren Cloud-Speicher gespeichert, je nach der Einstellung, die du selbst unter Profil → Speicher wählst. Im Modus "Dieses Gerät" verlässt es nie dein Telefon.</li>
+        <li><strong>"Nachweis"-Fotos</strong>: wenn du eines zu einer Leistung hinzufügst, wird es nur auf deinem Gerät gespeichert — es verlässt nie dein Telefon. Eine sichere Cloud-Speicheroption ist für die Zukunft geplant (als kostenpflichtiges Abo), aber noch nicht verfügbar.</li>
         <li><strong>Freunde und Rangliste</strong>: deine Freundesliste innerhalb der App und — nur wenn du das Teilen aktivierst — deine besten Leistungen, sichtbar für sie in der Rangliste.</li>
         <li><strong>Benachrichtigungen</strong>: ein technisches Token, mit dem dir app-bezogene Benachrichtigungen gesendet werden (z. B. ein beendeter Timer), falls du diese erlaubt hast.</li>
         <li><strong>Einstellungen</strong>: Sprache, Einheiten, visuelles Theme — damit deine Einstellungen dich auf all deinen Geräten begleiten.</li>
@@ -214,7 +214,7 @@
       <h2>Warum werden diese Daten erhoben?</h2>
       <p>Nur damit die App funktioniert: Erfassen und Anzeigen deiner Leistungen, Vergleichen der Ergebnisse mit Freunden, wenn du das möchtest, Synchronisieren deiner Daten zwischen deinen Geräten und Senden der Benachrichtigungen, die du erlaubt hast.</p>
       <h2>Wer hat sonst noch Zugriff auf diese Daten?</h2>
-      <p>Deine Daten werden von <strong>Firebase</strong> (Google Cloud) gehostet: Firebase Authentication (Konten), Cloud Firestore (Statistiken, Einstellungen, Freunde), Firebase Storage (Fotos, falls du den Cloud-Modus wählst) und Firebase Cloud Messaging (Benachrichtigungen). Google fungiert als technischer Auftragsverarbeiter und nutzt diese Daten nicht für eigene Werbezwecke. Es werden keine Daten verkauft oder an Dritte weitergegeben.</p>
+      <p>Deine Daten werden von <strong>Firebase</strong> (Google Cloud) gehostet: Firebase Authentication (Konten), Cloud Firestore (Statistiken, Einstellungen, Freunde), Firebase Storage (für die Zukunft für Fotos im Cloud-Modus geplant — noch nicht aktiv) und Firebase Cloud Messaging (Benachrichtigungen). Google fungiert als technischer Auftragsverarbeiter und nutzt diese Daten nicht für eigene Werbezwecke. Es werden keine Daten verkauft oder an Dritte weitergegeben.</p>
       <p>Wenn du dich mit Google anmeldest, teilt Google Sign-In uns deine E-Mail-Adresse mit, um dein Konto zu erstellen, gemäß den üblichen Regeln von Google.</p>
       <h2>Wie lange werden diese Daten aufbewahrt?</h2>
       <p>Solange dein Konto besteht. Du kannst dein Konto jederzeit unter Profil → Konto → Mein Konto löschen entfernen: Dies löscht sofort dein Profil und deine Daten auf unseren Servern sowie die lokal auf dem verwendeten Gerät gespeicherten Daten.</p>
@@ -231,7 +231,7 @@
       <ul>
         <li><strong>Account</strong>: indirizzo email, password (gestita da Firebase Authentication, mai vista né memorizzata da noi in chiaro), nome utente, data di nascita.</li>
         <li><strong>Prestazioni sportive</strong>: le statistiche che registri tu stesso (corsa, nuoto, ciclismo, triathlon, allenamento con i pesi) — tipo di esercizio, tempo, distanza, ripetizioni, peso, data.</li>
-        <li><strong>Foto "prova"</strong>: se scegli di aggiungerne una a una prestazione, viene memorizzata solo sul tuo dispositivo o su uno spazio cloud sicuro, in base all'impostazione che scegli tu stesso in Profilo → Archiviazione. In modalità "Questo dispositivo", non lascia mai il tuo telefono.</li>
+        <li><strong>Foto "prova"</strong>: se scegli di aggiungerne una a una prestazione, viene memorizzata solo sul tuo dispositivo — non lascia mai il tuo telefono. Un'opzione di archiviazione cloud sicura è prevista in futuro (come abbonamento a pagamento), ma non è ancora disponibile.</li>
         <li><strong>Amici e classifica</strong>: la tua lista di amici all'interno dell'app e — solo se attivi la condivisione — le tue migliori prestazioni visibili da loro nella classifica.</li>
         <li><strong>Notifiche</strong>: un token tecnico usato per inviarti notifiche relative all'app (es. un timer che termina), se le hai autorizzate.</li>
         <li><strong>Impostazioni</strong>: lingua, unità di misura, tema visivo — per ritrovare le tue preferenze su tutti i tuoi dispositivi.</li>
@@ -240,7 +240,7 @@
       <h2>Perché questi dati vengono raccolti?</h2>
       <p>Solo per far funzionare l'app: registrare e mostrare le tue prestazioni, confrontare i risultati con gli amici se lo desideri, sincronizzare i tuoi dati tra i tuoi dispositivi e inviarti le notifiche che hai autorizzato.</p>
       <h2>Chi altro ha accesso a questi dati?</h2>
-      <p>I tuoi dati sono ospitati da <strong>Firebase</strong> (Google Cloud): Firebase Authentication (account), Cloud Firestore (statistiche, impostazioni, amici), Firebase Storage (foto se scegli la modalità cloud) e Firebase Cloud Messaging (notifiche). Google agisce come responsabile tecnico del trattamento e non utilizza questi dati per propri fini pubblicitari. Nessun dato viene venduto o condiviso con terzi.</p>
+      <p>I tuoi dati sono ospitati da <strong>Firebase</strong> (Google Cloud): Firebase Authentication (account), Cloud Firestore (statistiche, impostazioni, amici), Firebase Storage (previsto in futuro per le foto in modalità cloud — non ancora attivo) e Firebase Cloud Messaging (notifiche). Google agisce come responsabile tecnico del trattamento e non utilizza questi dati per propri fini pubblicitari. Nessun dato viene venduto o condiviso con terzi.</p>
       <p>Se accedi con Google, Google Sign-In ci condivide il tuo indirizzo email per creare il tuo account, secondo le regole abituali di Google.</p>
       <h2>Per quanto tempo questi dati vengono conservati?</h2>
       <p>Finché il tuo account esiste. Puoi eliminare il tuo account in qualsiasi momento da Profilo → Account → Elimina il mio account: questa azione elimina immediatamente il tuo profilo e i tuoi dati dai nostri server, così come i dati memorizzati localmente sul dispositivo che stai usando.</p>
@@ -257,7 +257,7 @@
       <ul>
         <li><strong>Account</strong>: e-mailadres, wachtwoord (beheerd door Firebase Authentication, nooit door ons gezien of in platte tekst opgeslagen), gebruikersnaam, geboortedatum.</li>
         <li><strong>Sportprestaties</strong>: de statistieken die je zelf registreert (hardlopen, zwemmen, fietsen, triatlon, krachttraining) — type oefening, tijd, afstand, herhalingen, gewicht, datum.</li>
-        <li><strong>"Bewijs"-foto's</strong>: als je ervoor kiest er een toe te voegen aan een prestatie, wordt deze ofwel alleen op je apparaat ofwel op een beveiligde cloudopslag bewaard, afhankelijk van de instelling die je zelf kiest onder Profiel → Opslag. In de modus "Dit apparaat" verlaat de foto nooit je telefoon.</li>
+        <li><strong>"Bewijs"-foto's</strong>: als je ervoor kiest er een toe te voegen aan een prestatie, wordt deze alleen op je apparaat bewaard — de foto verlaat nooit je telefoon. Een veilige cloudopslagoptie is gepland voor de toekomst (als betaald abonnement), maar is nog niet beschikbaar.</li>
         <li><strong>Vrienden en ranglijst</strong>: je vriendenlijst binnen de app, en — alleen als je delen inschakelt — je beste prestaties zichtbaar voor hen op de ranglijst.</li>
         <li><strong>Meldingen</strong>: een technisch token waarmee je app-gerelateerde meldingen ontvangt (bijv. een afgelopen timer), als je die hebt toegestaan.</li>
         <li><strong>Instellingen</strong>: taal, eenheden, visueel thema — zodat je voorkeuren je volgen op al je apparaten.</li>
@@ -266,7 +266,7 @@
       <h2>Waarom worden deze gegevens verzameld?</h2>
       <p>Alleen om de app te laten werken: je prestaties vastleggen en tonen, resultaten vergelijken met vrienden als je dat wilt, je gegevens synchroniseren tussen je apparaten, en je de meldingen sturen die je hebt toegestaan.</p>
       <h2>Wie heeft nog meer toegang tot deze gegevens?</h2>
-      <p>Je gegevens worden gehost door <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (statistieken, instellingen, vrienden), Firebase Storage (foto's als je de cloudmodus kiest), en Firebase Cloud Messaging (meldingen). Google treedt op als technische verwerker en gebruikt deze gegevens niet voor eigen advertentiedoeleinden. Er worden geen gegevens verkocht of gedeeld met derden.</p>
+      <p>Je gegevens worden gehost door <strong>Firebase</strong> (Google Cloud): Firebase Authentication (accounts), Cloud Firestore (statistieken, instellingen, vrienden), Firebase Storage (gepland voor de toekomst voor foto's in cloudmodus — nog niet actief), en Firebase Cloud Messaging (meldingen). Google treedt op als technische verwerker en gebruikt deze gegevens niet voor eigen advertentiedoeleinden. Er worden geen gegevens verkocht of gedeeld met derden.</p>
       <p>Als je inlogt met Google, deelt Google Sign-In je e-mailadres met ons om je account aan te maken, volgens de gebruikelijke regels van Google.</p>
       <h2>Hoe lang worden deze gegevens bewaard?</h2>
       <p>Zolang je account bestaat. Je kunt je account op elk moment verwijderen via Profiel → Account → Mijn account verwijderen: dit verwijdert onmiddellijk je profiel en je gegevens van onze servers, evenals de lokaal opgeslagen gegevens op het gebruikte apparaat.</p>
@@ -283,7 +283,7 @@
       <ul>
         <li><strong>Λογαριασμός</strong>: διεύθυνση email, κωδικός πρόσβασης (διαχειρίζεται από το Firebase Authentication, ποτέ δεν τον βλέπουμε ούτε τον αποθηκεύουμε σε απλό κείμενο), όνομα χρήστη, ημερομηνία γέννησης.</li>
         <li><strong>Αθλητικές επιδόσεις</strong>: τα στατιστικά που καταγράφεις εσύ ο ίδιος (τρέξιμο, κολύμβηση, ποδηλασία, τρίαθλο, ενδυνάμωση) — τύπος άσκησης, χρόνος, απόσταση, επαναλήψεις, βάρος, ημερομηνία.</li>
-        <li><strong>Φωτογραφίες "απόδειξης"</strong>: αν επιλέξεις να προσθέσεις μία σε μια επίδοση, αποθηκεύεται είτε μόνο στη συσκευή σου είτε σε ασφαλή αποθηκευτικό χώρο cloud, ανάλογα με τη ρύθμιση που επιλέγεις εσύ στο Προφίλ → Αποθήκευση. Στη λειτουργία "Αυτή η συσκευή", δεν φεύγει ποτέ από το τηλέφωνό σου.</li>
+        <li><strong>Φωτογραφίες "απόδειξης"</strong>: αν επιλέξεις να προσθέσεις μία σε μια επίδοση, αποθηκεύεται μόνο στη συσκευή σου — δεν φεύγει ποτέ από το τηλέφωνό σου. Μια ασφαλής επιλογή αποθήκευσης cloud είναι προγραμματισμένη για το μέλλον (ως επί πληρωμή συνδρομή), αλλά δεν είναι ακόμα διαθέσιμη.</li>
         <li><strong>Φίλοι και κατάταξη</strong>: η λίστα φίλων σου μέσα στην εφαρμογή, και — μόνο αν ενεργοποιήσεις την κοινή χρήση — οι καλύτερες επιδόσεις σου ορατές από αυτούς στην κατάταξη.</li>
         <li><strong>Ειδοποιήσεις</strong>: ένα τεχνικό token που χρησιμοποιείται για να σου στέλνει ειδοποιήσεις σχετικές με την εφαρμογή (π.χ. ολοκλήρωση χρονομέτρου), αν τις έχεις επιτρέψει.</li>
         <li><strong>Ρυθμίσεις</strong>: γλώσσα, μονάδες μέτρησης, οπτικό θέμα — ώστε οι προτιμήσεις σου να σε ακολουθούν σε όλες τις συσκευές σου.</li>
@@ -292,7 +292,7 @@
       <h2>Γιατί συλλέγονται αυτά τα δεδομένα;</h2>
       <p>Μόνο για να λειτουργεί η εφαρμογή: καταγραφή και εμφάνιση των επιδόσεών σου, σύγκριση αποτελεσμάτων με φίλους αν το επιθυμείς, συγχρονισμός των δεδομένων σου μεταξύ των συσκευών σου, και αποστολή των ειδοποιήσεων που έχεις επιτρέψει.</p>
       <h2>Ποιος άλλος έχει πρόσβαση σε αυτά τα δεδομένα;</h2>
-      <p>Τα δεδομένα σου φιλοξενούνται από το <strong>Firebase</strong> (Google Cloud): Firebase Authentication (λογαριασμοί), Cloud Firestore (στατιστικά, ρυθμίσεις, φίλοι), Firebase Storage (φωτογραφίες αν επιλέξεις τη λειτουργία cloud), και Firebase Cloud Messaging (ειδοποιήσεις). Η Google ενεργεί ως τεχνικός επεξεργαστής και δεν χρησιμοποιεί αυτά τα δεδομένα για δικούς της διαφημιστικούς σκοπούς. Κανένα δεδομένο δεν πωλείται ούτε κοινοποιείται σε τρίτους.</p>
+      <p>Τα δεδομένα σου φιλοξενούνται από το <strong>Firebase</strong> (Google Cloud): Firebase Authentication (λογαριασμοί), Cloud Firestore (στατιστικά, ρυθμίσεις, φίλοι), Firebase Storage (προγραμματισμένο για το μέλλον για φωτογραφίες σε λειτουργία cloud — δεν είναι ακόμα ενεργό), και Firebase Cloud Messaging (ειδοποιήσεις). Η Google ενεργεί ως τεχνικός επεξεργαστής και δεν χρησιμοποιεί αυτά τα δεδομένα για δικούς της διαφημιστικούς σκοπούς. Κανένα δεδομένο δεν πωλείται ούτε κοινοποιείται σε τρίτους.</p>
       <p>Αν συνδεθείς με Google, το Google Sign-In μοιράζεται μαζί μας τη διεύθυνση email σου για να δημιουργήσουμε τον λογαριασμό σου, σύμφωνα με τους συνήθεις κανόνες της Google.</p>
       <h2>Για πόσο χρόνο διατηρούνται αυτά τα δεδομένα;</h2>
       <p>Όσο υπάρχει ο λογαριασμός σου. Μπορείς να διαγράψεις τον λογαριασμό σου οποιαδήποτε στιγμή από το Προφίλ → Λογαριασμός → Διαγραφή του λογαριασμού μου: αυτή η ενέργεια διαγράφει άμεσα το προφίλ και τα δεδομένα σου από τους διακομιστές μας, καθώς και τα δεδομένα που είναι αποθηκευμένα τοπικά στη συσκευή που χρησιμοποιείς.</p>
@@ -309,7 +309,7 @@
       <ul>
         <li><strong>الحساب</strong>: عنوان البريد الإلكتروني، كلمة المرور (تُدار بواسطة Firebase Authentication، ولا نراها أو نخزنها أبدًا كنص عادي)، اسم المستخدم، تاريخ الميلاد.</li>
         <li><strong>الأداء الرياضي</strong>: الإحصائيات التي تسجلها بنفسك (الجري، السباحة، ركوب الدراجات، الترياتلون، تمارين القوة) — نوع التمرين، الوقت، المسافة، عدد التكرارات، الوزن، التاريخ.</li>
-        <li><strong>صور "الإثبات"</strong>: إذا اخترت إضافة صورة إلى أداء معين، يتم تخزينها إما فقط على جهازك أو في مساحة تخزين سحابية آمنة، حسب الإعداد الذي تختاره بنفسك في الملف الشخصي ← التخزين. في وضع "هذا الجهاز"، لا تغادر هاتفك أبدًا.</li>
+        <li><strong>صور "الإثبات"</strong>: إذا اخترت إضافة صورة إلى أداء معين، يتم تخزينها فقط على جهازك — لا تغادر هاتفك أبدًا. من المخطط توفير خيار تخزين سحابي آمن مستقبلاً (كاشتراك مدفوع)، لكنه غير متاح حاليًا.</li>
         <li><strong>الأصدقاء والترتيب</strong>: قائمة أصدقائك داخل التطبيق، و — فقط إذا فعّلت المشاركة — أفضل أدائك المرئي لهم في الترتيب.</li>
         <li><strong>الإشعارات</strong>: رمز تقني يُستخدم لإرسال إشعارات متعلقة بالتطبيق (مثل انتهاء مؤقّت)، إذا سمحت بها.</li>
         <li><strong>الإعدادات</strong>: اللغة، الوحدات، المظهر البصري — حتى تتبعك تفضيلاتك على جميع أجهزتك.</li>
@@ -318,7 +318,7 @@
       <h2>لماذا يتم جمع هذه البيانات؟</h2>
       <p>فقط لتشغيل التطبيق: تسجيل وعرض أدائك، مقارنة النتائج مع الأصدقاء إذا اخترت ذلك، مزامنة بياناتك بين أجهزتك، وإرسال الإشعارات التي سمحت بها.</p>
       <h2>من آخر لديه حق الوصول إلى هذه البيانات؟</h2>
-      <p>تُستضاف بياناتك بواسطة <strong>Firebase</strong> (Google Cloud): Firebase Authentication (الحسابات)، Cloud Firestore (الإحصائيات، الإعدادات، الأصدقاء)، Firebase Storage (الصور إذا اخترت وضع السحابة)، وFirebase Cloud Messaging (الإشعارات). تعمل Google كمعالج تقني ولا تستخدم هذه البيانات لأغراضها الإعلانية الخاصة. لا يتم بيع أي بيانات أو مشاركتها مع أي طرف ثالث آخر.</p>
+      <p>تُستضاف بياناتك بواسطة <strong>Firebase</strong> (Google Cloud): Firebase Authentication (الحسابات)، Cloud Firestore (الإحصائيات، الإعدادات، الأصدقاء)، Firebase Storage (مخطط له مستقبلاً للصور في وضع السحابة — غير مفعّل بعد)، وFirebase Cloud Messaging (الإشعارات). تعمل Google كمعالج تقني ولا تستخدم هذه البيانات لأغراضها الإعلانية الخاصة. لا يتم بيع أي بيانات أو مشاركتها مع أي طرف ثالث آخر.</p>
       <p>إذا سجّلت الدخول باستخدام Google، يشارك Google Sign-In عنوان بريدك الإلكتروني معنا لإنشاء حسابك، وفقًا لقواعد Google المعتادة.</p>
       <h2>إلى متى يتم الاحتفاظ بهذه البيانات؟</h2>
       <p>طالما أن حسابك موجود. يمكنك حذف حسابك في أي وقت من الملف الشخصي ← الحساب ← حذف حسابي: يؤدي هذا الإجراء إلى حذف ملفك الشخصي وبياناتك فورًا من خوادمنا، وكذلك البيانات المخزنة محليًا على الجهاز الذي تستخدمه.</p>
@@ -335,7 +335,7 @@
       <ul>
         <li><strong>账户</strong>：电子邮件地址、密码（由 Firebase Authentication 管理，我们从未以明文查看或存储）、用户名、出生日期。</li>
         <li><strong>运动表现</strong>：你自己记录的统计数据（跑步、游泳、骑行、铁人三项、力量训练）——运动类型、时间、距离、次数、重量、日期。</li>
-        <li><strong>"证明"照片</strong>：如果你选择为某项表现添加照片，它将仅存储在你的设备上，或存储在安全的云存储中，具体取决于你在"个人资料 → 存储"中自行选择的设置。在"此设备"模式下，照片永远不会离开你的手机。</li>
+        <li><strong>"证明"照片</strong>：如果你选择为某项表现添加照片，它将仅存储在你的设备上——永远不会离开你的手机。未来计划推出安全的云存储选项（作为付费订阅），但目前尚不可用。</li>
         <li><strong>好友与排行榜</strong>：你在应用内的好友列表，以及——仅当你启用分享时——你的最佳表现会在排行榜上对他们可见。</li>
         <li><strong>通知</strong>：用于向你发送应用相关通知（例如计时器结束）的技术令牌，前提是你已允许通知。</li>
         <li><strong>设置</strong>：语言、单位、视觉主题——以便你的偏好设置在所有设备上保持一致。</li>
@@ -344,7 +344,7 @@
       <h2>为什么要收集这些数据？</h2>
       <p>仅为了让应用正常运行：记录并显示你的表现，在你愿意的情况下与好友比较结果，在你的设备之间同步数据，并发送你已允许的通知。</p>
       <h2>还有谁可以访问这些数据？</h2>
-      <p>你的数据托管在 <strong>Firebase</strong>（Google Cloud）上：Firebase Authentication（账户）、Cloud Firestore（统计数据、设置、好友）、Firebase Storage（如果你选择云存储模式则包括照片），以及 Firebase Cloud Messaging（通知）。Google 作为技术处理方，不会将这些数据用于其自身的广告目的。任何数据都不会被出售或与其他第三方共享。</p>
+      <p>你的数据托管在 <strong>Firebase</strong>（Google Cloud）上：Firebase Authentication（账户）、Cloud Firestore（统计数据、设置、好友）、Firebase Storage（计划未来用于云模式照片——目前尚未启用），以及 Firebase Cloud Messaging（通知）。Google 作为技术处理方，不会将这些数据用于其自身的广告目的。任何数据都不会被出售或与其他第三方共享。</p>
       <p>如果你使用 Google 登录，Google Sign-In 会与我们共享你的电子邮件地址以创建你的账户，遵循 Google 的常规规则。</p>
       <h2>这些数据会保留多久？</h2>
       <p>只要你的账户存在。你可以随时从"个人资料 → 账户 → 删除我的账户"中删除你的账户：此操作会立即从我们的服务器中删除你的个人资料和数据，以及存储在你所使用设备本地的数据。</p>
