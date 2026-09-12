@@ -186,10 +186,11 @@ async function syncFitnessLeaderboardEntries(exercises) {
 window.syncFitnessLeaderboardEntries = syncFitnessLeaderboardEntries;
 
 // ---- UI: sport/preset pickers + ranking ----
-const classementSportBtn = document.getElementById("classement-sport-select-btn");
-const classementSportLabel = document.getElementById("classement-sport-select-label");
-const classementSportIcon = document.getElementById("classement-sport-select-icon");
-const classementSportMenu = document.getElementById("classement-sport-menu");
+const classementSportGrid = document.getElementById("classement-sport-grid");
+const classementActiveHeader = document.getElementById("classement-active-header");
+const classementActiveIcon = document.getElementById("classement-active-icon");
+const classementActiveLabel = document.getElementById("classement-active-label");
+const classementChangeBtn = document.getElementById("classement-change-btn");
 const classementListEl = document.getElementById("classement-list");
 const classementEmptyEl = document.getElementById("classement-empty-state");
 const classementPresetSelects = {
@@ -220,8 +221,22 @@ let classementNatationDistance = null;
 let classementNatationStroke = null;
 
 function updateClassementSportLabel() {
-  classementSportLabel.textContent = t(CLASSEMENT_SPORT_LABEL_KEYS[classementSport]);
-  classementSportIcon.innerHTML = CLASSEMENT_SPORT_ICONS[classementSport] || "";
+  classementActiveLabel.textContent = t(CLASSEMENT_SPORT_LABEL_KEYS[classementSport]);
+  classementActiveIcon.innerHTML = CLASSEMENT_SPORT_ICONS[classementSport] || "";
+}
+
+// Landing on Classement (fresh from another tab) always shows the sport icon
+// grid first, mirroring the Sports tab - only picking a tile reveals the
+// preset pickers and ranking for that sport.
+function showClassementNeutralState() {
+  classementSportGrid.hidden = false;
+  classementActiveHeader.hidden = true;
+  Object.values(classementPresetSelects).forEach((dropdown) => {
+    dropdown.hidden = true;
+  });
+  classementNatationStrokeSelect.hidden = true;
+  classementListEl.innerHTML = "";
+  classementEmptyEl.classList.remove("visible");
 }
 
 function resetPresetDropdown(dropdown) {
@@ -234,13 +249,12 @@ function resetPresetDropdown(dropdown) {
 }
 
 function selectClassementSport(sport) {
+  classementSportGrid.hidden = true;
+  classementActiveHeader.hidden = false;
   classementSport = sport;
   classementPreset = null;
   classementNatationDistance = null;
   classementNatationStroke = null;
-  classementSportMenu.querySelectorAll(".sport-option").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.sport === sport);
-  });
   Object.keys(classementPresetSelects).forEach((key) => {
     classementPresetSelects[key].hidden = key !== sport;
     resetPresetDropdown(classementPresetSelects[key]);
@@ -251,24 +265,13 @@ function selectClassementSport(sport) {
   renderClassementList();
 }
 
-classementSportBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  const opening = classementSportMenu.hidden;
-  window.closeAllDropdowns();
-  classementSportMenu.hidden = !opening;
+classementSportGrid.querySelectorAll(".sport-icon-tile").forEach((tile) => {
+  tile.addEventListener("click", () => selectClassementSport(tile.dataset.sport));
 });
 
-classementSportMenu.querySelectorAll(".sport-option").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectClassementSport(btn.dataset.sport);
-    classementSportMenu.hidden = true;
-  });
-});
+classementChangeBtn.addEventListener("click", () => showClassementNeutralState());
 
 document.addEventListener("click", (e) => {
-  if (!classementSportMenu.hidden && !classementSportMenu.contains(e.target) && e.target !== classementSportBtn) {
-    classementSportMenu.hidden = true;
-  }
   [...Object.values(classementPresetSelects), classementNatationStrokeSelect].forEach((dropdown) => {
     const menu = dropdown.querySelector(".classement-preset-menu");
     if (!menu.hidden && !dropdown.contains(e.target)) menu.hidden = true;
@@ -417,7 +420,7 @@ async function renderClassementList() {
 }
 
 document.querySelector('.bottom-nav-btn[data-view="classement"]').addEventListener("click", () => {
-  selectClassementSport(classementSport);
+  showClassementNeutralState();
 });
 
 document.addEventListener("languagechange", () => {
@@ -425,7 +428,7 @@ document.addEventListener("languagechange", () => {
   const activeDropdown = classementPresetSelects[classementSport];
   const activeOption = activeDropdown?.querySelector(".sport-option.active");
   if (activeOption) activeDropdown.querySelector(".classement-preset-label").textContent = activeOption.textContent;
-  if (!document.getElementById("classement-view").hidden) renderClassementList();
+  if (!document.getElementById("classement-view").hidden && !classementActiveHeader.hidden) renderClassementList();
 });
 
 updateClassementSportLabel();

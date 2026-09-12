@@ -145,6 +145,14 @@
         <span class="flag-icon-slot"></span>
         <span>中文</span>
       </button>
+      <button class="lang-option" data-lang="ja">
+        <span class="flag-icon-slot"></span>
+        <span>日本語</span>
+      </button>
+      <button class="lang-option" data-lang="hi">
+        <span class="flag-icon-slot"></span>
+        <span>हिन्दी</span>
+      </button>
     </div>
   </div>
 
@@ -613,19 +621,33 @@
         <p class="subtitle" data-i18n="app.subtitle.classement">Compare tes chronos avec tes amis sur les mêmes épreuves.</p>
       </header>
 
-      <div class="sport-dropdown">
-        <button id="classement-sport-select-btn" class="sport-select-btn" type="button">
-          <span id="classement-sport-select-icon" class="sport-select-icon"></span>
-          <span id="classement-sport-select-label"></span>
-          <span class="dropdown-arrow">▾</span>
+      <div id="classement-sport-grid" class="sport-icon-grid">
+        <button class="sport-icon-tile" type="button" data-sport="fitness">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.fitness">Fitness</span>
         </button>
-        <div id="classement-sport-menu" class="sport-menu" hidden>
-          <button class="sport-option active" data-sport="course"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg></span><span data-i18n="sport.running">Course à pied</span></button>
-          <button class="sport-option" data-sport="natation"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span><span data-i18n="sport.swimming">Natation</span></button>
-          <button class="sport-option" data-sport="triathlon"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span><span data-i18n="sport.triathlon">Triathlon</span></button>
-          <button class="sport-option" data-sport="velo"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span><span data-i18n="sport.cycling">Vélo</span></button>
-          <button class="sport-option" data-sport="fitness"><span class="view-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h1"/><path d="M6 8h-2a1 1 0 0 0 -1 1v6a1 1 0 0 0 1 1h2"/><path d="M6 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M9 12h6"/><path d="M15 7v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1 -1v-10a1 1 0 0 0 -1 -1h-1a1 1 0 0 0 -1 1"/><path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2"/><path d="M22 12h-1"/></svg></span><span data-i18n="sport.fitness">Fitness</span></button>
-        </div>
+        <button class="sport-icon-tile" type="button" data-sport="course">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.running">Course à pied</span>
+        </button>
+        <button class="sport-icon-tile" type="button" data-sport="natation">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.swimming">Natation</span>
+        </button>
+        <button class="sport-icon-tile" type="button" data-sport="velo">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.cycling">Vélo</span>
+        </button>
+        <button class="sport-icon-tile" type="button" data-sport="triathlon">
+          <span class="sport-icon-tile-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4.2"/><circle cx="17" cy="8" r="4.2"/><circle cx="12" cy="15.5" r="4.2"/></svg></span>
+          <span class="sport-icon-tile-label" data-i18n="sport.triathlon">Triathlon</span>
+        </button>
+      </div>
+
+      <div id="classement-active-header" class="sport-active-header" hidden>
+        <span id="classement-active-icon" class="sport-active-icon"></span>
+        <span id="classement-active-label" class="sport-active-label"></span>
+        <button id="classement-change-btn" class="sport-change-btn" type="button" data-i18n="sports.changeSport">Changer</button>
       </div>
 
       <div id="classement-preset-course" class="sport-dropdown classement-preset-dropdown">
@@ -1401,6 +1423,16 @@
         <button class="profile-menu-row lang-option" type="button" data-lang="zh">
           <span class="flag-icon-slot"></span>
           <span class="profile-menu-label">中文</span>
+          <span class="profile-menu-chevron lang-option-check"></span>
+        </button>
+        <button class="profile-menu-row lang-option" type="button" data-lang="ja">
+          <span class="flag-icon-slot"></span>
+          <span class="profile-menu-label">日本語</span>
+          <span class="profile-menu-chevron lang-option-check"></span>
+        </button>
+        <button class="profile-menu-row lang-option" type="button" data-lang="hi">
+          <span class="flag-icon-slot"></span>
+          <span class="profile-menu-label">हिन्दी</span>
           <span class="profile-menu-chevron lang-option-check"></span>
         </button>
       </div>
