@@ -250,10 +250,14 @@ const intervalDisplay = document.getElementById("interval-display");
 const intervalPhaseLabelEl = document.getElementById("interval-phase-label");
 const intervalCycleCountEl = document.getElementById("interval-cycle-count");
 const intervalSetupEl = document.getElementById("interval-setup");
+const intervalWorkHoursInput = document.getElementById("interval-work-hours-input");
 const intervalWorkMinutesInput = document.getElementById("interval-work-minutes-input");
 const intervalWorkSecondsInput = document.getElementById("interval-work-seconds-input");
+const intervalRestHoursInput = document.getElementById("interval-rest-hours-input");
 const intervalRestMinutesInput = document.getElementById("interval-rest-minutes-input");
 const intervalRestSecondsInput = document.getElementById("interval-rest-seconds-input");
+const intervalInfiniteCheckbox = document.getElementById("interval-infinite-checkbox");
+const intervalRepsInput = document.getElementById("interval-reps-input");
 const intervalStartBtn = document.getElementById("interval-start-btn");
 const intervalResetBtn = document.getElementById("interval-reset-btn");
 
@@ -263,24 +267,35 @@ function loadIntervalSettings() {
     return {
       workSeconds: Math.max(0, Number(parsed.workSeconds) || 0),
       restSeconds: Math.max(0, Number(parsed.restSeconds) || 0),
+      maxCycles: parsed.maxCycles == null ? null : Math.max(1, Number(parsed.maxCycles) || 1),
     };
   } catch {
-    return { workSeconds: 60, restSeconds: 180 };
+    return { workSeconds: 60, restSeconds: 180, maxCycles: null };
   }
 }
 
-function saveIntervalSettings(workSeconds, restSeconds) {
-  localStorage.setItem(INTERVAL_SETTINGS_KEY, JSON.stringify({ workSeconds, restSeconds }));
+function saveIntervalSettings(workSeconds, restSeconds, maxCycles) {
+  localStorage.setItem(INTERVAL_SETTINGS_KEY, JSON.stringify({ workSeconds, restSeconds, maxCycles }));
 }
 
 const intervalSaved = loadIntervalSettings();
-intervalWorkMinutesInput.value = Math.floor(intervalSaved.workSeconds / 60);
+intervalWorkHoursInput.value = Math.floor(intervalSaved.workSeconds / 3600);
+intervalWorkMinutesInput.value = Math.floor((intervalSaved.workSeconds % 3600) / 60);
 intervalWorkSecondsInput.value = intervalSaved.workSeconds % 60;
-intervalRestMinutesInput.value = Math.floor(intervalSaved.restSeconds / 60);
+intervalRestHoursInput.value = Math.floor(intervalSaved.restSeconds / 3600);
+intervalRestMinutesInput.value = Math.floor((intervalSaved.restSeconds % 3600) / 60);
 intervalRestSecondsInput.value = intervalSaved.restSeconds % 60;
+intervalInfiniteCheckbox.checked = intervalSaved.maxCycles == null;
+intervalRepsInput.hidden = intervalSaved.maxCycles == null;
+if (intervalSaved.maxCycles != null) intervalRepsInput.value = intervalSaved.maxCycles;
+
+intervalInfiniteCheckbox.addEventListener("change", () => {
+  intervalRepsInput.hidden = intervalInfiniteCheckbox.checked;
+});
 
 let intervalWorkSeconds = intervalSaved.workSeconds;
 let intervalRestSeconds = intervalSaved.restSeconds;
+let intervalMaxCycles = intervalSaved.maxCycles; // null = infinite, else a positive number of pauses
 let intervalRunning = false;
 let intervalElapsedBeforePause = 0;
 let intervalStartTimestamp = 0;
@@ -298,11 +313,35 @@ function intervalGetElapsedSeconds() {
   return intervalRunning ? intervalElapsedBeforePause + (Date.now() - intervalStartTimestamp) / 1000 : intervalElapsedBeforePause;
 }
 
+function resetIntervalState() {
+  intervalRunning = false;
+  cancelAnimationFrame(intervalAnimationHandle);
+  clearScheduledNotification();
+  intervalElapsedBeforePause = 0;
+  intervalLastPhaseWasWork = null;
+  intervalLastCycleIndex = -1;
+  setIntervalBtnState("start");
+  intervalSetupEl.hidden = false;
+  intervalPhaseLabelEl.textContent = t("timer.intervalWork");
+  intervalPhaseLabelEl.classList.remove("rest");
+  intervalDisplay.classList.remove("phase-rest");
+  intervalDisplay.textContent = formatTime(intervalWorkSeconds);
+  intervalCycleCountEl.textContent = "0";
+}
+
 function updateIntervalDisplay() {
   const cycleLength = intervalWorkSeconds + intervalRestSeconds;
   if (cycleLength <= 0) return;
   const elapsed = intervalGetElapsedSeconds();
   const cycleIndex = Math.floor(elapsed / cycleLength);
+
+  if (intervalMaxCycles !== null && cycleIndex >= intervalMaxCycles) {
+    beep(660, 400);
+    scheduleNotification(0, t("timer.intervalTab"));
+    resetIntervalState();
+    return;
+  }
+
   const posInCycle = elapsed - cycleIndex * cycleLength;
   const isWork = posInCycle < intervalWorkSeconds;
   const remaining = isWork ? intervalWorkSeconds - posInCycle : cycleLength - posInCycle;
@@ -317,6 +356,7 @@ function updateIntervalDisplay() {
 
   intervalPhaseLabelEl.textContent = isWork ? t("timer.intervalWork") : t("timer.intervalRest");
   intervalPhaseLabelEl.classList.toggle("rest", !isWork);
+  intervalDisplay.classList.toggle("phase-rest", !isWork);
   intervalDisplay.textContent = formatTime(Math.max(0, remaining));
   intervalCycleCountEl.textContent = String(completedReps);
 
@@ -336,14 +376,17 @@ intervalStartBtn.addEventListener("click", () => {
   }
 
   if (intervalElapsedBeforePause === 0) {
+    const workHours = Math.max(0, Math.round(Number(intervalWorkHoursInput.value) || 0));
     const workMinutes = Math.max(0, Math.round(Number(intervalWorkMinutesInput.value) || 0));
     const workSecondsPart = Math.max(0, Math.round(Number(intervalWorkSecondsInput.value) || 0));
+    const restHours = Math.max(0, Math.round(Number(intervalRestHoursInput.value) || 0));
     const restMinutes = Math.max(0, Math.round(Number(intervalRestMinutesInput.value) || 0));
     const restSecondsPart = Math.max(0, Math.round(Number(intervalRestSecondsInput.value) || 0));
-    intervalWorkSeconds = workMinutes * 60 + workSecondsPart;
-    intervalRestSeconds = restMinutes * 60 + restSecondsPart;
+    intervalWorkSeconds = workHours * 3600 + workMinutes * 60 + workSecondsPart;
+    intervalRestSeconds = restHours * 3600 + restMinutes * 60 + restSecondsPart;
     if (intervalWorkSeconds <= 0 || intervalRestSeconds <= 0) return;
-    saveIntervalSettings(intervalWorkSeconds, intervalRestSeconds);
+    intervalMaxCycles = intervalInfiniteCheckbox.checked ? null : Math.max(1, Math.round(Number(intervalRepsInput.value) || 0));
+    saveIntervalSettings(intervalWorkSeconds, intervalRestSeconds, intervalMaxCycles);
     intervalSetupEl.hidden = true;
     intervalLastPhaseWasWork = null;
     intervalLastCycleIndex = -1;
@@ -356,20 +399,7 @@ intervalStartBtn.addEventListener("click", () => {
   setIntervalBtnState("pause");
 });
 
-intervalResetBtn.addEventListener("click", () => {
-  intervalRunning = false;
-  cancelAnimationFrame(intervalAnimationHandle);
-  clearScheduledNotification();
-  intervalElapsedBeforePause = 0;
-  intervalLastPhaseWasWork = null;
-  intervalLastCycleIndex = -1;
-  setIntervalBtnState("start");
-  intervalSetupEl.hidden = false;
-  intervalPhaseLabelEl.textContent = t("timer.intervalWork");
-  intervalPhaseLabelEl.classList.remove("rest");
-  intervalDisplay.textContent = formatTime(intervalWorkSeconds);
-  intervalCycleCountEl.textContent = "0";
-});
+intervalResetBtn.addEventListener("click", resetIntervalState);
 
 // ---- Chronos prédéfinis ----
 const PRESETS_STORAGE_KEY = "exercise-tracker-presets";

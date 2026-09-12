@@ -373,13 +373,23 @@
               <div id="interval-setup" class="interval-setup">
                 <div class="interval-setup-row">
                   <span class="interval-setup-label" data-i18n="timer.intervalWork">Travail</span>
+                  <input type="number" id="interval-work-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
                   <input type="number" id="interval-work-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
                   <input type="number" id="interval-work-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
                 </div>
                 <div class="interval-setup-row">
                   <span class="interval-setup-label" data-i18n="timer.intervalRest">Pause</span>
+                  <input type="number" id="interval-rest-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
                   <input type="number" id="interval-rest-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
                   <input type="number" id="interval-rest-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+                </div>
+                <div class="interval-setup-row">
+                  <span class="interval-setup-label" data-i18n="timer.intervalRepsLabel">Pauses</span>
+                  <label class="interval-infinite-toggle">
+                    <input type="checkbox" id="interval-infinite-checkbox" checked>
+                    <span data-i18n="timer.intervalInfinite">Infini</span>
+                  </label>
+                  <input type="number" id="interval-reps-input" class="preset-time-field interval-reps-input" min="1" step="1" placeholder="5" hidden>
                 </div>
               </div>
 
