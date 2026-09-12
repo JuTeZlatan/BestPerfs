@@ -327,34 +327,74 @@
     </nav>
 
     <section id="timer-view" hidden>
-      <div class="timer-panel">
-        <div class="timer-display" id="timer-display">00:00</div>
-        <div class="timer-controls">
-          <div class="timer-controls-row">
-            <button id="timer-reset-btn" class="timer-btn" data-i18n="timer.reset">Réinitialiser</button>
-            <button id="lap-btn" class="timer-btn" data-i18n="timer.lap">Intervalle</button>
+      <div id="timer-main-tab-bar" class="friends-tab-bar">
+        <button class="friends-tab-btn active" type="button" data-i18n="timer.classicTab">Classique</button>
+        <button class="friends-tab-btn" type="button" data-i18n="timer.intervalTab">Répétition</button>
+      </div>
+      <div id="timer-tab-viewport" class="friends-tab-viewport">
+        <div id="timer-tab-track" class="friends-tab-track">
+          <div class="friends-tab-page">
+            <div class="timer-panel">
+              <div class="timer-display" id="timer-display">00:00</div>
+              <div class="timer-controls">
+                <div class="timer-controls-row">
+                  <button id="timer-reset-btn" class="timer-btn" data-i18n="timer.reset">Réinitialiser</button>
+                  <button id="lap-btn" class="timer-btn" data-i18n="timer.lap">Intervalle</button>
+                </div>
+                <div class="timer-controls-row">
+                  <button id="timer-start-btn" class="timer-btn primary" data-i18n="timer.start">Démarrer</button>
+                </div>
+              </div>
+
+              <div id="lap-list" class="lap-list"></div>
+            </div>
+
+            <h2 class="section-title" data-i18n="presets.sectionTitle">Chronos prédéfinis</h2>
+
+            <form id="add-preset-form" class="add-form">
+              <input type="text" id="preset-name-input" data-i18n-placeholder="presets.namePlaceholder" placeholder="Nom (ex: Repos)" maxlength="30" required>
+              <input type="number" id="preset-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
+              <input type="number" id="preset-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+              <input type="number" id="preset-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+              <button type="submit" data-i18n="common.add">Ajouter</button>
+            </form>
+
+            <div id="preset-list" class="exercise-list"></div>
+
+            <p id="preset-empty-state" class="empty-state" data-i18n="presets.empty">Aucun chrono enregistré. Ajoute-en un ci-dessous !</p>
           </div>
-          <div class="timer-controls-row">
-            <button id="timer-start-btn" class="timer-btn primary" data-i18n="timer.start">Démarrer</button>
+
+          <div class="friends-tab-page">
+            <div class="timer-panel">
+              <div class="interval-phase-label" id="interval-phase-label" data-i18n="timer.intervalWork">Travail</div>
+              <div class="timer-display" id="interval-display">01:00</div>
+              <p class="interval-cycle-count"><span data-i18n="timer.intervalCycleLabel">Répétitions effectuées</span> : <span id="interval-cycle-count">0</span></p>
+
+              <div id="interval-setup" class="interval-setup">
+                <div class="interval-setup-row">
+                  <span class="interval-setup-label" data-i18n="timer.intervalWork">Travail</span>
+                  <input type="number" id="interval-work-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+                  <input type="number" id="interval-work-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+                </div>
+                <div class="interval-setup-row">
+                  <span class="interval-setup-label" data-i18n="timer.intervalRest">Pause</span>
+                  <input type="number" id="interval-rest-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
+                  <input type="number" id="interval-rest-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
+                </div>
+              </div>
+
+              <div class="timer-controls">
+                <div class="timer-controls-row">
+                  <button id="interval-reset-btn" class="timer-btn" data-i18n="timer.reset">Réinitialiser</button>
+                </div>
+                <div class="timer-controls-row">
+                  <button id="interval-start-btn" class="timer-btn primary" data-i18n="timer.start">Démarrer</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div id="lap-list" class="lap-list"></div>
       </div>
-
-      <h2 class="section-title" data-i18n="presets.sectionTitle">Chronos prédéfinis</h2>
-
-      <form id="add-preset-form" class="add-form">
-        <input type="text" id="preset-name-input" data-i18n-placeholder="presets.namePlaceholder" placeholder="Nom (ex: Repos)" maxlength="30" required>
-        <input type="number" id="preset-hours-input" class="preset-time-field" placeholder="H" min="0" step="1">
-        <input type="number" id="preset-minutes-input" class="preset-time-field" data-i18n-placeholder="presets.minPlaceholder" placeholder="Min" min="0" step="1">
-        <input type="number" id="preset-seconds-input" class="preset-time-field" data-i18n-placeholder="presets.secPlaceholder" placeholder="Sec" min="0" max="59" step="1">
-        <button type="submit" data-i18n="common.add">Ajouter</button>
-      </form>
-
-      <div id="preset-list" class="exercise-list"></div>
-
-      <p id="preset-empty-state" class="empty-state" data-i18n="presets.empty">Aucun chrono enregistré. Ajoute-en un ci-dessous !</p>
     </section>
 
     <section id="sports-view">
