@@ -227,11 +227,15 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
 }
 
 .bottom-nav-label {
+  display: block;
+  max-width: 100%;
   font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bottom-nav-center {
