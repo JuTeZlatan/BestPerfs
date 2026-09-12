@@ -2041,6 +2041,86 @@ h1 .view-icon {
   color: var(--accent-2);
 }
 
+/* Once a challenge ends, this covers the ranking/entry-form/leave-button
+   area so nothing there can be interacted with any more - only the header's
+   back arrow (outside this wrapper) still works. */
+.challenge-detail-body {
+  position: relative;
+}
+
+.challenge-ended-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(6, 4, 4, 0.82);
+  backdrop-filter: blur(4px);
+  border-radius: var(--cut);
+}
+
+.challenge-ended-overlay[hidden] {
+  display: none;
+}
+
+.challenge-ended-card {
+  width: 100%;
+  max-width: 320px;
+  background: var(--card-gradient), var(--card-glass);
+  border: 1px solid var(--card-border);
+  border-radius: var(--cut);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: var(--float-shadow), var(--glow-strong);
+}
+
+.challenge-ended-title {
+  font-family: "Oswald", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent-2);
+  margin: 0 0 4px;
+}
+
+.challenge-ended-subtitle {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin: 0 0 18px;
+}
+
+.challenge-ended-podium {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.challenge-ended-podium-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--field);
+  text-align: left;
+}
+
+.challenge-ended-podium-row .classement-rank {
+  min-width: 24px;
+}
+
+.challenge-ended-podium-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .friend-accept-btn,
 .friend-decline-btn,
 .friend-cancel-btn,

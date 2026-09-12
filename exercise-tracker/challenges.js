@@ -669,6 +669,8 @@ const challengeDetailDates = document.getElementById("challenge-detail-dates");
 const challengeDetailList = document.getElementById("challenge-detail-list");
 const challengeDetailEmpty = document.getElementById("challenge-detail-empty");
 const challengeLeaveBtn = document.getElementById("challenge-leave-btn");
+const challengeEndedOverlay = document.getElementById("challenge-ended-overlay");
+const challengeEndedPodium = document.getElementById("challenge-ended-podium");
 
 const challengeEntryFitnessFields = document.getElementById("challenge-entry-fitness-fields");
 const challengeEntryFitnessInput = document.getElementById("challenge-entry-fitness-input");
@@ -704,6 +706,7 @@ const challengeEntryClosedMsg = document.getElementById("challenge-entry-closed-
 let currentChallenge = null;
 let detailUnsubscribe = null;
 let detailCountdownInterval = null;
+let lastRankingRows = [];
 
 function challengeIsActive(challenge) {
   if (!challenge.activatedAt) return false;
@@ -820,6 +823,34 @@ new MutationObserver(() => {
   }
 }).observe(challengeDetailView, { attributes: true, attributeFilter: ["hidden"] });
 
+// Once a challenge is over, an overlay covers the ranking/entry/leave area
+// entirely (see .challenge-ended-overlay) - viewing the final podium is all
+// there is left to do, so only the header's back arrow still works.
+function updateEndedOverlay(challenge) {
+  const ended = !challengeIsActive(challenge);
+  challengeEndedOverlay.hidden = !ended;
+  if (!ended) return;
+  const uid = myUid();
+  challengeEndedPodium.innerHTML = "";
+  lastRankingRows.slice(0, 3).forEach((row, index) => {
+    const node = challengeRankingRowTemplate.content.cloneNode(true);
+    const card = node.querySelector(".exercise-card");
+    card.classList.add("challenge-ended-podium-row");
+    card.classList.remove("exercise-card");
+    const rankEl = node.querySelector(".classement-rank");
+    rankEl.textContent = String(index + 1);
+    rankEl.classList.toggle("rank-gold", index === 0);
+    rankEl.classList.toggle("rank-silver", index === 1);
+    rankEl.classList.toggle("rank-bronze", index === 2);
+    const nameEl = node.querySelector(".classement-name");
+    nameEl.classList.add("challenge-ended-podium-name");
+    nameEl.classList.remove("classement-name");
+    nameEl.textContent = row.uid === uid ? `${row.username} ${t("classement.you")}` : row.username;
+    node.querySelector(".classement-time").textContent = formatChallengeValue(challenge.sport, challenge.presetKey, row.value);
+    challengeEndedPodium.appendChild(node);
+  });
+}
+
 function openChallengeDetail(challenge) {
   currentChallenge = challenge;
   challengesViewEl.hidden = true;
@@ -828,10 +859,12 @@ function openChallengeDetail(challenge) {
   setupChallengeEntryForm(challenge);
 
   challengeDetailDates.textContent = challengeTimingLabel(challenge);
+  updateEndedOverlay(challenge);
   if (detailCountdownInterval) clearInterval(detailCountdownInterval);
   detailCountdownInterval = setInterval(() => {
     challengeDetailDates.textContent = challengeTimingLabel(challenge);
     setupChallengeEntryForm(challenge);
+    updateEndedOverlay(challenge);
   }, 1000);
 
   if (detailUnsubscribe) detailUnsubscribe();
@@ -849,6 +882,7 @@ function renderChallengeRanking(challenge, rows) {
   const sorted = [...rows].sort((a, b) =>
     challenge.sport === "fitness" ? b.value - a.value : a.value - b.value
   );
+  lastRankingRows = sorted;
   challengeDetailList.innerHTML = "";
   challengeDetailEmpty.classList.toggle("visible", sorted.length === 0);
   sorted.forEach((row, index) => {
@@ -864,6 +898,7 @@ function renderChallengeRanking(challenge, rows) {
     node.querySelector(".classement-time").textContent = formatChallengeValue(challenge.sport, challenge.presetKey, row.value);
     challengeDetailList.appendChild(node);
   });
+  updateEndedOverlay(challenge);
 }
 
 challengeDetailBackBtn.addEventListener("click", () => {
