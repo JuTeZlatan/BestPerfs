@@ -540,6 +540,18 @@ body:has(#app-root:not([hidden])) .notif-switcher.notif-switcher-fixed {
   color: var(--danger);
 }
 
+/* 12 languages need to fit on one screen without scrolling, so this list
+   uses noticeably more compact rows than the rest of the profile menu. */
+#language-view .profile-menu {
+  gap: 5px;
+  margin-top: 10px;
+}
+
+#language-view .profile-menu-row {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
