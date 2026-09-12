@@ -376,7 +376,7 @@ document.querySelectorAll(".bottom-nav-btn").forEach((btn) => {
 // a hardcoded string in sync with android/app/build.gradle by hand. The web
 // build has no such API, so it falls back to this constant instead - bump it
 // alongside build.gradle's versionName and sw.js's CACHE_NAME each release. ----
-const WEB_APP_VERSION = "0.4.9";
+const WEB_APP_VERSION = "0.4.10";
 
 function renderAppVersion(targetEl) {
   if (!targetEl) return;
