@@ -1322,14 +1322,17 @@ h1 .view-icon {
   width: 100%;
 }
 
-/* Hiking has too many fields (name, distance, time, D+, D-) to fit on one
-   nowrap row on mobile - let it wrap onto several lines instead, with the
-   name field given its own full-width line like running's description. */
-#add-hiking-form {
+/* Hiking and Trail both have too many fields (name, distance, time, D+, D-)
+   to fit on one nowrap row on mobile - let them wrap onto several lines
+   instead, with the name field given its own full-width line like running's
+   description. */
+#add-hiking-form,
+#add-trail-form {
   flex-wrap: wrap;
 }
 
-#hiking-name-input {
+#hiking-name-input,
+#trail-name-input {
   flex: 1 1 100%;
   min-width: 0;
   font-size: 0.95rem;

@@ -23,10 +23,10 @@ const statisticsGeneralContent = document.getElementById("statistics-general-con
 const statisticsSportContent = document.getElementById("statistics-sport-content");
 const statTotalCountEl = document.getElementById("stat-total-count");
 const statChallengesWonEl = document.getElementById("stat-challenges-won");
-const statAvgRankEl = document.getElementById("stat-avg-rank");
+const statAvgRankClassementEl = document.getElementById("stat-avg-rank-classement");
+const statAvgRankChallengesEl = document.getElementById("stat-avg-rank-challenges");
 const statFirstPlacesEl = document.getElementById("stat-first-places");
 const statFriendCountEl = document.getElementById("stat-friend-count");
-const statStreakEl = document.getElementById("stat-streak");
 
 profileStatisticsRow.addEventListener("click", () => {
   profileViewForSupport.hidden = true;
@@ -138,7 +138,8 @@ async function computeGeneralStats() {
   const uid = auth.currentUser?.uid;
   if (!uid) return null;
 
-  const rankPool = [];
+  const classementRankPool = [];
+  const challengeRankPool = [];
   let firstPlaces = 0;
   let challengeEntryCount = 0;
   let wins = 0;
@@ -159,7 +160,7 @@ async function computeGeneralStats() {
         mine.sport === "fitness" ? b.totalSeconds - a.totalSeconds : a.totalSeconds - b.totalSeconds
       );
       const myRank = rows.findIndex((r) => r.uid === uid) + 1;
-      rankPool.push(myRank);
+      classementRankPool.push(myRank);
       if (myRank === 1) firstPlaces++;
     }
   }
@@ -183,7 +184,7 @@ async function computeGeneralStats() {
       if (!myRow || others.length < MIN_RIVALS_FOR_RANKING) continue;
       const sorted = [...rows].sort((a, b) => (challenge.sport === "fitness" ? b.value - a.value : a.value - b.value));
       const myRank = sorted.findIndex((r) => r.uid === uid) + 1;
-      rankPool.push(myRank);
+      challengeRankPool.push(myRank);
       if (myRank === 1 && isChallengeEnded(challenge)) wins++;
     }
   }
@@ -191,47 +192,15 @@ async function computeGeneralStats() {
   return {
     total: countPersonalPerfs() + challengeEntryCount,
     wins,
-    avgRank: rankPool.length ? rankPool.reduce((a, b) => a + b, 0) / rankPool.length : null,
+    avgRankClassement: classementRankPool.length
+      ? classementRankPool.reduce((a, b) => a + b, 0) / classementRankPool.length
+      : null,
+    avgRankChallenges: challengeRankPool.length
+      ? challengeRankPool.reduce((a, b) => a + b, 0) / challengeRankPool.length
+      : null,
     firstPlaces,
     friendCount: friendUids.length,
-    streak: computeCurrentStreak(),
   };
-}
-
-// A "day logged" is any date with at least one personal perf - streak counts
-// consecutive days back from today (or yesterday, so logging nothing yet
-// today doesn't zero out a streak still in progress).
-function localDateISO(d) {
-  const offset = d.getTimezoneOffset() * 60000;
-  return new Date(d - offset).toISOString().slice(0, 10);
-}
-
-function computeCurrentStreak() {
-  const days = new Set();
-  try {
-    const exercises = JSON.parse(localStorage.getItem("exercise-tracker-data") || "[]");
-    exercises.forEach((e) => e.date && days.add(e.date));
-  } catch {
-    // ignore malformed local data
-  }
-  try {
-    const sportsData = JSON.parse(localStorage.getItem("exercise-tracker-sports") || "{}");
-    Object.values(sportsData).forEach((arr) => {
-      if (Array.isArray(arr)) arr.forEach((e) => e.date && days.add(e.date));
-    });
-  } catch {
-    // ignore malformed local data
-  }
-  if (days.size === 0) return 0;
-
-  const cursor = new Date();
-  if (!days.has(localDateISO(cursor))) cursor.setDate(cursor.getDate() - 1);
-  let streak = 0;
-  while (days.has(localDateISO(cursor))) {
-    streak++;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return streak;
 }
 
 let statsRequestToken = 0;
@@ -241,10 +210,10 @@ async function refreshGeneralStats() {
   if (token !== statsRequestToken || !stats) return; // a newer refresh (or sign-out) superseded this one
   statTotalCountEl.textContent = String(stats.total);
   statChallengesWonEl.textContent = String(stats.wins);
-  statAvgRankEl.textContent = stats.avgRank == null ? "—" : stats.avgRank.toFixed(1);
+  statAvgRankClassementEl.textContent = stats.avgRankClassement == null ? "—" : stats.avgRankClassement.toFixed(1);
+  statAvgRankChallengesEl.textContent = stats.avgRankChallenges == null ? "—" : stats.avgRankChallenges.toFixed(1);
   statFirstPlacesEl.textContent = String(stats.firstPlaces);
   statFriendCountEl.textContent = String(stats.friendCount);
-  statStreakEl.textContent = String(stats.streak);
 }
 
 // ---- Per-sport stats: personal-tracking numbers only (Classement/Défis are
@@ -334,12 +303,10 @@ function renderSportStats(sport) {
     const entries = loadSportEntries("triathlon");
     const totalSeconds = entries.reduce((sum, e) => sum + triathlonEntrySeconds(e), 0);
     const bestSeconds = entries.length ? Math.min(...entries.map(triathlonEntrySeconds)) : null;
-    const distinctSizes = distinctGroupCount(entries, (e) => e.size);
     statisticsSportContent.innerHTML =
       tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
       tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime", "statistics.memoTime") +
-      tile(ICON_TROPHY, bestSeconds == null ? "—" : formatHoursMinutes(bestSeconds), "statistics.bestTime", "statistics.memoBestTime") +
-      tile(ICON_TARGET, distinctSizes, "statistics.distinctSizes", "statistics.memoDistinctSizes");
+      tile(ICON_TROPHY, bestSeconds == null ? "—" : formatHoursMinutes(bestSeconds), "statistics.bestTime", "statistics.memoBestTime");
     return;
   }
 
@@ -357,8 +324,7 @@ function renderSportStats(sport) {
     statisticsSportContent.innerHTML =
       tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
       tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance", "statistics.memoDistance") +
-      tile(ICON_ELEVATION, `${window.mToDisplay ? window.mToDisplay(totalElevation) : totalElevation} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`, "statistics.totalElevation", "statistics.memoElevation") +
-      tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances", "statistics.memoDistinctDistances");
+      tile(ICON_ELEVATION, `${window.mToDisplay ? window.mToDisplay(totalElevation) : totalElevation} ${window.mUnitLabel ? window.mUnitLabel() : "m"}`, "statistics.totalElevation", "statistics.memoElevation");
     return;
   }
 
@@ -366,8 +332,13 @@ function renderSportStats(sport) {
   statisticsSportContent.innerHTML =
     tile(ICON_COUNT, entries.length, "statistics.totalStats", "statistics.memoTotalSport") +
     tile(ICON_ROUTE, distanceDisplay, "statistics.totalDistance", "statistics.memoDistance") +
-    tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime", "statistics.memoTime") +
-    tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances", "statistics.memoDistinctDistances");
+    tile(ICON_CLOCK, formatHoursMinutes(totalSeconds), "statistics.totalTime", "statistics.memoTime");
+
+  // Vélo is the only one of this group that keeps the distinct-distances
+  // tile - Course and Natation dropped it at the user's request.
+  if (sport === "velo") {
+    statisticsSportContent.innerHTML += tile(ICON_TARGET, distinctGroupCount(entries, groupKeyFn), "statistics.distinctDistances", "statistics.memoDistinctDistances");
+  }
 
   // Course and Vélo also get an average pace per displayed distance unit -
   // not meaningful for Natation (tracked in meters, not km) or the branches

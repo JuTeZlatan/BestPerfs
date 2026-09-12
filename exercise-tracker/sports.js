@@ -103,6 +103,7 @@ const triFields = {
 };
 
 const DISTANCE_SORT_SPORTS = ["natation", "velo", "course", "triathlon", "randonnee", "trail"];
+const ELEVATION_SORT_SPORTS = ["randonnee", "trail"];
 const TRIATHLON_SIZE_ORDER = { XS: 0, S: 1, M: 2, L: 3, XL: 4 };
 
 function distanceUnitFor(sport) {
@@ -295,6 +296,16 @@ function getSortedSportEntries(entries, sport) {
     });
     return sorted;
   }
+  if (sportSortMode === "elev-asc" || sportSortMode === "elev-desc") {
+    const elevOf = (perf) => (perf.elevationGain ?? 0) + (perf.elevationLoss ?? 0);
+    sorted.sort((a, b) => {
+      const elevDiff = elevOf(a) - elevOf(b);
+      if (elevDiff !== 0) return sportSortMode === "elev-asc" ? elevDiff : -elevDiff;
+      // Equal elevation: always rank the best performance (fastest time) first.
+      return perfTimeCentiseconds(a) - perfTimeCentiseconds(b);
+    });
+    return sorted;
+  }
   return entries;
 }
 
@@ -383,6 +394,10 @@ function selectSport(sport) {
   const canSortByDistance = DISTANCE_SORT_SPORTS.includes(sport);
   sportSortMenu.querySelectorAll(".sort-opt-dist").forEach((opt) => {
     opt.hidden = !canSortByDistance;
+  });
+  const canSortByElevation = ELEVATION_SORT_SPORTS.includes(sport);
+  sportSortMenu.querySelectorAll(".sort-opt-elev").forEach((opt) => {
+    opt.hidden = !canSortByElevation;
   });
   sportSortMode = "date-desc";
   sportSortMenu.querySelectorAll(".sport-option").forEach((opt) => {
