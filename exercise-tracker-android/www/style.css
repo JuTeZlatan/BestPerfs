@@ -2885,7 +2885,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .interval-phase-label.rest {
-  color: var(--danger);
+  color: #ff1a1a;
 }
 
 .interval-cycle-count {
@@ -2898,8 +2898,8 @@ input[type="number"]::-webkit-inner-spin-button {
    turns red while resting - a much stronger visual cue than the small phase
    label alone. */
 #interval-display.phase-rest {
-  color: var(--danger);
-  text-shadow: 0 0 24px rgba(255, 122, 84, 0.45);
+  color: #ff1a1a;
+  text-shadow: 0 0 10px rgba(255, 26, 26, 0.9), 0 0 34px rgba(255, 26, 26, 0.65);
 }
 
 .interval-infinite-toggle {
@@ -3251,7 +3251,6 @@ textarea.modal-input {
   border-radius: 22%;
   opacity: 0;
   transform: scale(0.5);
-  filter: drop-shadow(0 0 10px rgba(255, 64, 64, 0.8)) drop-shadow(0 0 26px rgba(255, 26, 26, 0.5));
   animation: core-charge 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
 }
 
