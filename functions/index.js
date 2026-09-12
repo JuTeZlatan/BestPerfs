@@ -1,7 +1,7 @@
 const { onDocumentCreated, onDocumentUpdated, onDocumentWritten } = require("firebase-functions/v2/firestore");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { initializeApp } = require("firebase-admin/app");
-const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const { getFirestore, FieldValue, Timestamp } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
 const { getAuth } = require("firebase-admin/auth");
 
@@ -119,6 +119,160 @@ exports.onChallengeParticipantWrite = onDocumentWritten("challengeParticipants/{
   if (allResolved) {
     await challengeRef.update({ activatedAt: FieldValue.serverTimestamp() });
   }
+});
+
+// ---- Challenge deadline reminders: ended + ending-soon, both driven off the
+// same calendar-correct end-date math as challengeEndDate() in challenges.js.
+// A single scheduled sweep handles both so each challenge doc is only read
+// once per run. ----
+const FR_SPORT_LABELS = { course: "course à pied", natation: "natation", velo: "vélo", triathlon: "triathlon", fitness: "fitness" };
+
+function frPresetLabel(sport, presetKey) {
+  if (sport === "natation") return `${presetKey.split("-")[0]} m`;
+  if (sport === "course" && presetKey === "half") return "semi-marathon";
+  if (sport === "course" && presetKey === "marathon") return "marathon";
+  if (sport === "course") return Number(presetKey) >= 1 ? `${presetKey} km` : `${Number(presetKey) * 1000} m`;
+  if (sport === "velo") return `${presetKey} km`;
+  return presetKey;
+}
+
+function frChallengeLabel(sport, presetKey) {
+  return `${FR_SPORT_LABELS[sport] || sport} · ${frPresetLabel(sport, presetKey)}`;
+}
+
+function challengeEndDate(challenge) {
+  const end = challenge.activatedAt.toDate();
+  end.setMonth(end.getMonth() + (challenge.durationMonths || 0));
+  end.setDate(end.getDate() + (challenge.durationDays || 0));
+  end.setHours(end.getHours() + (challenge.durationHours || 0));
+  return end;
+}
+
+async function notifyAcceptedParticipants(challengeId, type, title, body, sport, presetKey) {
+  const participantsSnap = await db
+    .collection("challengeParticipants")
+    .where("challengeId", "==", challengeId)
+    .where("status", "==", "accepted")
+    .get();
+  await Promise.all(
+    participantsSnap.docs.map((p) =>
+      Promise.all([
+        sendToUser(p.data().uid, title, body),
+        db.collection("notifications").add({
+          uid: p.data().uid,
+          type,
+          sport,
+          presetKey,
+          createdAt: FieldValue.serverTimestamp(),
+        }),
+      ])
+    )
+  );
+}
+
+const ENDING_SOON_WINDOW_MS = 24 * 60 * 60 * 1000;
+// Guards against a flood of stale notifications the first time this sweep
+// runs (or after any gap) finding challenges that ended long ago - those get
+// silently marked as handled instead of "just" being announced.
+const RECENTLY_ENDED_WINDOW_MS = 60 * 60 * 1000;
+
+exports.checkChallengeDeadlines = onSchedule({ schedule: "every 15 minutes", region: "europe-west9" }, async () => {
+  const now = Date.now();
+  // A range filter (rather than "!=") reliably excludes challenges that
+  // never got an activatedAt at all (still waiting on invitees), since
+  // Firestore range queries skip documents missing the compared field.
+  const activeSnap = await db.collection("challenges").where("activatedAt", ">", Timestamp.fromMillis(0)).get();
+
+  await Promise.all(
+    activeSnap.docs.map(async (challengeDoc) => {
+      const challenge = challengeDoc.data();
+      const end = challengeEndDate(challenge);
+      const label = frChallengeLabel(challenge.sport, challenge.presetKey);
+
+      if (!challenge.endedNotifiedAt && now >= end.getTime()) {
+        const justEnded = now - end.getTime() <= RECENTLY_ENDED_WINDOW_MS;
+        await Promise.all([
+          justEnded
+            ? notifyAcceptedParticipants(
+                challengeDoc.id,
+                "challenge_ended",
+                "Best Perfs",
+                `Ton défi ${label} est terminé, viens voir le podium !`,
+                challenge.sport,
+                challenge.presetKey
+              )
+            : Promise.resolve(),
+          challengeDoc.ref.update({ endedNotifiedAt: FieldValue.serverTimestamp() }),
+        ]);
+        return;
+      }
+
+      if (!challenge.endingSoonNotifiedAt && end.getTime() - now > 0 && end.getTime() - now <= ENDING_SOON_WINDOW_MS) {
+        await Promise.all([
+          notifyAcceptedParticipants(
+            challengeDoc.id,
+            "challenge_ending_soon",
+            "Best Perfs",
+            `Ton défi ${label} se termine bientôt, enregistre ta perf !`,
+            challenge.sport,
+            challenge.presetKey
+          ),
+          challengeDoc.ref.update({ endingSoonNotifiedAt: FieldValue.serverTimestamp() }),
+        ]);
+      }
+    })
+  );
+});
+
+// ---- "Overtaken" alert: whenever someone's leaderboard entry improves,
+// check their accepted friends' entries in that same sport+preset category -
+// anyone this write newly ranks ahead of (and didn't already, before this
+// write) gets notified. Fitness ranks reps/weight high-to-low; everything
+// else ranks time low-to-high. ----
+exports.onLeaderboardEntryWritten = onDocumentWritten("leaderboardEntries/{entryId}", async (event) => {
+  const after = event.data.after.exists ? event.data.after.data() : null;
+  if (!after) return; // deleted - nothing to announce
+  const before = event.data.before.exists ? event.data.before.data() : null;
+
+  const higherIsBetter = after.sport === "fitness";
+  const newValue = after.totalSeconds;
+  const oldValue = before ? before.totalSeconds : null;
+
+  const [asFromSnap, asToSnap] = await Promise.all([
+    db.collection("friendRequests").where("fromUid", "==", after.uid).where("status", "==", "accepted").get(),
+    db.collection("friendRequests").where("toUid", "==", after.uid).where("status", "==", "accepted").get(),
+  ]);
+  const friendUids = [
+    ...asFromSnap.docs.map((d) => d.data().toUid),
+    ...asToSnap.docs.map((d) => d.data().fromUid),
+  ];
+  if (friendUids.length === 0) return;
+
+  await Promise.all(
+    friendUids.map(async (friendUid) => {
+      const friendEntrySnap = await db.doc(`leaderboardEntries/${friendUid}_${after.sport}_${after.presetKey}`).get();
+      if (!friendEntrySnap.exists) return;
+      const friendValue = friendEntrySnap.data().totalSeconds;
+
+      const nowBetter = higherIsBetter ? newValue > friendValue : newValue < friendValue;
+      if (!nowBetter) return;
+      const wasBetterBefore = oldValue != null && (higherIsBetter ? oldValue > friendValue : oldValue < friendValue);
+      if (wasBetterBefore) return; // already ahead of this friend before this update
+
+      const label = frChallengeLabel(after.sport, after.presetKey);
+      await Promise.all([
+        sendToUser(friendUid, "Best Perfs", `${after.username} vient de battre ton record en ${label}`),
+        db.collection("notifications").add({
+          uid: friendUid,
+          type: "leaderboard_overtaken",
+          fromUsername: after.username,
+          sport: after.sport,
+          presetKey: after.presetKey,
+          createdAt: FieldValue.serverTimestamp(),
+        }),
+      ]);
+    })
+  );
 });
 
 // Deletes email/password signups that never clicked their confirmation link

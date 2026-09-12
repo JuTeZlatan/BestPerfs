@@ -932,6 +932,10 @@ function openChallengesView(tabIndex) {
   refreshChallengesData();
 }
 window.openChallengesView = openChallengesView;
+// Reused by notifications.js to build "challenge ended/ending soon" labels
+// in the viewer's own language, without duplicating this lookup logic.
+window.sportLabel = sportLabel;
+window.presetDisplayLabel = presetDisplayLabel;
 
 document.querySelector('.bottom-nav-btn[data-view="challenges"]').addEventListener("click", () => {
   setChallengesActiveTab(0);
