@@ -37,6 +37,18 @@ const usernameInput = document.getElementById("username-input");
 const usernameBirthdateInput = document.getElementById("username-birthdate-input");
 const usernameErrorEl = document.getElementById("username-error");
 
+// Letters (any script) + digits + underscore/hyphen only - blocks emoji,
+// spaces and other symbols so a pseudo can't be used to slip in something
+// unreadable or offensive-looking in the leaderboard/friends UI. Two
+// separate regexes (rather than one reused global one) since mixing
+// String.replace and RegExp.test on the same /g regex is a lastIndex trap.
+const USERNAME_VALID_PATTERN = /^[\p{L}\p{N}_-]+$/u;
+
+usernameInput.addEventListener("input", () => {
+  const sanitized = usernameInput.value.replace(/[^\p{L}\p{N}_-]/gu, "");
+  if (sanitized !== usernameInput.value) usernameInput.value = sanitized;
+});
+
 const verifyEmailViewEl = document.getElementById("verify-email-view");
 const verifyEmailHintEl = document.getElementById("verify-email-hint");
 const verifyEmailContinueBtn = document.getElementById("verify-email-continue-btn");
@@ -613,6 +625,11 @@ usernameForm.addEventListener("submit", async (e) => {
   const value = usernameInput.value.trim();
   const birthdate = usernameBirthdateInput.value;
   if (!value || !birthdate || !currentUid) return;
+  if (!USERNAME_VALID_PATTERN.test(value)) {
+    usernameErrorEl.textContent = t("auth.errorUsernameInvalidChars");
+    usernameErrorEl.hidden = false;
+    return;
+  }
   // First time finishing account setup: default proof photos to local
   // storage rather than the app's normal cloud fallback, unless this device
   // already had an explicit choice (e.g. used the app locally before signing up).
