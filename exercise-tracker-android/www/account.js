@@ -194,6 +194,21 @@ async function ensureUsernameMapping(uid, username) {
   }
 }
 
+// signOut(auth) alone only clears the JS SDK's in-memory state - on native
+// the credential was bridged in from the native Google/Firebase layer via
+// signInWithCredential, which signOut(auth) never touches. Without this,
+// the native side keeps remembering the last Google account, so the account
+// picker gets silently skipped on the next "Continue with Google" instead
+// of letting the user pick a different one.
+async function nativeSignOut() {
+  if (!isNativePlatform) return;
+  try {
+    await Capacitor.Plugins.FirebaseAuthentication.signOut();
+  } catch (error) {
+    console.warn("nativeSignOut failed", error);
+  }
+}
+
 // Registers this device for push notifications (friend requests, accepted
 // requests - see functions/index.js) by saving its FCM token onto the user's
 // doc. Native-only: there's no web push setup (VAPID key / messaging service
@@ -323,6 +338,7 @@ gateAuthForm.addEventListener("submit", async (e) => {
 
 accountLogoutBtn.addEventListener("click", async () => {
   await signOut(auth).catch(() => {});
+  await nativeSignOut();
   // Wipe locally cached data on the way out - script.js/sports.js only read
   // localStorage once at page load, so without this + a reload, whoever
   // signs in next on this device would inherit this account's stats in
@@ -560,7 +576,10 @@ async function checkEmailVerified({ silent }) {
   } catch (error) {
     stopVerifyEmailPolling();
     showFieldError(verifyEmailErrorEl, { code: "auth/expired-signup" });
-    setTimeout(() => signOut(auth), 2500);
+    setTimeout(() => {
+      signOut(auth);
+      nativeSignOut();
+    }, 2500);
     return;
   }
   if (!auth.currentUser.emailVerified) {
@@ -623,6 +642,7 @@ verifyEmailCancelBtn.addEventListener("click", () => {
     } catch (error) {
       console.warn("cancelPendingSignup failed", error);
       signOut(auth);
+      nativeSignOut();
     }
   });
 });
