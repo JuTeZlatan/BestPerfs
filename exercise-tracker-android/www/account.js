@@ -222,7 +222,12 @@ gateGoogleBtn.addEventListener("click", async () => {
     if (isNativePlatform) {
       // Native Google Sign-In (Android/iOS) authenticates on the native layer;
       // bridge that into the JS SDK so auth/onAuthStateChanged/Firestore see it.
-      const result = await Capacitor.Plugins.FirebaseAuthentication.signInWithGoogle();
+      // useCredentialManager: false - the newer Credential Manager path hits a
+      // widely-reported, still-unresolved "[28444] Developer console is not
+      // set up correctly" error on Play-signed builds even with a correct SHA/
+      // webClientId setup; the legacy GoogleSignInClient flow the plugin falls
+      // back to is unaffected.
+      const result = await Capacitor.Plugins.FirebaseAuthentication.signInWithGoogle({ useCredentialManager: false });
       const idToken = result?.credential?.idToken;
       if (!idToken) throw new Error("missing-id-token");
       const credential = GoogleAuthProvider.credential(idToken);
