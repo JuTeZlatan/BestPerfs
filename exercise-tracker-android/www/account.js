@@ -201,13 +201,16 @@ async function ensureUsernameMapping(uid, username) {
 async function registerPushToken(uid) {
   if (!isNativePlatform) return;
   try {
-    const permStatus = await Capacitor.Plugins.FirebaseMessaging.checkPermissions();
-    let receive = permStatus.receive;
-    if (receive === "prompt" || receive === "prompt-with-rationale") {
-      const requested = await Capacitor.Plugins.FirebaseMessaging.requestPermissions();
-      receive = requested.receive;
-    }
-    if (receive !== "granted") return;
+    // Skip FirebaseMessaging.checkPermissions()/requestPermissions() - on
+    // this Capacitor/Android combo they crash the whole native process
+    // (NullPointerException deep in Capacitor's own permission-state
+    // resolution, uncaught on a background thread outside this try/catch's
+    // reach) rather than just rejecting. getToken() doesn't actually need
+    // the notification permission granted to succeed - that permission only
+    // gates whether resulting notifications are shown, not token issuance -
+    // and it's already requested elsewhere (the interval timer) via the
+    // unaffected LocalNotifications plugin, which shares the same OS-level
+    // POST_NOTIFICATIONS permission.
     const { token } = await Capacitor.Plugins.FirebaseMessaging.getToken();
     if (!token) return;
     await setDoc(doc(db, "users", uid), { fcmTokens: arrayUnion(token) }, { merge: true });
@@ -732,7 +735,12 @@ async function syncSignedInUser(user) {
     accountUsernameDisplay.textContent = data.username;
     accountBirthdateDisplay.textContent = formatBirthdate(data.birthdate);
     ensureUsernameMapping(currentUid, data.username);
-    registerPushToken(currentUid);
+    // Awaited so it can't still be in flight when location.reload() below
+    // fires - reloading mid-call tears down the native bridge under it and
+    // crashes the app (only reproduces for accounts with existing cloud data
+    // that differs from this device's local storage, since only that path
+    // reloads; a brand-new account never hits it).
+    await registerPushToken(currentUid);
 
     currentBirthdateChangesUsed = data.birthdateChangesUsed || 0;
     accountEmailRowMenu.hidden = !user.providerData.some((p) => p.providerId === "password");

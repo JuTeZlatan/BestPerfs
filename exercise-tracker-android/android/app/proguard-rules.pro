@@ -24,3 +24,12 @@
 # (Facebook, GitHub, etc.) that this app doesn't use/depend on - R8 only
 # needs to know it's fine that those classes aren't present.
 -dontwarn com.facebook.**
+
+# R8 strips annotations by default unless told otherwise. Capacitor reads
+# @CapacitorPlugin/@Permission via reflection at runtime to resolve plugin
+# permission states (e.g. FirebaseMessaging.checkPermissions) - without this,
+# that lookup silently gets null annotation data and crashes with a
+# NullPointerException in com.getcapacitor's getPermissionStates, but only
+# in the minified release build (never in debug), which is why it went
+# unnoticed until testing an actual Play-signed release.
+-keepattributes *Annotation*
