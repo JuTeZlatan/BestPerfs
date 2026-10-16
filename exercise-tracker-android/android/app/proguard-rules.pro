@@ -33,3 +33,13 @@
 # in the minified release build (never in debug), which is why it went
 # unnoticed until testing an actual Play-signed release.
 -keepattributes *Annotation*
+
+# R8 (full mode) was removing PluginHandle.pluginAnnotation and its getter, so
+# every plugin permission call (checkPermissions/requestPermissions on
+# FirebaseMessaging, LocalNotifications, Camera...) hit a NullPointerException
+# in Bridge.getPermissionStates on release builds. Keep the classes involved in
+# reading @CapacitorPlugin/@Permission metadata intact.
+-keep class com.getcapacitor.PluginHandle { *; }
+-keep class com.getcapacitor.Plugin { *; }
+-keep class com.getcapacitor.annotation.** { *; }
+-keep @interface com.getcapacitor.annotation.** { *; }
