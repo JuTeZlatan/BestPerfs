@@ -49,6 +49,27 @@ usernameInput.addEventListener("input", () => {
   if (sanitized !== usernameInput.value) usernameInput.value = sanitized;
 });
 
+// Minimum age to use the app (children's-privacy rules such as COPPA and the
+// GDPR's age of digital consent). Compared as plain YYYY-MM-DD strings, which
+// sort chronologically, so there's no timezone/Date parsing involved.
+const MIN_AGE_YEARS = 13;
+
+function latestAllowedBirthdate() {
+  const d = new Date();
+  const y = d.getFullYear() - MIN_AGE_YEARS;
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+// No `max` attribute on the date inputs on purpose: it makes the browser's
+// native validation block the submit before this check runs, so the user
+// would never see the translated message (and some WebViews show no native
+// validation bubble at all).
+function isOldEnough(birthdate) {
+  return birthdate <= latestAllowedBirthdate();
+}
+
 const verifyEmailViewEl = document.getElementById("verify-email-view");
 const verifyEmailHintEl = document.getElementById("verify-email-hint");
 const verifyEmailContinueBtn = document.getElementById("verify-email-continue-btn");
@@ -462,6 +483,11 @@ changeBirthdateForm.addEventListener("submit", async (e) => {
   clearFieldError(changeBirthdateErrorEl);
   const newBirthdate = changeBirthdateInput.value;
   if (!newBirthdate || !currentUid || currentBirthdateChangesUsed >= MAX_BIRTHDATE_CHANGES) return;
+  if (!isOldEnough(newBirthdate)) {
+    changeBirthdateErrorEl.textContent = t("auth.errorTooYoung", { age: String(MIN_AGE_YEARS) });
+    changeBirthdateErrorEl.hidden = false;
+    return;
+  }
   try {
     const nextCount = currentBirthdateChangesUsed + 1;
     await updateDoc(doc(db, "users", currentUid), {
@@ -653,6 +679,11 @@ usernameForm.addEventListener("submit", async (e) => {
   const value = usernameInput.value.trim();
   const birthdate = usernameBirthdateInput.value;
   if (!value || !birthdate || !currentUid) return;
+  if (!isOldEnough(birthdate)) {
+    usernameErrorEl.textContent = t("auth.errorTooYoung", { age: String(MIN_AGE_YEARS) });
+    usernameErrorEl.hidden = false;
+    return;
+  }
   if (!USERNAME_VALID_PATTERN.test(value)) {
     usernameErrorEl.textContent = t("auth.errorUsernameInvalidChars");
     usernameErrorEl.hidden = false;
