@@ -23,10 +23,7 @@
 <meta name="apple-mobile-web-app-title" content="Exercices">
 </head>
 <body>
-  <div id="brand-splash" class="brand-splash">
-    <img class="brand-splash-logo" src="jba-logo.png" alt="JBA">
-  </div>
-  <div id="splash-screen" class="splash-screen" hidden>
+  <div id="splash-screen" class="splash-screen">
     <div class="splash-hud">
       <div class="splash-core">
         <img class="core-logo" src="logo-mark.png" alt="">
@@ -42,7 +39,6 @@
     (function () {
       function startMainSplash() {
         var splash = document.getElementById("splash-screen");
-        splash.hidden = false;
 
         var pctEl = document.getElementById("splashPct");
         var fillEl = document.getElementById("splashProgressFill");
@@ -69,18 +65,7 @@
         }, 4000);
       }
 
-      setTimeout(function () {
-        // Reveal the BEST PERFS splash (opaque, covers the app) first, then
-        // fade the JBA logo out on top of it - this way whatever is exposed
-        // as the JBA logo becomes transparent is the splash, never the raw
-        // app/login screen underneath.
-        startMainSplash();
-        var brand = document.getElementById("brand-splash");
-        brand.classList.add("hide");
-        setTimeout(function () {
-          brand.style.display = "none";
-        }, 350);
-      }, 2000);
+      startMainSplash();
     })();
   </script>
 

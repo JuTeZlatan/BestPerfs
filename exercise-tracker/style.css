@@ -3281,37 +3281,6 @@ textarea.modal-input {
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
-.brand-splash {
-  position: fixed;
-  inset: 0;
-  z-index: 1100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #11213A;
-  opacity: 1;
-  transition: opacity 0.35s ease;
-}
-
-.brand-splash.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.brand-splash-logo {
-  width: min(420px, 78vw);
-  animation: brand-splash-logo-in 0.5s ease-out;
-}
-
-@keyframes brand-splash-logo-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .brand-splash-logo { animation: none; }
-}
-
 .splash-screen {
   position: fixed;
   inset: 0;
