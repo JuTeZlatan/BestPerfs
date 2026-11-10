@@ -119,6 +119,50 @@ function scheduleNotification(remainingSeconds, name) {
   scheduleNativeNotification(remainingSeconds, name);
 }
 
+// ---- Keep the screen on while a timer is running ----
+// Screen Wake Lock API: works in the browser and in Android's WebView. The
+// browser drops the lock whenever the page is hidden, so it's re-requested
+// when the app comes back to the foreground (see visibilitychange below).
+let wakeLock = null;
+let wakeLockPending = false;
+
+async function acquireWakeLock() {
+  if (!("wakeLock" in navigator) || wakeLock || wakeLockPending) return;
+  wakeLockPending = true;
+  try {
+    const lock = await navigator.wakeLock.request("screen");
+    // The timer may have been paused/reset while the request was in flight.
+    if (!(running || intervalRunning)) {
+      lock.release().catch(() => {});
+      return;
+    }
+    wakeLock = lock;
+    lock.addEventListener("release", () => {
+      if (wakeLock === lock) wakeLock = null;
+    });
+  } catch (error) {
+    // Refused (battery saver, page hidden...) - best effort, the timer still works.
+  } finally {
+    wakeLockPending = false;
+  }
+}
+
+function releaseWakeLock() {
+  if (!wakeLock) return;
+  const lock = wakeLock;
+  wakeLock = null;
+  lock.release().catch(() => {});
+}
+
+function syncKeepAwake() {
+  if (running || intervalRunning) acquireWakeLock();
+  else releaseWakeLock();
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") syncKeepAwake();
+});
+
 // ---- Chrono ----
 const timerDisplay = document.getElementById("timer-display");
 const timerStartBtn = document.getElementById("timer-start-btn");
@@ -160,6 +204,7 @@ function updateDisplay() {
       elapsedSeconds = 0;
       setTimerBtnState("start");
       timerDisplay.textContent = formatTime(0);
+      syncKeepAwake();
       return;
     }
     timerDisplay.textContent = formatTime(remaining);
@@ -188,6 +233,7 @@ timerStartBtn.addEventListener("click", () => {
     updateDisplay();
     setTimerBtnState("pause");
   }
+  syncKeepAwake();
 });
 
 timerResetBtn.addEventListener("click", () => {
@@ -201,6 +247,7 @@ timerResetBtn.addEventListener("click", () => {
   laps = [];
   renderLaps();
   updateDisplay();
+  syncKeepAwake();
 });
 
 function startCountdown(seconds, name) {
@@ -216,6 +263,7 @@ function startCountdown(seconds, name) {
   scheduleNotification(seconds, countdownName);
   updateDisplay();
   setTimerBtnState("pause");
+  syncKeepAwake();
 }
 
 lapBtn.addEventListener("click", () => {
@@ -327,6 +375,7 @@ function resetIntervalState() {
   intervalDisplay.classList.remove("phase-rest");
   intervalDisplay.textContent = formatTime(intervalWorkSeconds);
   intervalCycleCountEl.textContent = "0";
+  syncKeepAwake();
 }
 
 function updateIntervalDisplay() {
@@ -372,6 +421,7 @@ intervalStartBtn.addEventListener("click", () => {
     cancelAnimationFrame(intervalAnimationHandle);
     clearScheduledNotification();
     setIntervalBtnState("resume");
+    syncKeepAwake();
     return;
   }
 
@@ -397,6 +447,7 @@ intervalStartBtn.addEventListener("click", () => {
   intervalRunning = true;
   updateIntervalDisplay();
   setIntervalBtnState("pause");
+  syncKeepAwake();
 });
 
 intervalResetBtn.addEventListener("click", resetIntervalState);
